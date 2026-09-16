@@ -2456,7 +2456,8 @@
 
     const shell = document.getElementById('knee-ai-frontend-shell');
 
-    const API_BASE_URL = window.KNEE_AI_API_BASE_URL || (location.protocol.startsWith('http') ? location.origin : 'http://127.0.0.1:8000');
+    const isVercelRuntime = typeof window !== 'undefined' && window.location && /vercel|localhost/.test(window.location.hostname);
+    const API_BASE_URL = window.KNEE_AI_API_BASE_URL || (isVercelRuntime ? '/api' : (location.protocol.startsWith('http') ? location.origin : 'http://127.0.0.1:8000'));
 
     const REQUEST_TIMEOUT_MS = 180000;
 

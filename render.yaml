@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: kneura-backend
+    env: python
+    rootDir: backend 1
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /docs
+    plan: free
+    autoDeploy: true

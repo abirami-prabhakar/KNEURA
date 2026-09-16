@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KNEURA</title>
+    <meta
+      http-equiv="refresh"
+      content="0; url=./code.html"
+    />
+  </head>
+  <body>
+    <noscript>
+      <p>JavaScript is required to load the KNEURA frontend.</p>
+    </noscript>
+    <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const apiBase = params.get('api') || params.get('apiBase');
+        if (apiBase) {
+          window.KNEE_AI_API_BASE_URL = apiBase.replace(/\/$/, '');
+        }
+        const target = './code.html' + window.location.search;
+        window.location.replace(target);
+      })();
+    </script>
+  </body>
+</html>
