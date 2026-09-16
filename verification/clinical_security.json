@@ -1,0 +1,17 @@
+[
+  "rad login PASS",
+  "ortho login PASS",
+  "patient login PASS",
+  "None GET /studies: 401",
+  "patient GET /studies: 403",
+  "patient GET /studies/1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767: 403",
+  "patient GET /reports/1/versions: 403",
+  "patient POST /api/v1/ai/analyze: 403",
+  "ortho PUT /reports/1: 403",
+  "ortho POST /reports/1/approve: 403",
+  "ortho GET /orthopedic/studies/1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767: 409",
+  "ortho POST /studies/1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767/patient-release: 409",
+  "patient GET /patient/reports/1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767: 409",
+  "rad POST /studies/1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767/patient-explanation: 409",
+  "patient GET /studies/1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767/mri-preview: 403"
+]

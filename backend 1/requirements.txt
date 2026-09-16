@@ -1,0 +1,14 @@
+# Use Python 3.12 on Windows for the supported CPU PyTorch wheels.
+fastapi==0.115.12
+uvicorn[standard]==0.34.3
+SQLAlchemy==2.0.41
+pandas==2.2.3
+pydicom==3.0.1
+Pillow==11.2.1
+pytest==8.3.5
+httpx==0.28.1
+python-multipart==0.0.20
+google-genai==2.23.0
+torch==2.7.1+cpu
+torchvision==0.22.1+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu

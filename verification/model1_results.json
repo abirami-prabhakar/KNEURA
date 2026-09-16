@@ -1,0 +1,122 @@
+{
+  "checkpoint_sha256": "ac59d8ce17a0b35c15189d691f7c6aa828f31a3dfe14601a02036a6c3b892a82",
+  "studies_detected": 10,
+  "dicom_files": 1107,
+  "eligible_series": 38,
+  "implementation": "backend 2\\ai\\knee_ai_inference.py",
+  "tolerance": 1e-06,
+  "torch": "2.7.1+cpu",
+  "results": [
+    {
+      "case": 1,
+      "study_id": "1.2.826.0.1.3680043.8.498.12606657226568558340797193167488111973",
+      "counts_match": true,
+      "max_absolute_difference": 1.1920928955078125e-07,
+      "bit_exact": false,
+      "within_1e_6": true,
+      "elapsed_seconds": 141.34,
+      "series_evaluated": 4,
+      "windows_evaluated": 99
+    },
+    {
+      "case": 2,
+      "study_id": "1.2.826.0.1.3680043.8.498.11771393824519892797114773408583976756",
+      "counts_match": true,
+      "max_absolute_difference": 2.3663043975830078e-05,
+      "bit_exact": false,
+      "within_1e_6": false,
+      "elapsed_seconds": 73.58,
+      "series_evaluated": 4,
+      "windows_evaluated": 82
+    },
+    {
+      "case": 3,
+      "study_id": "1.2.826.0.1.3680043.8.498.41600498783384864111179175518614837125",
+      "counts_match": true,
+      "max_absolute_difference": 3.8236379623413086e-05,
+      "bit_exact": false,
+      "within_1e_6": false,
+      "elapsed_seconds": 122.7,
+      "series_evaluated": 4,
+      "windows_evaluated": 97
+    },
+    {
+      "case": 4,
+      "study_id": "1.2.826.0.1.3680043.8.498.10170898615867673028696505248839028269",
+      "counts_match": true,
+      "max_absolute_difference": 9.655952453613281e-06,
+      "bit_exact": false,
+      "within_1e_6": false,
+      "elapsed_seconds": 101.19,
+      "series_evaluated": 4,
+      "windows_evaluated": 99
+    },
+    {
+      "case": 5,
+      "study_id": "1.2.826.0.1.3680043.8.498.78512215519177850923279235346968676828",
+      "counts_match": true,
+      "max_absolute_difference": 4.744529724121094e-05,
+      "bit_exact": false,
+      "within_1e_6": false,
+      "elapsed_seconds": 77.69,
+      "series_evaluated": 3,
+      "windows_evaluated": 89
+    },
+    {
+      "case": 6,
+      "study_id": "1.2.826.0.1.3680043.8.498.11557620559191469069130827959098335840",
+      "counts_match": true,
+      "max_absolute_difference": 4.945695400238037e-05,
+      "bit_exact": false,
+      "within_1e_6": false,
+      "elapsed_seconds": 98.33,
+      "series_evaluated": 3,
+      "windows_evaluated": 92
+    },
+    {
+      "case": 7,
+      "study_id": "1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767",
+      "counts_match": true,
+      "max_absolute_difference": 1.7881393432617188e-07,
+      "bit_exact": false,
+      "within_1e_6": true,
+      "elapsed_seconds": 51.25,
+      "series_evaluated": 4,
+      "windows_evaluated": 58
+    },
+    {
+      "case": 8,
+      "study_id": "1.2.826.0.1.3680043.8.498.11548045715264151632153040089882701935",
+      "counts_match": true,
+      "max_absolute_difference": 3.403425216674805e-05,
+      "bit_exact": false,
+      "within_1e_6": false,
+      "elapsed_seconds": 43.59,
+      "series_evaluated": 4,
+      "windows_evaluated": 101
+    },
+    {
+      "case": 9,
+      "study_id": "1.2.826.0.1.3680043.8.498.10306159113324811538703788080836752052",
+      "counts_match": true,
+      "max_absolute_difference": 6.42240047454834e-06,
+      "bit_exact": false,
+      "within_1e_6": false,
+      "elapsed_seconds": 93.31,
+      "series_evaluated": 5,
+      "windows_evaluated": 136
+    },
+    {
+      "case": 10,
+      "study_id": "1.2.826.0.1.3680043.8.498.22109739962224309418874538994436903404",
+      "counts_match": true,
+      "max_absolute_difference": 1.7881393432617188e-07,
+      "bit_exact": false,
+      "within_1e_6": true,
+      "elapsed_seconds": 79.91,
+      "series_evaluated": 3,
+      "windows_evaluated": 102
+    }
+  ],
+  "maximum_probability_difference": 4.945695400238037e-05
+}

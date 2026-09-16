@@ -1,0 +1,43 @@
+﻿# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Databases
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# KNEURA runtime/generated data
+.prototype_data/
+uploads/
+logs/
+
+# Medical imaging / patient data
+*.dcm
+*.dicom
+
+# Large demo/data archives
+*.zip
+KNEE_AI_10_REAL_DEMO_INPUTS/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log

@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "study_id": "1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767",
+  "action": "ANALYZE_KNEE_MRI",
+  "status": "completed",
+  "model_version": "KNEE-AI 3.3",
+  "architecture": "StandaloneFiveSliceEfficientNet",
+  "series_evaluated": 4,
+  "windows_evaluated": 58,
+  "probabilities": {
+    "ACL": 0.20345237851142883,
+    "MCL": 0.2901681661605835,
+    "Medial Meniscus": 0.4106006324291229,
+    "Lateral Meniscus": 0.7479868531227112,
+    "Medial OA": 0.6073434352874756,
+    "Lateral OA": 0.6608086824417114,
+    "PF OA": 0.8107481598854065,
+    "Effusion": 0.4357095956802368,
+    "Synovitis": 0.6393622756004333,
+    "Baker's": 0.446150004863739,
+    "Contusion": 0.14415545761585236,
+    "Fracture": 0.4300882816314697
+  },
+  "requires_radiologist_review": true,
+  "data_mode": "DEMO"
+}

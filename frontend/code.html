@@ -1,0 +1,4229 @@
+﻿<!DOCTYPE html><html lang="en" style=""><head>
+
+<meta charset="utf-8">
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<title>KNEE-AI 3.3 — Archival Clinical Folio &amp; Diagnostic Dossier</title>
+
+<!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+
+<link href="https://fonts.googleapis.com" rel="preconnect">
+
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+
+<!-- Material Symbols Outlined -->
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS CDN -->
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<!-- Tailwind Theme Configuration Verbatim -->
+
+<script id="tailwind-config">
+
+    tailwind.config = {
+
+      darkMode: "class",
+
+      theme: {
+
+        extend: {
+
+          "colors": {
+
+            "on-tertiary-container": "#ada99f",
+
+            "primary": "#0b245c",
+
+            "surface-tint": "#485c96",
+
+            "primary-fixed": "#dbe1ff",
+
+            "surface-container-high": "#e5e7f6",
+
+            "secondary": "#705a45",
+
+            "on-tertiary": "#ffffff",
+
+            "surface-container": "#ebedfc",
+
+            "on-secondary-container": "#77604b",
+
+            "tertiary-fixed-dim": "#cbc6bc",
+
+            "on-primary": "#ffffff",
+
+            "on-surface-variant": "#444650",
+
+            "on-error": "#ffffff",
+
+            "on-tertiary-fixed-variant": "#49473f",
+
+            "on-tertiary-fixed": "#1d1c15",
+
+            "on-secondary": "#ffffff",
+
+            "outline-variant": "#c5c6d1",
+
+            "error-container": "#ffdad6",
+
+            "surface-container-highest": "#e0e2f0",
+
+            "background": "#faf8ff",
+
+            "error": "#ba1a1a",
+
+            "on-surface": "#181b26",
+
+            "on-primary-container": "#93a7e6",
+
+            "on-error-container": "#93000a",
+
+            "surface-container-lowest": "#ffffff",
+
+            "surface-dim": "#d7d9e8",
+
+            "surface-bright": "#faf8ff",
+
+            "on-primary-fixed": "#00174a",
+
+            "on-secondary-fixed": "#281808",
+
+            "on-secondary-fixed-variant": "#57432f",
+
+            "secondary-container": "#fcddc2",
+
+            "on-background": "#181b26",
+
+            "surface-variant": "#e0e2f0",
+
+            "on-primary-fixed-variant": "#30447d",
+
+            "inverse-surface": "#2d303b",
+
+            "primary-fixed-dim": "#b3c5ff",
+
+            "tertiary-container": "#403e36",
+
+            "surface": "#faf8ff",
+
+            "secondary-fixed-dim": "#dfc1a7",
+
+            "inverse-primary": "#b3c5ff",
+
+            "primary-container": "#263b73",
+
+            "tertiary": "#2a2821",
+
+            "secondary-fixed": "#fcddc2",
+
+            "tertiary-fixed": "#e7e2d7",
+
+            "outline": "#757681",
+
+            "inverse-on-surface": "#eef0ff",
+
+            "surface-container-low": "#f2f3ff"
+
+          },
+
+          "borderRadius": {
+
+            "DEFAULT": "0.25rem",
+
+            "lg": "0.5rem",
+
+            "xl": "0.75rem",
+
+            "full": "9999px"
+
+          },
+
+          "spacing": {
+
+            "space-xl": "2.5rem",
+
+            "space-xs": "0.25rem",
+
+            "gutter": "1.5rem",
+
+            "space-lg": "1.5rem",
+
+            "margin": "2.5rem",
+
+            "space-md": "1rem",
+
+            "gutter-mobile": "1rem",
+
+            "space-sm": "0.5rem",
+
+            "margin-mobile": "1rem"
+
+          },
+
+          "fontFamily": {
+
+            "body-md": ["Plus Jakarta Sans"],
+
+            "headline-md": ["Playfair Display"],
+
+            "code-metric": ["Plus Jakarta Sans"],
+
+            "body-lg": ["Plus Jakarta Sans"],
+
+            "headline-lg": ["Playfair Display"],
+
+            "display-lg": ["Playfair Display"],
+
+            "body-sm": ["Plus Jakarta Sans"],
+
+            "headline-sm": ["Playfair Display"],
+
+            "title-lg": ["Plus Jakarta Sans"],
+
+            "label-caps-sm": ["Plus Jakarta Sans"],
+
+            "label-caps-lg": ["Plus Jakarta Sans"],
+
+            "display-lg-mobile": ["Playfair Display"]
+
+          },
+
+          "fontSize": {
+
+            "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+
+            "code-metric": ["13px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+
+            "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+
+            "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+
+            "display-lg": ["44px", { "lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "700" }],
+
+            "label-caps-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.18em", "fontWeight": "800" }],
+
+            "label-caps-lg": ["12px", { "lineHeight": "16px", "letterSpacing": "0.14em", "fontWeight": "700" }],
+
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+
+          }
+
+        },
+
+      },
+
+    }
+
+  </script>
+
+<style>
+
+    /* Archival Plate & Contour Canvas Tokens */
+
+    body {
+
+      background-color: #EEF0FF;
+
+      background-image: 
+
+        linear-gradient(to right, rgba(38, 59, 115, 0.04) 1px, transparent 1px),
+
+        linear-gradient(to bottom, rgba(38, 59, 115, 0.04) 1px, transparent 1px);
+
+      background-size: 32px 32px;
+
+    }
+
+    
+
+    .plate-card {
+
+      background-color: #FFF9EE;
+
+      border: 1.5px solid #34497F;
+
+      box-shadow: 3px 3px 0px 0px #263B73;
+
+    }
+
+
+
+    .plate-card-focal {
+
+      background-color: #FFF9EE;
+
+      border: 1.5px solid #34497F;
+
+      box-shadow: 5px 5px 0px 0px #263B73;
+
+    }
+
+
+
+    .dashed-ink-border {
+
+      border-style: dashed;
+
+      border-color: #34497F;
+
+      border-width: 1.5px;
+
+    }
+
+
+
+    .dashed-ink-divider {
+
+      border-bottom: 1.5px dashed #34497F;
+
+    }
+
+
+
+    .peach-pill-banner {
+
+      background-color: #FFE0C5;
+
+      color: #263B73;
+
+      border: 1.5px solid #34497F;
+
+    }
+
+
+
+    .btn-primary-archival {
+
+      background-color: #263B73;
+
+      color: #FFF9EE;
+
+      border: 1.5px solid #263B73;
+
+      box-shadow: 2px 2px 0px 0px #34497F;
+
+      transition: all 120ms ease;
+
+    }
+
+    .btn-primary-archival:hover {
+
+      transform: translate(-1px, -1px);
+
+      box-shadow: 3px 3px 0px 0px #34497F;
+
+    }
+
+    .btn-primary-archival:active {
+
+      transform: translate(2px, 2px);
+
+      box-shadow: 0px 0px 0px 0px transparent;
+
+    }
+
+
+
+    .btn-secondary-archival {
+
+      background-color: #FFF9EE;
+
+      color: #263B73;
+
+      border: 1.5px solid #34497F;
+
+      box-shadow: 2px 2px 0px 0px #34497F;
+
+      transition: all 120ms ease;
+
+    }
+
+    .btn-secondary-archival:hover {
+
+      background-color: #FFE0C5;
+
+      transform: translate(-1px, -1px);
+
+      box-shadow: 3px 3px 0px 0px #34497F;
+
+    }
+
+
+
+    /* Heatmap Overlay Simulation */
+
+    .gradcam-gradient {
+
+      background: radial-gradient(circle at 48% 54%, rgba(255, 30, 0, 0.75) 0%, rgba(255, 170, 0, 0.55) 26%, rgba(0, 200, 255, 0.3) 52%, transparent 70%);
+
+      mix-blend-mode: color-dodge;
+
+    }
+
+
+
+    #legacy-static-header,
+
+    #legacy-static-workspace {
+
+      display: none;
+
+    }
+
+  </style>
+
+</head>
+
+<body class="text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md">
+
+<!-- ========================================================================= -->
+
+<!-- SHARED COMPONENT 1: TopNavBar (Exact Schema Keys & Injected Styles)      -->
+
+<!-- ========================================================================= -->
+
+<header id="legacy-static-header" class="flex justify-between items-center w-full px-margin h-16 border-b border-primary dark:border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface shadow-[0_3px_0px_0px_#263B73] dark:shadow-none sticky top-0 z-50">
+
+<!-- Left: Brand Anchor & Academic Specimen Callout -->
+
+<div class="flex items-center gap-space-md">
+
+<div class="flex items-center gap-2">
+
+<div class="w-8 h-8 rounded-DEFAULT bg-primary text-surface-container-lowest flex items-center justify-center border border-primary shadow-[1.5px_1.5px_0px_#263B73]">
+
+
+
+</div>
+
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-primary dark:text-inverse-primary">
+
+          KNEEX</span>
+
+</div>
+
+
+
+<div class="h-6 w-[1.5px] bg-primary hidden md:block opacity-40"></div>
+
+<!-- Study Breadcrumb Badge -->
+
+<div class="hidden sm:flex items-center gap-2 text-primary font-code-metric text-code-metric">
+
+
+
+
+
+</div>
+
+</div>
+
+<!-- Center Navigation Links (Exact Shared Component Names) -->
+
+<nav class="hidden md:flex items-center space-x-6">
+
+<a class="text-primary dark:text-inverse-primary font-bold border-b-2 border-primary dark:border-inverse-primary pb-1 flex items-center gap-1.5 font-label-caps-lg text-label-caps-lg" href="#radiologist">
+
+<span class="w-2 h-2 rounded-full bg-primary inline-block animate-pulse"></span>
+
+        Radiologist
+
+      </a>
+
+<a class="text-on-surface-variant dark:text-surface-variant font-medium pb-1 hover:text-primary dark:hover:text-inverse-primary transition-colors font-label-caps-lg text-label-caps-lg" href="#orthopedician">
+
+        Orthopedician
+
+      </a>
+
+<a class="text-on-surface-variant dark:text-surface-variant font-medium pb-1 hover:text-primary dark:hover:text-inverse-primary transition-colors font-label-caps-lg text-label-caps-lg" href="#patient">
+
+        Patient
+
+      </a>
+
+</nav>
+
+<!-- Right Cluster: Pending Badge, Trailing Actions, Profile Portrait -->
+
+<div class="flex items-center gap-space-sm">
+
+<!-- Status Badge -->
+
+<span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-caps-sm font-label-caps-sm bg-[#FEF3C7] text-[#D97706] border border-[#D97706] font-bold">
+
+<span class="w-1.5 h-1.5 rounded-full bg-[#D97706]"></span>
+
+        Final Approval: PENDING
+
+      </span>
+
+<!-- Trailing Action (Primary Button) -->
+
+<button class="btn-primary-archival px-3 py-1.5 rounded-DEFAULT font-label-caps-lg text-label-caps-lg uppercase flex items-center gap-1">
+
+<span class="material-symbols-outlined text-body-lg" data-icon="verified">verified</span>
+
+        Final Approval
+
+      </button>
+
+<!-- Trailing Icon Actions -->
+
+<div class="hidden lg:flex items-center gap-1 border-l border-primary/25 pl-2 ml-1">
+
+<button class="p-1.5 rounded-DEFAULT hover:bg-surface-container text-primary transition-colors active:translate-x-0.5 active:translate-y-0.5" title="notifications">
+
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+
+</button>
+
+<button class="p-1.5 rounded-DEFAULT hover:bg-surface-container text-primary transition-colors active:translate-x-0.5 active:translate-y-0.5" title="help">
+
+<span class="material-symbols-outlined" data-icon="help">help</span>
+
+</button>
+
+</div>
+
+<!-- Profile Image & Sign Out Button -->
+
+<div class="flex items-center gap-2 pl-2 border-l border-primary/30">
+
+<img class="w-8 h-8 rounded-full border border-primary object-cover" data-alt="Distinguished female radiologist portrait, Dr. Eleanor Vance, wearing clinical white coat with stethoscope, soft natural academic library lighting, deep navy background tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMvCGfu-H-ThnZWb2pz58qxyA-u-TpFD5CdhRkXINyw00VYE_ZlHL_SqHlJUVrn7hFX-5fzPkm76rAGfJdofIDD3aQoax7GCfySaCbalnamcgslgzvHnMDkUA3eEQ5cC9pRcg8d--Pm3v5pCOzZxsz9i6htXc1vhjK8XIqIsp2wqivpmpOqncxEM6JGAcDyoY7ihgLLZ88bpGb0MBVHtuKyjIoVJUJpDK6qt3fKcVJZ_jSo9Rr8Mvcg">
+
+<div class="hidden 2xl:flex flex-col text-left">
+
+<span class="font-bold text-primary font-body-sm text-body-sm leading-tight">Dr. Eleanor Vance</span>
+
+<span class="text-on-surface-variant font-label-caps-sm text-label-caps-sm">Lead Radiologist</span>
+
+</div>
+
+<button class="text-on-surface-variant hover:text-error text-label-caps-sm font-label-caps-sm hidden xl:block ml-1 hover:underline">
+
+          Sign Out
+
+        </button>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ========================================================================= -->
+
+<!-- MAIN WORKSPACE CONTAINER (SideNav + Clinical Monograph Canvas)            -->
+
+<!-- ========================================================================= -->
+
+<div id="legacy-static-workspace" class="flex flex-1 w-full overflow-hidden">
+
+<!-- ======================================================================= -->
+
+<!-- SHARED COMPONENT 2: SideNavBar (Exact Tabs & Anchors from JSON)         -->
+
+<!-- ======================================================================= -->
+
+<aside class="hidden md:flex flex-col justify-between h-[calc(100vh-4rem)] w-64 p-space-md border-r border-primary dark:border-outline-variant bg-surface-container-low dark:bg-inverse-surface shadow-[3px_0px_0px_0px_#263B73] dark:shadow-none shrink-0 sticky top-16 overflow-y-auto">
+
+<!-- Nav Header & Academic Folio Seal -->
+
+<div>
+
+<div class="p-2.5 mb-3 bg-[#FFE0C5] border border-primary rounded-DEFAULT shadow-[1px_1px_0px_#263B73]">
+
+<div class="flex items-center gap-2 mb-1">
+
+<span class="material-symbols-outlined text-primary text-title-lg" data-icon="folder_special">folder_special</span>
+
+<h2 class="text-title-lg font-title-lg font-bold text-primary">Clinical Workflow</h2>
+
+</div>
+
+<p class="font-code-metric text-code-metric text-primary">Protocol: MR-KNEE-884</p>
+
+<p class="font-label-caps-sm text-label-caps-sm text-secondary mt-1">SESSION #994-A • ACTIVE</p>
+
+</div>
+
+<!-- Canonical 7 SideNav Tabs -->
+
+<nav class="space-y-1">
+
+<!-- 1. Overview -->
+
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-primary rounded-DEFAULT px-3 py-2 text-body-sm font-body-sm hover:bg-secondary-container transition-all duration-150" href="#overview">
+
+<span class="material-symbols-outlined text-primary text-title-lg" data-icon="dashboard">dashboard</span>
+
+<span class="">Overview</span>
+
+</a>
+
+<!-- 2. Upload & Viewer -->
+
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-primary rounded-DEFAULT px-3 py-2 text-body-sm font-body-sm hover:bg-secondary-container transition-all duration-150" href="#viewer">
+
+<span class="material-symbols-outlined text-primary text-title-lg" data-icon="upload_file">upload_file</span>
+
+<span class="">Upload &amp; Viewer</span>
+
+</a>
+
+<!-- 3. 12-Finding AI Analysis (ACTIVE TAB) -->
+
+<a class="flex items-center gap-3 bg-secondary-container text-primary font-bold border border-primary rounded-DEFAULT shadow-[2px_2px_0px_0px_#263B73] px-3 py-2 text-body-sm font-body-sm transition-all duration-150" href="#ai-findings">
+
+<span class="material-symbols-outlined text-primary text-title-lg" data-icon="analytics" data-weight="fill" style="font-variation-settings: &quot;FILL&quot; 1;">analytics</span>
+
+<span class="">12-Finding AI Analysis</span>
+
+</a>
+
+<!-- 4. Grad-CAM -->
+
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-primary rounded-DEFAULT px-3 py-2 text-body-sm font-body-sm hover:bg-secondary-container transition-all duration-150" href="#grad-cam">
+
+<span class="material-symbols-outlined text-primary text-title-lg" data-icon="biotech">biotech</span>
+
+<span class="">Grad-CAM</span>
+
+</a>
+
+<!-- 5. Radiologist Review -->
+
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-primary rounded-DEFAULT px-3 py-2 text-body-sm font-body-sm hover:bg-secondary-container transition-all duration-150" href="#radiologist-review">
+
+<span class="material-symbols-outlined text-primary text-title-lg" data-icon="rate_review">rate_review</span>
+
+<span class="">Radiologist Review</span>
+
+</a>
+
+<!-- 6. Clinical Report -->
+
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-primary rounded-DEFAULT px-3 py-2 text-body-sm font-body-sm hover:bg-secondary-container transition-all duration-150" href="#clinical-report">
+
+<span class="material-symbols-outlined text-primary text-title-lg" data-icon="description">description</span>
+
+<span class="">Clinical Report</span>
+
+</a>
+
+<!-- 7. Final Approval -->
+
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-primary rounded-DEFAULT px-3 py-2 text-body-sm font-body-sm hover:bg-secondary-container transition-all duration-150" href="#final-approval">
+
+<span class="material-symbols-outlined text-primary text-title-lg" data-icon="verified">verified</span>
+
+<span class="">Final Approval</span>
+
+</a>
+
+</nav>
+
+</div>
+
+<!-- Footer & CTA Section -->
+
+<div class="pt-4 border-t border-primary/20 space-y-2">
+
+<button class="w-full btn-secondary-archival py-2 px-3 rounded-DEFAULT font-label-caps-sm text-label-caps-sm tracking-wider flex items-center justify-center gap-1.5 uppercase font-bold">
+
+<span class="material-symbols-outlined text-body-md" data-icon="download">download</span>
+
+          Export Dossier
+
+        </button>
+
+<div class="space-y-0.5 pt-1">
+
+<a class="flex items-center gap-2 text-on-surface-variant hover:text-primary px-3 py-1.5 text-body-sm font-body-sm rounded-DEFAULT" href="#audit-trail">
+
+<span class="material-symbols-outlined text-body-md" data-icon="history">history</span>
+
+            Audit Trail
+
+          </a>
+
+<a class="flex items-center gap-2 text-on-surface-variant hover:text-primary px-3 py-1.5 text-body-sm font-body-sm rounded-DEFAULT" href="#system-diagnostic">
+
+<span class="material-symbols-outlined text-body-md" data-icon="tune">tune</span>
+
+            System Diagnostic
+
+          </a>
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- ======================================================================= -->
+
+<!-- PRIMARY CLINICAL CANVAS & FOLIO SHEET                                    -->
+
+<!-- ======================================================================= -->
+
+<main class="flex-1 overflow-y-auto px-4 lg:px-8 py-6 space-y-6">
+
+<!-- 1. CLINICAL WORKFLOW SUBHEADER / DOSSIER BANNER -->
+
+<section class="space-y-4">
+
+<!-- Patient Context Plate -->
+
+<div class="plate-card p-space-md relative overflow-hidden">
+
+<!-- Archival Ledger Cutout Header -->
+
+<div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 dashed-ink-divider">
+
+<div class="flex items-center gap-3">
+
+<span class="px-2.5 py-1 peach-pill-banner rounded-DEFAULT font-label-caps-sm text-label-caps-sm font-extrabold uppercase">
+
+                STUDY DETAILS: CONFIDENTIAL MSK DOSSIER
+
+              </span>
+
+<span class="font-code-metric text-code-metric text-primary font-bold">
+
+                PATIENT DISPLAY ID: <span class="bg-[#EEF0FF] px-1.5 py-0.5 border border-[#34497F] rounded-DEFAULT">PT-90214</span>
+
+</span>
+
+<span class="text-body-sm font-body-sm text-on-surface-variant font-medium">
+
+                (Demographics: 44 y/o • Female • DOB: 1980-04-12)
+
+              </span>
+
+</div>
+
+<div class="flex items-center gap-2 text-label-caps-sm font-label-caps-sm text-primary">
+
+<span class="material-symbols-outlined text-body-md" data-icon="calendar_today">calendar_today</span>
+
+<span class="">ACQUISITION: 2024-11-04 09:14 EST</span>
+
+<span class="mx-1">•</span>
+
+<span class="">INSTITUTION: BRIGHAM &amp; MSK RESEARCH INSTITUTE</span>
+
+</div>
+
+</div>
+
+<!-- Clinical Indications & History Grid -->
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-body-sm text-body-sm">
+
+<div class="bg-[#F2F3FF] p-3 rounded-DEFAULT border border-[#34497F]/40">
+
+<span class="block font-label-caps-sm text-label-caps-sm text-secondary uppercase font-bold mb-1">Presenting Symptoms</span>
+
+<p class="text-on-surface font-medium leading-snug">
+
+                Acute lateral joint line tenderness post-pivot injury during tennis. Joint effusion noted; full passive extension without mechanical block.
+
+              </p>
+
+</div>
+
+<div class="bg-[#F2F3FF] p-3 rounded-DEFAULT border border-[#34497F]/40">
+
+<span class="block font-label-caps-sm text-label-caps-sm text-secondary uppercase font-bold mb-1">Medical &amp; Surgical History</span>
+
+<p class="text-on-surface font-medium leading-snug">
+
+                Prior arthroscopic partial debridement (left knee, 2021). No prior trauma to right knee. Denies baseline inflammatory arthropathy.
+
+              </p>
+
+</div>
+
+<div class="bg-[#FFE0C5]/40 p-3 rounded-DEFAULT border border-[#34497F]/50">
+
+<span class="block font-label-caps-sm text-label-caps-sm text-primary uppercase font-bold mb-1">Attending Indication &amp; Notes</span>
+
+<p class="text-primary font-semibold leading-snug">
+
+                Suspected acute ACL tear with concomitant lateral meniscus pathology. Rule out osteochondral shear lesion or tibial plateau impaction fracture.
+
+              </p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Model Telemetry Info Bar -->
+
+<div class="plate-card bg-[#FFF9EE] px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-code-metric font-code-metric text-primary">
+
+<div class="flex flex-wrap items-center gap-3">
+
+<span class="flex items-center gap-1 bg-[#263B73] text-[#FFF9EE] px-2 py-0.5 rounded-DEFAULT text-label-caps-sm font-label-caps-sm uppercase">
+
+<span class="material-symbols-outlined text-body-sm" data-icon="memory">memory</span>
+
+              Model Telemetry
+
+            </span>
+
+<span class=""><strong>Model:</strong> KNEE-AI 3.3</span>
+
+<span class="opacity-30">|</span>
+
+<span class=""><strong>Architecture:</strong> StandaloneFiveSliceEfficientNet</span>
+
+<span class="opacity-30">|</span>
+
+<span class=""><strong>Backbone:</strong> EfficientNet-B0</span>
+
+<span class="opacity-30">|</span>
+
+<span class=""><strong>Target Layer:</strong> backbone.features.8.0 (1280 channels)</span>
+
+</div>
+
+<div class="flex items-center gap-2">
+
+<span class="inline-flex items-center gap-1 text-label-caps-sm font-label-caps-sm text-[#15803D] bg-[#DCFCE7] px-2 py-0.5 rounded-DEFAULT border border-[#15803D]">
+
+<span class="material-symbols-outlined text-body-sm" data-icon="check_circle">check_circle</span>
+
+              44 Evaluated 5-Slice Windows (100% Ingest Integrity)
+
+            </span>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- 2. TWO-COLUMN MAIN CLINICAL WORKSPACE -->
+
+<section class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg">
+
+<!-- ===================================================================== -->
+
+<!-- LEFT COLUMN: Imaging & Grad-CAM Explainability Engine (7 Columns)     -->
+
+<!-- ===================================================================== -->
+
+<div class="xl:col-span-7 space-y-4">
+
+<!-- DICOM Viewport Container -->
+
+<div class="plate-card-focal overflow-hidden">
+
+<!-- Viewer Toolbar Header -->
+
+<div class="bg-[#263B73] text-[#FFF9EE] px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-[#34497F]">
+
+<div class="flex items-center gap-2">
+
+<span class="material-symbols-outlined text-headline-sm" data-icon="view_in_ar">view_in_ar</span>
+
+<span class="font-headline-sm text-headline-sm text-[#FFF9EE]">Interactive MR Viewer</span>
+
+<span class="text-label-caps-sm font-label-caps-sm bg-[#FFE0C5] text-[#263B73] px-2 py-0.5 rounded-DEFAULT font-bold ml-2">
+
+                  Sagittal PD-FS (5-Slice)
+
+                </span>
+
+</div>
+
+<div class="flex items-center gap-2 text-body-sm font-body-sm">
+
+<span class="text-[#FFE0C5] font-code-metric">FOV: 160mm • Matrix: 512x512 • TE: 32ms</span>
+
+</div>
+
+</div>
+
+<!-- Viewport Canvas & Controls -->
+
+<div class="bg-[#0F172A] p-4 relative flex flex-col items-center justify-center min-h-[460px] select-none">
+
+<!-- Top Viewport Overlays -->
+
+<div class="absolute top-3 left-4 text-[#FFF9EE] font-code-metric text-body-sm pointer-events-none z-20 space-y-0.5 drop-shadow">
+
+<div class="">PT-90214 • SAG PD FAT-SAT</div>
+
+<div class="text-[#FFE0C5]">SLICE: 18 / 32 (Window #24)</div>
+
+<div class="text-outline-variant text-body-sm">THK: 3.0mm • Spacing: 3.3mm</div>
+
+</div>
+
+<div class="absolute top-3 right-4 text-right text-[#FFF9EE] font-code-metric text-body-sm pointer-events-none z-20 space-y-0.5 drop-shadow">
+
+<div class="text-[#10B981] font-bold">WL: 340 / WW: 780</div>
+
+<div class="">ZOOM: 100% (Native 1.0x)</div>
+
+<div class="text-amber-300">Grad-CAM Target: 1. ACL</div>
+
+</div>
+
+<!-- Main Sagittal Knee MRI Graphic + Explainability Heatmap -->
+
+<div class="relative w-full max-w-[420px] aspect-square rounded-DEFAULT border border-[#34497F] overflow-hidden bg-black shadow-2xl flex items-center justify-center">
+
+<!-- Knee Sagittal MRI Image Placeholder -->
+
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="High-resolution clinical sagittal MRI knee slice displaying distal femur, proximal tibia, patella, and anterior cruciate ligament in high contrast black, gray, and white tones. Crosshairs mark the intercondylar notch with anatomical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWcH2wUyuF1Y4eY1tZ0p8a_zwEXQVAyHbNRIn-aesyQglfESucwlb4kYNPILjYjzGTSBmY3VPph05FMXsA-cEYWXWIyJpqbW-5sVUTKz_Pv9udz8Ibhf8QpqXZnEv9jsNlOSCbzrZpTo9rrKT41WFinYFpwk3j65oH8RZAOFKBxx-nMsFAcH6OEXNPqibvF0ZWvopTadPMtCsRa1WyP4b_vhzbYUFSADWCMVg8Hlx-4Rt7fI7P2IfD7Q">
+
+<!-- Simulated Grad-CAM Class-Specific Activation Heatmap Overlay -->
+
+<div class="absolute inset-0 w-full h-full gradcam-gradient opacity-80 pointer-events-none transition-opacity duration-300" id="gradcam-layer" style="opacity: 0.95;"></div>
+
+<!-- Anatomical Center Crosshair Lines -->
+
+<div class="absolute inset-0 pointer-events-none border border-cyan-400/20">
+
+<div class="absolute left-1/2 top-0 bottom-0 w-[1px] bg-cyan-400/30"></div>
+
+<div class="absolute top-1/2 left-0 right-0 h-[1px] bg-cyan-400/30"></div>
+
+<!-- Focal Activation Indicator Bounding Circle -->
+
+<div class="absolute top-[46%] left-[44%] w-14 h-14 border border-dashed border-amber-300 rounded-full animate-ping opacity-30"></div>
+
+<div class="absolute top-[46%] left-[44%] w-14 h-14 border-2 border-dashed border-amber-300 rounded-full flex items-center justify-center">
+
+<span class="text-[9px] font-bold text-amber-300 bg-black/60 px-1 rounded">ACL ROl</span>
+
+</div>
+
+</div>
+
+<!-- Bottom Scale Rule Overlay -->
+
+<div class="absolute bottom-2 left-2 z-20 pointer-events-none flex items-center gap-1 text-[10px] text-white/70 font-mono">
+
+<span class="w-10 h-[2px] bg-white"></span> <span class="">2 cm</span>
+
+</div>
+
+</div>
+
+<!-- Interactive Slices Scrubber Slider -->
+
+<div class="w-full max-w-xl mt-4 px-2 flex items-center gap-3 text-[#FFF9EE] z-20">
+
+<span class="font-code-metric text-code-metric shrink-0">Slice 1</span>
+
+<input class="w-full h-2 bg-[#1E293B] rounded-lg appearance-none cursor-pointer accent-[#FFE0C5]" max="32" min="1" type="range" value="18">
+
+<span class="font-code-metric text-code-metric shrink-0">Slice 32</span>
+
+<span class="px-2 py-0.5 bg-[#263B73] border border-[#34497F] text-[#FFE0C5] font-code-metric text-code-metric rounded-DEFAULT font-bold">
+
+                  18/32
+
+                </span>
+
+</div>
+
+<!-- Quick Viewport Manipulation Controls -->
+
+<div class="flex flex-wrap items-center justify-center gap-2 mt-3 z-20">
+
+<div class="bg-[#1E293B] p-1 rounded-DEFAULT border border-slate-700 flex items-center gap-1">
+
+<button class="px-2 py-1 text-label-caps-sm font-label-caps-sm text-[#FFF9EE] hover:bg-[#334155] rounded-DEFAULT">ZOOM 100%</button>
+
+<button class="px-2 py-1 text-label-caps-sm font-label-caps-sm text-[#FFE0C5] bg-[#334155] rounded-DEFAULT font-bold">150%</button>
+
+<button class="px-2 py-1 text-label-caps-sm font-label-caps-sm text-[#FFF9EE] hover:bg-[#334155] rounded-DEFAULT">200%</button>
+
+</div>
+
+<div class="bg-[#1E293B] p-1 rounded-DEFAULT border border-slate-700 flex items-center gap-1">
+
+<span class="text-label-caps-sm font-label-caps-sm text-slate-400 px-1">PRESETS:</span>
+
+<button class="px-2 py-1 text-label-caps-sm font-label-caps-sm text-[#FFE0C5] bg-[#334155] rounded-DEFAULT">BONE</button>
+
+<button class="px-2 py-1 text-label-caps-sm font-label-caps-sm text-[#FFF9EE] hover:bg-[#334155] rounded-DEFAULT">SOFT TISSUE</button>
+
+<button class="px-2 py-1 text-label-caps-sm font-label-caps-sm text-[#FFF9EE] hover:bg-[#334155] rounded-DEFAULT">CARTILAGE</button>
+
+</div>
+
+<button class="p-1.5 bg-[#1E293B] text-[#FFF9EE] border border-slate-700 rounded-DEFAULT hover:bg-[#334155]" title="Invert Grayscale">
+
+<span class="material-symbols-outlined text-body-md" data-icon="contrast">contrast</span>
+
+</button>
+
+<button class="p-1.5 bg-[#1E293B] text-[#FFF9EE] border border-slate-700 rounded-DEFAULT hover:bg-[#334155]" title="Reset Framing">
+
+<span class="material-symbols-outlined text-body-md" data-icon="restart_alt">restart_alt</span>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Grad-CAM Mode Selectors & Explainability Attribution Card -->
+
+<div class="p-4 bg-[#FFF9EE] border-t border-[#34497F] space-y-3">
+
+<div class="flex flex-wrap items-center justify-between gap-2">
+
+<div class="flex items-center gap-2">
+
+<span class="material-symbols-outlined text-primary" data-icon="heatmap">layers</span>
+
+<span class="font-title-lg text-title-lg text-primary">Grad-CAM Attribution Overlay</span>
+
+</div>
+
+<!-- Three-State Toggle Button Strip -->
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] p-0.5 bg-[#EEF0FF]">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm text-primary hover:bg-[#FFF9EE] rounded-DEFAULT" onclick="document.getElementById('gradcam-layer').style.opacity='0'">
+
+                    Original MRI
+
+                  </button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm text-primary hover:bg-[#FFF9EE] rounded-DEFAULT" onclick="document.getElementById('gradcam-layer').style.opacity='0.95'">
+
+                    Grad-CAM Heatmap
+
+                  </button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#263B73] text-[#FFF9EE] font-bold rounded-DEFAULT shadow-[1px_1px_0px_#263B73]" onclick="document.getElementById('gradcam-layer').style.opacity='0.5'">
+
+                    50% Blended Overlay
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- Mandatory Grad-CAM Clinical Caution Notice -->
+
+<div class="p-3 bg-[#FFE0C5]/50 border border-[#34497F] rounded-DEFAULT flex items-start gap-2.5">
+
+<span class="material-symbols-outlined text-primary text-title-lg shrink-0 mt-0.5" data-icon="warning">warning</span>
+
+<p class="text-body-sm font-body-sm text-primary leading-tight">
+
+<strong>AI Explanation / Grad-CAM:</strong> Visualizes model feature activation for selected finding. Grad-CAM is an exploratory decision-support visualization and does <u>NOT</u> constitute ground truth or confirmed diagnosis. Model attention may reflect adjacent soft tissue artifacts.
+
+                </p>
+
+</div>
+
+<!-- Selected Finding Metadata Attribution Details -->
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-code-metric text-code-metric">
+
+<div class="bg-[#EEF0FF] p-2 border border-[#34497F]/40 rounded-DEFAULT">
+
+<span class="block text-label-caps-sm text-secondary uppercase">Active Finding</span>
+
+<strong class="text-primary">1. ACL (Tear)</strong>
+
+</div>
+
+<div class="bg-[#EEF0FF] p-2 border border-[#34497F]/40 rounded-DEFAULT">
+
+<span class="block text-label-caps-sm text-secondary uppercase">Activation Slice</span>
+
+<strong class="text-primary">Slice #18 (Win #24)</strong>
+
+</div>
+
+<div class="bg-[#EEF0FF] p-2 border border-[#34497F]/40 rounded-DEFAULT">
+
+<span class="block text-label-caps-sm text-secondary uppercase">Target Tensor</span>
+
+<strong class="text-primary text-body-sm truncate block" title="backbone.features.8.0">features.8.0</strong>
+
+</div>
+
+<div class="bg-[#EEF0FF] p-2 border border-[#34497F]/40 rounded-DEFAULT">
+
+<span class="block text-label-caps-sm text-secondary uppercase">Activation Peak</span>
+
+<strong class="text-[#B91C1C]">0.982 (Focal High)</strong>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Series Verification Bar -->
+
+<div class="px-4 py-2 bg-[#F2F3FF] border-t border-dashed border-[#34497F] flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+
+<span class="flex items-center gap-1.5 font-medium">
+
+<span class="material-symbols-outlined text-green-700 text-body-md" data-icon="check_circle">check_circle</span>
+
+                DICOM verified • 5 Slices aligned • Series integrity: 100%
+
+              </span>
+
+<span class="font-code-metric text-code-metric text-primary">Transfer Syntax: 1.2.840.10008.1.2.1</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===================================================================== -->
+
+<!-- RIGHT COLUMN: Canonical 12 AI Findings & Probability Ledger (5 Cols)   -->
+
+<!-- ===================================================================== -->
+
+<div class="xl:col-span-5 space-y-4">
+
+<div class="plate-card-focal p-0 overflow-hidden">
+
+<!-- Section Header Banner with Soft Peach Background -->
+
+<div class="peach-pill-banner p-3.5 border-none border-b border-[#34497F] flex items-center justify-between">
+
+<div class="flex items-center gap-2">
+
+
+
+<h3 class="font-title-lg text-title-lg font-bold text-primary">
+
+                  12 AI FINDING&nbsp;</h3>
+
+</div>
+
+
+
+</div>
+
+<!-- Mandatory Clinical Regulatory Notice -->
+
+<div class="p-3 bg-[#FFF9EE] border-b border-dashed border-[#34497F] text-body-sm font-body-sm text-[#705A45] leading-snug">
+
+<p class="">
+
+<strong>Mandatory Clinical Notice:</strong> AI output represents unvalidated statistical probability distribution (0.00 to 1.00). Probability does NOT equate to diagnosis and has NO validated autonomous threshold. All findings require explicit Radiologist Review.
+
+              </p>
+
+</div>
+
+<!-- Findings Table Header -->
+
+<div class="bg-[#FFE0C5]/60 px-4 py-2 border-b border-[#34497F] grid grid-cols-12 text-label-caps-sm font-label-caps-sm text-primary font-extrabold uppercase">
+
+<div class="col-span-4">Finding Name</div>
+
+<div class="col-span-4 text-center">Model Probability</div>
+
+<div class="col-span-4 text-right">Workflow &amp; Inspect</div>
+
+</div>
+
+<!-- The 12 Canonical Findings Rows -->
+
+<div class="divide-y divide-dashed divide-[#34497F]/40 bg-[#FFF9EE] text-body-sm font-body-sm">
+
+<!-- 1. ACL -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2 bg-[#FFE0C5]/20">
+
+<div class="col-span-4">
+
+<div class="font-bold text-primary flex items-center gap-1.5">
+
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+
+                    1. ACL
+
+                  </div>
+
+<span class="text-[10px] text-red-700 font-bold uppercase">High Probability</span>
+
+</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-primary font-bold text-xs mb-0.5">
+
+<span class="">0.9421</span>
+
+<span class="">94.21%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#B91C1C] h-full" style="width: 94.21%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#263B73] text-[#FFF9EE] text-[10px] font-bold rounded shadow-[1px_1px_0px_#34497F] hover:bg-[#1E2E5C]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 2. MCL -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2">
+
+<div class="col-span-4 font-semibold text-primary">2. MCL</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-on-surface-variant text-xs mb-0.5">
+
+<span class="">0.1245</span>
+
+<span class="">12.45%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#34497F] h-full" style="width: 12.45%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 3. Medial Meniscus -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2 bg-[#FFE0C5]/20">
+
+<div class="col-span-4">
+
+<div class="font-bold text-primary flex items-center gap-1.5">
+
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+
+                    3. Medial Meniscus
+
+                  </div>
+
+<span class="text-[10px] text-red-700 font-bold uppercase">Tear Detected</span>
+
+</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-primary font-bold text-xs mb-0.5">
+
+<span class="">0.8812</span>
+
+<span class="">88.12%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#B91C1C] h-full" style="width: 88.12%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 4. Lateral Meniscus -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2 bg-[#FFE0C5]/20">
+
+<div class="col-span-4">
+
+<div class="font-bold text-primary flex items-center gap-1.5">
+
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+
+                    4. Lateral Meniscus
+
+                  </div>
+
+<span class="text-[10px] text-red-700 font-bold uppercase">Complex Tear</span>
+
+</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-primary font-bold text-xs mb-0.5">
+
+<span class="">0.8190</span>
+
+<span class="">81.90%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#B91C1C] h-full" style="width: 81.90%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 5. Medial OA -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2">
+
+<div class="col-span-4 font-semibold text-primary">5. Medial OA</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-on-surface-variant text-xs mb-0.5">
+
+<span class="">0.0820</span>
+
+<span class="">8.20%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#34497F] h-full" style="width: 8.20%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 6. Lateral OA -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2">
+
+<div class="col-span-4 font-semibold text-primary">6. Lateral OA</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-on-surface-variant text-xs mb-0.5">
+
+<span class="">0.0512</span>
+
+<span class="">5.12%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#34497F] h-full" style="width: 5.12%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 7. PF OA -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2">
+
+<div class="col-span-4 font-semibold text-primary">7. PF OA</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-on-surface-variant text-xs mb-0.5">
+
+<span class="">0.1410</span>
+
+<span class="">14.10%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#34497F] h-full" style="width: 14.10%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 8. Effusion -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2 bg-[#FFE0C5]/20">
+
+<div class="col-span-4">
+
+<div class="font-bold text-primary flex items-center gap-1.5">
+
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+
+                    8. Effusion
+
+                  </div>
+
+<span class="text-[10px] text-red-700 font-bold uppercase">Marked Fluid</span>
+
+</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-primary font-bold text-xs mb-0.5">
+
+<span class="">0.9150</span>
+
+<span class="">91.50%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#B91C1C] h-full" style="width: 91.50%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 9. Synovitis -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2 bg-[#FFE0C5]/20">
+
+<div class="col-span-4">
+
+<div class="font-bold text-primary flex items-center gap-1.5">
+
+<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+
+                    9. Synovitis
+
+                  </div>
+
+<span class="text-[10px] text-amber-800 font-bold uppercase">Prominent</span>
+
+</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-primary font-bold text-xs mb-0.5">
+
+<span class="">0.7230</span>
+
+<span class="">72.30%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#D97706] h-full" style="width: 72.30%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 10. Baker's -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2">
+
+<div class="col-span-4 font-semibold text-primary">10. Baker's</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-on-surface-variant text-xs mb-0.5">
+
+<span class="">0.0630</span>
+
+<span class="">6.30%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#34497F] h-full" style="width: 6.30%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 11. Contusion -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2 bg-[#FFE0C5]/20">
+
+<div class="col-span-4">
+
+<div class="font-bold text-primary flex items-center gap-1.5">
+
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+
+                    11. Contusion
+
+                  </div>
+
+<span class="text-[10px] text-red-700 font-bold uppercase">Bone Edema</span>
+
+</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-primary font-bold text-xs mb-0.5">
+
+<span class="">0.7940</span>
+
+<span class="">79.40%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#B91C1C] h-full" style="width: 79.40%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+<!-- 12. Fracture -->
+
+<div class="px-4 py-2.5 hover:bg-[#EEF0FF] transition-colors grid grid-cols-12 items-center gap-2">
+
+<div class="col-span-4 font-semibold text-primary">12. Fracture</div>
+
+<div class="col-span-4 px-2">
+
+<div class="flex justify-between text-code-metric font-code-metric text-on-surface-variant text-xs mb-0.5">
+
+<span class="">0.0210</span>
+
+<span class="">2.10%</span>
+
+</div>
+
+<div class="w-full bg-[#E0E2F0] h-2 rounded-full overflow-hidden border border-[#34497F]/30">
+
+<div class="bg-[#34497F] h-full" style="width: 2.10%"></div>
+
+</div>
+
+</div>
+
+<div class="col-span-4 flex items-center justify-end gap-1.5">
+
+<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-[#FEF3C7] text-[#D97706] border border-[#D97706]">PENDING</span>
+
+<button class="px-2 py-1 bg-[#FFF9EE] text-primary border border-[#34497F] text-[10px] font-bold rounded hover:bg-[#FFE0C5]">
+
+                    Grad-CAM
+
+                  </button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Findings Summary Footer Strip -->
+
+<div class="p-3 bg-[#F2F3FF] border-t border-[#34497F] flex items-center justify-between text-label-caps-sm font-label-caps-sm text-primary">
+
+<span class="">CANONICAL INDEX: 12 OF 12 PRESENT</span>
+
+<span class="font-bold">MEAN COHORT CONFIDENCE: 0.884</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================================= -->
+
+<!-- 3. FULL-WIDTH: RADIOLOGIST REVIEW WORKSPACE & HITL AUDIT                -->
+
+<!-- ======================================================================= -->
+
+<section class="plate-card-focal p-space-md space-y-4" id="radiologist-review">
+
+<div class="flex flex-wrap items-center justify-between gap-3 pb-3 dashed-ink-divider">
+
+<div class="flex items-center gap-2">
+
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="rate_review">rate_review</span>
+
+<div>
+
+<h3 class="font-headline-md text-headline-md text-primary">RADIOLOGIST REVIEW WORKSPACE</h3>
+
+
+
+</div>
+
+</div>
+
+<div class="flex items-center gap-2">
+
+<span class="px-3 py-1 bg-[#DCFCE7] text-[#15803D] border border-[#15803D] rounded-DEFAULT font-label-caps-sm text-label-caps-sm font-bold">
+
+              6 APPROVED
+
+            </span>
+
+<span class="px-3 py-1 bg-[#FFE4E6] text-[#BE123C] border border-[#BE123C] rounded-DEFAULT font-label-caps-sm text-label-caps-sm font-bold">
+
+              6 REJECTED
+
+            </span>
+
+</div>
+
+</div>
+
+<!-- Golden Case Standard Guideline Banner -->
+
+<div class="p-3.5 bg-[#FFE0C5] border border-[#34497F] rounded-DEFAULT flex items-start gap-3">
+
+<span class="material-symbols-outlined text-primary text-headline-sm shrink-0" data-icon="gavel">gavel</span>
+
+<div class="text-body-sm font-body-sm text-primary">
+
+<strong class="font-bold">Human decision layer strictly required. Golden Case Standard:</strong>
+
+            6 Findings Approved (ACL, Medial Meniscus, Lateral Meniscus, Effusion, Synovitis, Contusion), 
+
+            6 Findings Rejected (MCL, Medial OA, Lateral OA, PF OA, Baker's, Fracture). Approving a finding admits it into downstream LLM report generation.
+
+          </div>
+
+</div>
+
+<!-- HITL Decision Matrix Table -->
+
+<div class="border border-[#34497F] rounded-DEFAULT overflow-x-auto bg-[#FFF9EE]">
+
+<table class="w-full text-left border-collapse text-body-sm font-body-sm">
+
+<thead>
+
+<tr class="bg-[#FFE0C5] border-b border-[#34497F] text-label-caps-sm font-label-caps-sm text-primary font-bold">
+
+<th class="p-2.5">No.</th>
+
+<th class="p-2.5">Canonical Finding</th>
+
+<th class="p-2.5">AI Prob.</th>
+
+<th class="p-2.5 text-center">Attending Decision</th>
+
+<th class="p-2.5">Radiologist Clinical Annotation / Key Evidence</th>
+
+</tr>
+
+</thead>
+
+<tbody class="divide-y divide-dashed divide-[#34497F]/40">
+
+<!-- 1. ACL -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#DCFCE7]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">01</td>
+
+<td class="p-2.5 font-bold text-primary">ACL</td>
+
+<td class="p-2.5 font-code-metric text-red-700 font-bold">0.9421</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#15803D] text-white font-bold">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#FFE4E6]">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-primary font-medium focus:border-primary focus:ring-0" type="text" value="Complete mid-substance tear visualized with secondary lateral femoral condyle contusion.">
+
+</td>
+
+</tr>
+
+<!-- 2. MCL -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#FFE4E6]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">02</td>
+
+<td class="p-2.5 font-semibold text-primary">MCL</td>
+
+<td class="p-2.5 font-code-metric text-on-surface-variant">0.1245</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#DCFCE7]">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#BE123C] text-white font-bold">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-on-surface-variant focus:border-primary focus:ring-0" type="text" value="MCL fibers continuous; no periligamentous fluid or discrete fiber disruption.">
+
+</td>
+
+</tr>
+
+<!-- 3. Medial Meniscus -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#DCFCE7]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">03</td>
+
+<td class="p-2.5 font-bold text-primary">Medial Meniscus</td>
+
+<td class="p-2.5 font-code-metric text-red-700 font-bold">0.8812</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#15803D] text-white font-bold">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#FFE4E6]">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-primary font-medium focus:border-primary focus:ring-0" type="text" value="Complex posterior horn tear extending to inferior articular margin.">
+
+</td>
+
+</tr>
+
+<!-- 4. Lateral Meniscus -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#DCFCE7]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">04</td>
+
+<td class="p-2.5 font-bold text-primary">Lateral Meniscus</td>
+
+<td class="p-2.5 font-code-metric text-red-700 font-bold">0.8190</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#15803D] text-white font-bold">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#FFE4E6]">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-primary font-medium focus:border-primary focus:ring-0" type="text" value="Radial tear at body-anterior horn junction, stable without extrusion.">
+
+</td>
+
+</tr>
+
+<!-- 5. Medial OA -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#FFE4E6]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">05</td>
+
+<td class="p-2.5 font-semibold text-primary">Medial OA</td>
+
+<td class="p-2.5 font-code-metric text-on-surface-variant">0.0820</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#DCFCE7]">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#BE123C] text-white font-bold">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-on-surface-variant focus:border-primary focus:ring-0" type="text" value="Cartilage thickness maintained, no significant marginal osteophytosis.">
+
+</td>
+
+</tr>
+
+<!-- 6. Lateral OA -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#FFE4E6]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">06</td>
+
+<td class="p-2.5 font-semibold text-primary">Lateral OA</td>
+
+<td class="p-2.5 font-code-metric text-on-surface-variant">0.0512</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#DCFCE7]">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#BE123C] text-white font-bold">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-on-surface-variant focus:border-primary focus:ring-0" type="text" value="Joint space preservation; no osteochondral defects.">
+
+</td>
+
+</tr>
+
+<!-- 7. PF OA -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#FFE4E6]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">07</td>
+
+<td class="p-2.5 font-semibold text-primary">PF OA</td>
+
+<td class="p-2.5 font-code-metric text-on-surface-variant">0.1410</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#DCFCE7]">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#BE123C] text-white font-bold">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-on-surface-variant focus:border-primary focus:ring-0" type="text" value="Normal patellofemoral tracking; minor chondromalacia Grade I non-limiting.">
+
+</td>
+
+</tr>
+
+<!-- 8. Effusion -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#DCFCE7]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">08</td>
+
+<td class="p-2.5 font-bold text-primary">Effusion</td>
+
+<td class="p-2.5 font-code-metric text-red-700 font-bold">0.9150</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#15803D] text-white font-bold">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#FFE4E6]">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-primary font-medium focus:border-primary focus:ring-0" type="text" value="Moderate-to-large suprapatellar pouch joint distention consistent with hemarthrosis.">
+
+</td>
+
+</tr>
+
+<!-- 9. Synovitis -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#DCFCE7]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">09</td>
+
+<td class="p-2.5 font-bold text-primary">Synovitis</td>
+
+<td class="p-2.5 font-code-metric text-amber-700 font-bold">0.7230</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#15803D] text-white font-bold">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#FFE4E6]">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-primary font-medium focus:border-primary focus:ring-0" type="text" value="Reactive synovial frond thickening throughout Hoffa's fat pad interface.">
+
+</td>
+
+</tr>
+
+<!-- 10. Baker's -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#FFE4E6]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">10</td>
+
+<td class="p-2.5 font-semibold text-primary">Baker's</td>
+
+<td class="p-2.5 font-code-metric text-on-surface-variant">0.0630</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#DCFCE7]">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#BE123C] text-white font-bold">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-on-surface-variant focus:border-primary focus:ring-0" type="text" value="No popliteal cyst in the semimembranosus-medial gastrocnemius bursa.">
+
+</td>
+
+</tr>
+
+<!-- 11. Contusion -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#DCFCE7]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">11</td>
+
+<td class="p-2.5 font-bold text-primary">Contusion</td>
+
+<td class="p-2.5 font-code-metric text-red-700 font-bold">0.7940</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#15803D] text-white font-bold">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#FFE4E6]">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-primary font-medium focus:border-primary focus:ring-0" type="text" value="Classic pivot-shift kissing contusion: lateral femoral condyle and posterolateral tibia.">
+
+</td>
+
+</tr>
+
+<!-- 12. Fracture -->
+
+<tr class="hover:bg-[#EEF0FF] bg-[#FFE4E6]/20">
+
+<td class="p-2.5 font-code-metric font-bold text-primary">12</td>
+
+<td class="p-2.5 font-semibold text-primary">Fracture</td>
+
+<td class="p-2.5 font-code-metric text-on-surface-variant">0.0210</td>
+
+<td class="p-2.5 text-center whitespace-nowrap">
+
+<div class="inline-flex rounded-DEFAULT border border-[#34497F] overflow-hidden">
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#FFF9EE] text-on-surface-variant hover:bg-[#DCFCE7]">APPROVE</button>
+
+<button class="px-2.5 py-1 text-label-caps-sm font-label-caps-sm bg-[#BE123C] text-white font-bold">REJECT</button>
+
+</div>
+
+</td>
+
+<td class="p-2.5">
+
+<input class="w-full bg-[#FFF9EE] border border-[#34497F]/50 rounded text-body-sm p-1.5 text-on-surface-variant focus:border-primary focus:ring-0" type="text" value="No cortical step-off or occult fracture line visualized.">
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+
+<span class="text-body-sm font-body-sm text-secondary italic">
+
+            Audit Stamp: Dr. Eleanor Vance, MD • 2024-11-04 10:22 EST
+
+          </span>
+
+<button class="btn-primary-archival px-4 py-2 rounded-DEFAULT font-label-caps-lg text-label-caps-lg uppercase flex items-center gap-2">
+
+<span class="material-symbols-outlined text-body-lg" data-icon="save">save</span>
+
+            Save Review &amp; Stage for LLM Report
+
+          </button>
+
+</div>
+
+</section>
+
+<!-- ======================================================================= -->
+
+<!-- 4. FULL-WIDTH: AI-ASSISTED CLINICAL REPORT & FINAL APPROVAL            -->
+
+<!-- ======================================================================= -->
+
+<section class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg" id="clinical-report">
+
+<!-- LLM Draft Report Generator (7 Columns) -->
+
+<div class="xl:col-span-7 plate-card p-space-md space-y-3 relative overflow-hidden">
+
+<!-- Watermark Draft Indicator -->
+
+<div class="absolute right-6 top-16 text-[88px] font-headline-lg font-bold text-red-500/10 rotate-[-15deg] pointer-events-none select-none tracking-widest">
+
+            DRAFT
+
+          </div>
+
+<div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 dashed-ink-divider">
+
+<div class="flex items-center gap-2">
+
+<span class="material-symbols-outlined text-primary text-headline-sm" data-icon="clinical_notes">clinical_notes</span>
+
+<h4 class="font-headline-sm text-headline-sm text-primary">Backend LLM Draft Report Generator</h4>
+
+</div>
+
+<span class="px-2.5 py-0.5 rounded-full text-label-caps-sm font-label-caps-sm bg-[#F1F5F9] text-[#475569] border border-[#475569] font-bold">
+
+              REPORT STATUS: DRAFT
+
+            </span>
+
+</div>
+
+<!-- Structured Clinical Draft Filter Notice -->
+
+<div class="p-2.5 bg-[#EEF0FF] border border-[#34497F]/40 rounded-DEFAULT text-body-sm font-body-sm text-primary">
+
+<strong class="font-bold">Filter Notice:</strong> Input to draft report includes <u>ONLY approved findings (6)</u>. Rejected findings (6) are strictly excluded from downstream report generation.
+
+          </div>
+
+<!-- Structured Report Paper View -->
+
+<div class="bg-surface-container-lowest p-4 rounded-DEFAULT border border-[#34497F] space-y-3 font-body-sm text-body-sm leading-relaxed text-on-surface">
+
+<div>
+
+<span class="font-bold text-primary uppercase text-label-caps-sm block">EXAM</span>
+
+<p class="">MRI RIGHT KNEE WITHOUT CONTRAST (Acquired Sagittal PD, Sagittal T2, Coronal PD-FS, Axial PDFS).</p>
+
+</div>
+
+<div class="pt-1 border-t border-dashed border-[#34497F]/20">
+
+<span class="font-bold text-primary uppercase text-label-caps-sm block">CLINICAL CONTEXT</span>
+
+<p class="">44-year-old female with acute rotational sports injury during tennis. Joint effusion with pain on weight-bearing.</p>
+
+</div>
+
+<div class="pt-1 border-t border-dashed border-[#34497F]/20 space-y-2">
+
+<span class="font-bold text-primary uppercase text-label-caps-sm block">FINDINGS</span>
+
+<div class="">
+
+<strong>Ligamentous Structures:</strong> Complete disruption of the mid-substance fibers of the anterior cruciate ligament (ACL) with non-visualization of normal low-signal trajectory. The posterior cruciate ligament (PCL), medial collateral ligament (MCL), and fibular collateral ligament complexes remain intact.
+
+              </div>
+
+<div class="">
+
+<strong>Menisci:</strong> Complex radial tear identified at the lateral meniscus body-anterior horn junction. The medial meniscus demonstrates a posterior horn complex tear extending to the inferior articular surface.
+
+              </div>
+
+<div class="">
+
+<strong>Osseous &amp; Cartilage:</strong> Kissing bone contusion pattern involving the mid-lateral femoral condyle and posterolateral tibial plateau, consistent with pivot-shift mechanics. No cortical fracture. Articular cartilage is preserved across all three compartments without significant osteoarthritic degradation.
+
+              </div>
+
+<div class="">
+
+<strong>Joint Fluid:</strong> Moderate-to-large joint effusion with high signal frond-like synovial thickening, consistent with hemarthrosis and reactive synovitis. No Baker's cyst.
+
+              </div>
+
+</div>
+
+<div class="pt-2 border-t-2 border-[#34497F] bg-[#FFF9EE] p-3 rounded-DEFAULT">
+
+<span class="font-bold text-primary uppercase text-label-caps-sm block">IMPRESSION</span>
+
+<ol class="list-decimal list-inside space-y-1 font-semibold text-primary">
+
+<li class="">Full-thickness mid-substance rupture of the anterior cruciate ligament (ACL).</li>
+
+<li class="">Radial tear of the lateral meniscus body and complex posterior horn medial meniscus tear.</li>
+
+<li class="">Substantial hemarthrosis with associated reactive synovitis.</li>
+
+<li class="">Prominent pivot-shift bone contusion pattern in the lateral femoral condyle and posterolateral tibial plateau.</li>
+
+</ol>
+
+</div>
+
+</div>
+
+<div class="flex items-center justify-between text-label-caps-sm font-label-caps-sm text-secondary pt-1">
+
+<span class="">GENERATION MODEL: MED-LLAMA-3-70B CLINICAL FINETUNE</span>
+
+<span class="">TOKEN COUNT: 482 WORDS</span>
+
+</div>
+
+</div>
+
+<!-- Section 2: Final Radiologist Approval Panel (5 Columns) -->
+
+<div class="xl:col-span-5 plate-card-focal p-space-md flex flex-col justify-between space-y-4" id="final-approval">
+
+<div class="space-y-3">
+
+<!-- Prominent Peach Warning Header -->
+
+<div class="peach-pill-banner p-3 rounded-DEFAULT flex items-center gap-2">
+
+<span class="material-symbols-outlined text-primary text-headline-sm" data-icon="lock">lock</span>
+
+<div>
+
+<h4 class="font-title-lg text-title-lg font-bold text-primary">FINAL APPROVAL REQUIRED</h4>
+
+<p class="text-body-sm font-body-sm text-primary">Irreversible Dossier Signature Protocol</p>
+
+</div>
+
+</div>
+
+<!-- Attending Information Plate -->
+
+<div class="bg-[#EEF0FF] p-3 rounded-DEFAULT border border-[#34497F] space-y-1">
+
+<div class="text-label-caps-sm font-label-caps-sm text-secondary uppercase font-bold">Reviewing Attending Radiologist</div>
+
+<div class="font-title-lg text-title-lg text-primary font-bold">Dr. Eleanor Vance, MD</div>
+
+<div class="text-body-sm font-body-sm text-on-surface-variant">
+
+                MSK Radiology • Harvard/Brigham Fellow • License #MD-884920-MA
+
+              </div>
+
+</div>
+
+<!-- Statutory Attestation Checkbox -->
+
+<div class="p-3 bg-[#FFF9EE] border border-[#34497F] rounded-DEFAULT">
+
+<label class="flex items-start gap-3 cursor-pointer select-none">
+
+<input checked="" class="mt-1 w-5 h-5 text-primary border-2 border-[#34497F] rounded bg-[#FFF9EE] focus:ring-0 cursor-pointer" type="checkbox">
+
+<span class="text-body-sm font-body-sm text-primary font-medium leading-tight">
+
+                  I hereby certify that I have reviewed all 12 AI findings, examined raw MRI slices alongside Grad-CAM activation maps, verified the clinical accuracy of this draft report, and take legal diagnostic responsibility for this dossier.
+
+                </span>
+
+</label>
+
+</div>
+
+<div class="space-y-1 text-code-metric font-code-metric text-body-sm text-on-surface-variant">
+
+<div class="flex justify-between">
+
+<span class="">Dossier Hash:</span>
+
+<span class="font-bold text-primary">SHA256:e88f...91bc</span>
+
+</div>
+
+<div class="flex justify-between">
+
+<span class="">DICOM UID:</span>
+
+<span class="text-primary">1.2.840.113619.2.8842</span>
+
+</div>
+
+<div class="flex justify-between">
+
+<span class="">Timestamp:</span>
+
+<span class="text-primary">2024-11-04T15:28:44Z</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Authorized Primary Action Button -->
+
+<div class="space-y-2 pt-4 border-t border-dashed border-[#34497F]">
+
+<button class="w-full btn-primary-archival py-3 px-4 rounded-DEFAULT font-label-caps-lg text-label-caps-lg uppercase flex items-center justify-center gap-2 text-base tracking-wider font-extrabold">
+
+<span class="material-symbols-outlined text-headline-sm" data-icon="verified">verified</span>
+
+              Grant Final Approval &amp; Sign Dossier
+
+            </button>
+
+<p class="text-center font-label-caps-sm text-label-caps-sm text-secondary">
+
+              TRIGGERS POST /api/v1/report/final-approval • STATUS: PENDING FINAL SIGNATURE
+
+            </p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Canvas Archival Bottom Margin / Specimen Footer -->
+
+<footer class="pt-6 pb-8 border-t border-[#34497F]/30 flex flex-wrap items-center justify-between text-label-caps-sm font-label-caps-sm text-secondary gap-4">
+
+<div>
+
+<span class="">KNEE-AI 3.3 MEDICAL CAD SYSTEM • ARCHIVAL SPECIMEN WORKFLOW</span>
+
+<span class="mx-2">•</span>
+
+<span class="">COMPLIANT WITH ACR-NEMA / DICOM PS3.1-2023</span>
+
+</div>
+
+<div>
+
+<span class="">PATIENT PRIVACY PROTECTED • HIPAA OMNIBUS RULE APPLIED</span>
+
+</div>
+
+</footer>
+
+</main>
+
+</div>
+
+
+
+<div id="knee-ai-frontend-shell" class="max-w-7xl mx-auto px-4 py-6"></div>
+
+
+
+<script>
+
+  (function () {
+
+    const shell = document.getElementById('knee-ai-frontend-shell');
+
+    const API_BASE_URL = window.KNEE_AI_API_BASE_URL || (location.protocol.startsWith('http') ? location.origin : 'http://127.0.0.1:8000');
+
+    const REQUEST_TIMEOUT_MS = 180000;
+
+    const STORAGE_KEY = 'knee_ai_frontend_session';
+
+    const STATE = {
+
+      session: null,
+
+      studies: [],
+
+      selectedStudyId: null,
+
+      pendingDetail: null,
+
+      aiMetadata: null,
+
+      patientReports: [],
+
+      orthopedics: [],
+
+      notification: null,
+
+      loading: false,
+
+      submitting: false,
+
+    };
+
+
+
+    const CANONICAL_ORDER = [
+
+      'ACL',
+
+      'MCL',
+
+      'Medial Meniscus',
+
+      'Lateral Meniscus',
+
+      'Medial OA',
+
+      'Lateral OA',
+
+      'PF OA',
+
+      'Effusion',
+
+      'Synovitis',
+
+      "Baker's",
+
+      'Contusion',
+
+      'Fracture',
+
+    ];
+
+
+
+    function readSession() {
+
+      try {
+
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+
+        return parsed && parsed.accessToken && parsed.userId && parsed.role ? parsed : null;
+
+      } catch {
+
+        return null;
+
+      }
+
+    }
+
+
+
+    function persistSession(session) {
+
+      if (session) {
+
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+
+      } else {
+
+        sessionStorage.removeItem(STORAGE_KEY);
+
+      }
+
+    }
+
+
+
+    function getHeaders() {
+
+      const session = readSession();
+
+      if (!session) {
+
+        return {};
+
+      }
+
+      return {
+
+        Authorization: `Bearer ${session.accessToken}`,
+
+        'Content-Type': 'application/json',
+
+      };
+
+    }
+
+
+
+    function escapeHtml(value) {
+
+      return String(value ?? '')
+
+        .replaceAll('&', '&amp;')
+
+        .replaceAll('<', '&lt;')
+
+        .replaceAll('>', '&gt;')
+
+        .replaceAll('"', '&quot;')
+
+        .replaceAll("'", '&#039;');
+
+    }
+
+
+
+    function isOrthopedicRole(role) {
+
+      return role === 'ORTHOPEDIC' || role === 'ORTHOPEDIC_SURGEON';
+
+    }
+
+
+
+    function isPatientRole(role) {
+
+      return role === 'PATIENT';
+
+    }
+
+
+
+    async function getStudyDetail(studyId) {
+
+      const role = STATE.session?.role;
+
+      if (isPatientRole(role)) {
+
+        return api(`/patient/reports/${studyId}`);
+
+      }
+
+      if (isOrthopedicRole(role)) {
+
+        const approved = await api(`/orthopedic/studies/${studyId}`);
+
+        return { ...approved, report: { status: 'APPROVED', draft_content: approved.approved_report, patient_explanation: approved.patient_explanation } };
+
+      }
+
+      const detail = await api(`/studies/${studyId}`);
+
+      if (detail.report) detail.versions = await api(`/reports/${detail.report.report_id}/versions`);
+
+      return detail;
+
+    }
+
+
+
+    async function api(path, options = {}) {
+
+      const headers = {
+
+        'Content-Type': 'application/json',
+
+        ...getHeaders(),
+
+        ...(options.headers || {}),
+
+      };
+
+      if (options.body instanceof FormData) {
+
+        delete headers['Content-Type'];
+
+      }
+
+      const controller = new AbortController();
+
+      const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+      let response;
+
+      try {
+
+        response = await fetch(`${API_BASE_URL}${path}`, {
+
+          ...options,
+
+          headers,
+
+          signal: controller.signal,
+
+        });
+
+      } catch (error) {
+
+        if (error.name === 'AbortError') {
+
+          throw new Error('The backend request timed out. Check that KNEE-AI is running on port 8000.');
+
+        }
+
+        throw new Error('Cannot connect to the KNEE-AI backend. Start it on http://127.0.0.1:8000.');
+
+      } finally {
+
+        window.clearTimeout(timeout);
+
+      }
+
+
+
+      let payload = null;
+
+      try {
+
+        payload = await response.json();
+
+      } catch {
+
+        payload = null;
+
+      }
+
+
+
+      if (!response.ok) {
+
+        const detail = payload?.detail || payload?.message || (
+
+          response.status === 404 ? `Endpoint not found: ${path}` :
+
+          response.status >= 500 ? `Backend error (${response.status}).` :
+
+          `Request failed (${response.status}).`
+
+        );
+
+        if (response.status === 401) {
+
+          persistSession(null);
+
+          STATE.session = null;
+
+          renderLogin();
+
+        }
+
+        const message = Array.isArray(detail) ? detail.map(item => `${item.loc?.join('.')}: ${item.msg}`).join('; ') : String(detail);
+
+        throw new Error(`HTTP ${response.status}: ${message}`);
+
+      }
+
+
+
+      return payload;
+
+    }
+
+
+
+    async function uploadMri(event) {
+
+      event.preventDefault();
+
+      const input = event.target.querySelector('input[type="file"]');
+
+      if (!input.files.length) {
+
+        setNotification('Select one or more DICOM files first.', 'error');
+
+        return;
+
+      }
+
+      const body = new FormData();
+
+      Array.from(input.files).forEach((file) => body.append('files', file, file.name));
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        const response = await api('/studies/upload', { method: 'POST', body });
+
+        STATE.studies = await api('/studies');
+
+        STATE.selectedStudyId = response.study_id;
+
+        STATE.pendingDetail = await getStudyDetail(response.study_id);
+
+        setNotification(`Ingested ${response.file_count} DICOM slice(s) from ${response.series_count} series as study ${response.study_id}.`, 'success');
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.submitting = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    function setNotification(message, variant = 'info') {
+
+      STATE.notification = { message, variant };
+
+      render();
+
+    }
+
+
+
+    function clearNotification() {
+
+      STATE.notification = null;
+
+    }
+
+
+
+    async function login(event) {
+
+      event.preventDefault();
+
+      const form = new FormData(event.target);
+
+      const email = String(form.get('email') || '').trim();
+
+      const password = String(form.get('password') || '');
+
+      if (!email || !password) {
+
+        setNotification('Enter your email and password to continue.', 'error');
+
+        return;
+
+      }
+
+
+
+      STATE.loading = true;
+
+      render();
+
+      try {
+
+        const response = await api('/login', {
+
+          method: 'POST',
+
+          body: JSON.stringify({ email, password }),
+
+        });
+
+        const session = {
+
+          accessToken: response.access_token,
+
+          userId: response.user_id,
+
+          email: response.email,
+
+          role: response.role,
+
+        };
+
+        persistSession(session);
+
+        STATE.session = session;
+
+        STATE.selectedStudyId = null;
+
+        clearNotification();
+
+        await initializeApp();
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.loading = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    function logout() {
+
+      persistSession(null);
+
+      STATE.session = null;
+
+      STATE.studies = [];
+
+      STATE.patientReports = [];
+
+      STATE.orthopedics = [];
+
+      STATE.selectedStudyId = null;
+
+      STATE.editingReport = false;
+
+      STATE.pendingDetail = null;
+
+      STATE.aiMetadata = null;
+
+      renderLogin();
+
+    }
+
+
+
+    async function initializeApp() {
+
+      STATE.session = readSession();
+
+      if (!STATE.session) {
+
+        renderLogin();
+
+        return;
+
+      }
+
+
+
+      STATE.loading = true;
+
+      render();
+
+      try {
+
+        if (STATE.session.role === 'PATIENT') {
+
+          STATE.patientReports = await api('/patient/reports');
+
+          STATE.selectedStudyId = STATE.selectedStudyId || STATE.patientReports[0]?.study_id || null;
+
+        } else if (isOrthopedicRole(STATE.session.role)) {
+
+          STATE.orthopedics = await api('/orthopedic/studies');
+
+          STATE.selectedStudyId = STATE.selectedStudyId || STATE.orthopedics[0]?.study_id || null;
+
+        } else {
+
+          STATE.studies = await api('/studies');
+
+          STATE.selectedStudyId = STATE.selectedStudyId || STATE.studies[0]?.study_id || null;
+
+        }
+
+
+
+        if (STATE.selectedStudyId) {
+
+          STATE.pendingDetail = await getStudyDetail(STATE.selectedStudyId);
+
+        } else {
+
+          STATE.pendingDetail = null;
+
+        }
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.loading = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    async function refreshStudyDetail() {
+
+      if (!STATE.selectedStudyId) {
+
+        STATE.pendingDetail = null;
+
+        return;
+
+      }
+
+      STATE.loading = true;
+
+      render();
+
+      try {
+
+        STATE.pendingDetail = await getStudyDetail(STATE.selectedStudyId);
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.loading = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    async function runAiAnalysis() {
+
+      if (!STATE.selectedStudyId) return;
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        const response = await api('/api/v1/ai/analyze', {
+
+          method: 'POST',
+
+          body: JSON.stringify({
+
+            study_id: STATE.selectedStudyId,
+
+            action: 'ANALYZE_KNEE_MRI',
+
+          }),
+
+        });
+
+        STATE.aiMetadata = response;
+
+        await refreshStudyDetail();
+
+        setNotification('AI analysis completed. Radiologist review is now required.', 'success');
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.submitting = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    async function submitReview(event) {
+
+      event.preventDefault();
+
+      const form = new FormData(event.target);
+
+      const decision = String(form.get('decision') || 'MIXED');
+
+      const validatedFindings = [];
+
+      const aiProbabilities = STATE.pendingDetail?.ai_probabilities || {};
+
+      const findingEntries = CANONICAL_ORDER.filter((label) => aiProbabilities[label] !== undefined);
+
+
+
+      findingEntries.forEach((label, index) => {
+
+        const outcome = String(form.get(`outcome-${index}`) || '');
+
+        validatedFindings.push({
+
+          finding: label,
+
+          outcome,
+
+          details: String(form.get(`details-${index}`) || '').trim() || null,
+
+          is_radiologist_added: false,
+
+        });
+
+      });
+
+
+
+      const added = String(form.get('added-finding') || '').trim();
+
+      if (added) validatedFindings.push({finding:added, outcome:'CONFIRMED', details:String(form.get('added-details') || '').trim() || null, is_radiologist_added:true});
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        await api(`/studies/${STATE.selectedStudyId}/review`, {
+
+          method: 'POST',
+
+          body: JSON.stringify({
+
+            decision,
+
+            validated_findings: validatedFindings,
+
+            notes: String(form.get('review-notes') || '').trim(),
+
+          }),
+
+        });
+
+        await refreshStudyDetail();
+
+        setNotification('Radiologist review submitted successfully.', 'success');
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.submitting = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    async function generateDraft() {
+
+      if (!STATE.selectedStudyId) return;
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        const response = await api(`/studies/${STATE.selectedStudyId}/generate-report`, {
+
+          method: 'POST',
+
+        });
+
+        await refreshStudyDetail();
+
+        setNotification(`Draft report created: Report #${response.report_id}.`, 'success');
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.submitting = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    function editReport() {
+
+      STATE.editingReport = true;
+
+      render();
+
+    }
+
+
+
+    async function saveReport(event) {
+
+      event.preventDefault();
+
+      const form = new FormData(event.target);
+
+      const report = STATE.pendingDetail.report;
+
+      const parsed = parseContent(report.draft_content);
+
+      const content = parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+
+        ? JSON.stringify({...parsed, findings: String(form.get('findings')).split('\n').filter(line => line.trim()), impression: String(form.get('impression')), status: 'DRAFT', final_approval: 'PENDING'})
+
+        : String(form.get('content'));
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        await api(`/reports/${report.report_id}`, {method:'PUT', body:JSON.stringify({draft_content:content})});
+
+        STATE.editingReport = false;
+
+        await refreshStudyDetail();
+
+        setNotification('Edited version saved. Explicit radiologist approval is still required.', 'success');
+
+      } catch (error) { setNotification(error.message, 'error'); }
+
+      finally { STATE.submitting = false; render(); }
+
+    }
+
+
+
+    async function generatePatientExplanation() {
+
+      if (!STATE.selectedStudyId) return;
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        await api(`/studies/${STATE.selectedStudyId}/patient-explanation`, { method: 'POST' });
+
+        await refreshStudyDetail();
+
+        setNotification('Patient explanation generated. Human approval and release are still required.', 'success');
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.submitting = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    async function approveReport() {
+
+      const report = STATE.pendingDetail?.report;
+
+      if (!report) return;
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        await api(`/reports/${report.report_id}/approve`, {
+
+          method: 'POST',
+
+          body: JSON.stringify({}),
+
+        });
+
+        await refreshStudyDetail();
+
+        setNotification('Report approved and forwarded to orthopedic review.', 'success');
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.submitting = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    async function submitOrthopedicReview(event) {
+
+      event.preventDefault();
+
+      const form = new FormData(event.target);
+
+      const body = {
+
+        assessment: String(form.get('assessment') || '').trim(),
+
+        recommendation: String(form.get('recommendation') || '').trim(),
+
+        notes: String(form.get('notes') || '').trim(),
+
+        patient_information_approved: form.get('patient_information_approved') === 'true',
+
+        approved_followup_info: String(form.get('approved_followup_info') || '').trim(),
+
+      };
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        await api(`/orthopedic/${STATE.selectedStudyId}/review`, {
+
+          method: 'POST',
+
+          body: JSON.stringify(body),
+
+        });
+
+        await refreshStudyDetail();
+
+        setNotification('Orthopedic review submitted.', 'success');
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.submitting = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    async function releaseToPatient() {
+
+      if (!STATE.selectedStudyId) return;
+
+      STATE.submitting = true;
+
+      render();
+
+      try {
+
+        await api(`/studies/${STATE.selectedStudyId}/patient-release`, {
+
+          method: 'POST',
+
+          body: JSON.stringify({}),
+
+        });
+
+        await refreshStudyDetail();
+
+        setNotification('Study released to the patient.', 'success');
+
+      } catch (error) {
+
+        setNotification(error.message, 'error');
+
+      } finally {
+
+        STATE.submitting = false;
+
+        render();
+
+      }
+
+    }
+
+
+
+    function renderLogin() {
+
+      shell.innerHTML = `
+
+        <div class="max-w-xl mx-auto rounded-2xl border border-[#34497F] bg-[#FFF9EE] p-6 shadow-[4px_4px_0_0_#263B73]">
+
+          <div class="mb-6">
+
+            <p class="text-label-caps-sm font-label-caps-sm text-primary uppercase">KNEE-AI 3.3</p>
+
+            <h2 class="mt-2 text-headline-lg font-headline-lg text-primary">Clinical Workspace Login</h2>
+
+            <p class="mt-2 text-body-sm text-on-surface-variant">Sign in with your backend account to access the clinical workflow.</p>
+
+          </div>
+
+          <form id="login-form" class="space-y-4" onsubmit="return false;">
+
+            ${STATE.notification ? `<div role="alert" class="rounded border border-red-700 bg-red-50 p-3">${escapeHtml(STATE.notification.message)}</div>` : ''}
+
+            <div>
+
+              <label class="mb-1 block text-label-caps-sm font-label-caps-sm text-primary uppercase">Email</label>
+
+                <input name="email" type="email" class="w-full rounded border border-[#34497F] bg-white px-3 py-2 text-body-sm" placeholder="clinician@example.com" required />
+
+            </div>
+
+            <div>
+
+                <label class="mb-1 block text-label-caps-sm font-label-caps-sm text-primary uppercase">Password</label>
+
+                <input name="password" type="password" class="w-full rounded border border-[#34497F] bg-white px-3 py-2 text-body-sm" required />
+
+            </div>
+
+            <button type="submit" class="btn-primary-archival w-full rounded px-4 py-3 font-label-caps-lg text-label-caps-lg uppercase">Enter Clinical Workspace</button>
+
+            <div class="mt-4 pt-3 border-t border-[#34497F]/30 text-xs">
+              <p class="font-bold text-primary mb-2">One-Click Demo Roles:</p>
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" data-fill-role="rad" class="rounded border border-[#34497F] bg-[#EEF0FF] p-2 font-bold text-primary hover:bg-[#FFE0C5] text-center">Radiologist</button>
+                <button type="button" data-fill-role="ortho" class="rounded border border-[#34497F] bg-[#EEF0FF] p-2 font-bold text-primary hover:bg-[#FFE0C5] text-center">Orthopedician</button>
+                <button type="button" data-fill-role="pat" class="rounded border border-[#34497F] bg-[#EEF0FF] p-2 font-bold text-primary hover:bg-[#FFE0C5] text-center">Patient</button>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+
+      `;
+
+      const form = shell.querySelector('#login-form');
+
+      form.addEventListener('submit', (event) => {
+
+        event.preventDefault();
+
+        login(event);
+
+      });
+
+      const fills = {
+        rad: ['radiologist@kneura.local', 'Kneura-Rad-83Qp!2026'],
+        ortho: ['orthopedic@kneura.local', 'Kneura-Ortho-57Mx!2026'],
+        pat: ['patient@kneura.local', 'Kneura-Patient-64Vz!2026']
+      };
+      shell.querySelectorAll('[data-fill-role]').forEach(btn => {
+        btn.onclick = () => {
+          const creds = fills[btn.dataset.fillRole];
+          if (creds) {
+            form.querySelector('input[name="email"]').value = creds[0];
+            form.querySelector('input[name="password"]').value = creds[1];
+          }
+        };
+      });
+
+    }
+
+
+
+    function renderStudyList(list = null) {
+
+      const role = STATE.session?.role;
+
+      const activeList = list || (role === 'PATIENT'
+
+        ? (STATE.patientReports || [])
+
+        : isOrthopedicRole(role)
+
+          ? (STATE.orthopedics || [])
+
+          : (STATE.studies || []));
+
+
+
+      if (!activeList.length) {
+
+        const emptyMessage = role === 'PATIENT'
+
+          ? 'No released patient reports are available for this account.'
+
+          : isOrthopedicRole(role)
+
+            ? 'No radiologist-approved studies are currently waiting for orthopedic review.'
+
+            : 'No studies are currently available from the backend.';
+
+        return `<div class="rounded border border-dashed border-[#34497F] bg-[#F2F3FF] p-4 text-body-sm text-on-surface-variant">${emptyMessage}</div>`;
+
+      }
+
+
+
+      return activeList.map((study) => {
+        if (study.study_id === STATE.pendingDetail?.study_id) study = {...study, workflow_state:STATE.pendingDetail.workflow_state || study.workflow_state, report_status:STATE.pendingDetail.report?.status || study.report_status};
+
+        const workflowState = study.workflow_state || study.status || 'UNINITIALIZED';
+
+        const patientLabel = study.patient_id || 'Not linked';
+
+        const aiStatus = study.ai_available ? 'AI Available' : 'AI Pending';
+
+        const reportStatus = study.report_status || study.status || (isOrthopedicRole(role) ? 'APPROVED' : 'None');
+
+
+
+        return `
+
+          <button
+
+            class="w-full rounded border ${study.study_id === STATE.selectedStudyId ? 'border-[#263B73] bg-[#EEF0FF]' : 'border-[#34497F]/50 bg-white'} p-3 text-left transition hover:bg-[#FFF9EE]"
+
+            data-select-study="${escapeHtml(study.study_id)}"
+
+          >
+
+            <div class="flex items-center justify-between gap-3">
+
+              <span class="font-bold text-primary break-all min-w-0">${escapeHtml(study.study_id)}</span>
+
+              <span class="rounded-full border border-[#34497F] px-2 py-0.5 text-[10px] font-bold uppercase">${escapeHtml(workflowState)}</span>
+
+            </div>
+
+            <div class="mt-2 text-body-sm text-on-surface-variant">
+
+              ${role === 'RADIOLOGIST' ? `<div>Patient: ${escapeHtml(patientLabel)}</div>` : ''}
+
+              <div>${role === 'PATIENT' ? `Released report: ${escapeHtml(reportStatus)}` : `${isOrthopedicRole(role) ? 'Approved report' : escapeHtml(aiStatus)} • Report: ${escapeHtml(reportStatus)}`}</div>
+
+            </div>
+
+          </button>
+
+        `;
+
+      }).join('');
+
+    }
+
+
+
+    function renderAiResults(detail) {
+
+      const probabilities = detail?.ai_probabilities || {};
+
+      const rows = CANONICAL_ORDER.map((label) => {
+
+        const value = probabilities[label];
+
+        const percentage = value !== undefined ? (value * 100).toFixed(2) : '—';
+
+        const width = value !== undefined ? Math.max(4, value * 100) : 0;
+
+        return `
+
+          <div class="grid grid-cols-12 items-center gap-2 border-b border-dashed border-[#34497F]/40 p-3">
+
+            <div class="col-span-4 font-bold text-primary">${escapeHtml(label)}</div>
+
+            <div class="col-span-4">
+
+              <div class="mb-1 flex items-center justify-between text-[10px] font-bold text-primary">
+
+                <span>${value !== undefined ? value.toFixed(4) : '—'}</span>
+
+                <span>${percentage}%</span>
+
+              </div>
+
+              <div class="h-2 overflow-hidden rounded-full border border-[#34497F]/40 bg-[#E0E2F0]">
+
+                <div class="h-full rounded-full bg-[#263B73]" style="width: ${width}%"></div>
+
+              </div>
+
+            </div>
+
+            <div class="col-span-4 text-right text-[10px] font-bold uppercase text-[#705A45]">${escapeHtml((detail.validated_findings || []).find(f => f.finding === label)?.outcome?.replace('APPROVED', 'CONFIRMED') || 'PENDING')}</div>
+
+          </div>
+
+        `;
+
+      }).join('');
+
+
+
+      return `
+
+        <div class="rounded border border-[#34497F] bg-[#FFF9EE] overflow-hidden">
+
+          <div class="border-b border-[#34497F] bg-[#FFE0C5] p-3">
+
+            <div class="flex items-center justify-between gap-3">
+
+              <h3 class="text-title-lg font-title-lg text-primary">12 Probabilities</h3>
+
+              <button ${detail?.workflow_state && detail.workflow_state !== 'AI_COMPLETE' ? 'disabled' : ''} class="btn-primary-archival rounded px-3 py-1.5 font-label-caps-sm text-label-caps-sm uppercase" data-ai-analyze>
+
+                Run KNEE-AI 3.3 Analysis
+
+              </button>
+
+            </div>
+
+            ${STATE.aiMetadata ? `
+
+              <div class="mt-2 grid gap-2 text-[10px] font-bold text-primary sm:grid-cols-4">
+
+                <span>Model: ${escapeHtml(STATE.aiMetadata.model_version)}</span>
+
+                <span>Architecture: ${escapeHtml(STATE.aiMetadata.architecture)}</span>
+
+                <span>Series: ${escapeHtml(STATE.aiMetadata.series_evaluated)}</span>
+
+                <span>Windows: ${escapeHtml(STATE.aiMetadata.windows_evaluated)}</span>
+
+              </div>
+
+            ` : ''}
+
+          </div>
+
+          <div class="max-h-[420px] overflow-auto">${rows}</div>
+
+        </div>
+
+      `;
+
+    }
+
+
+
+    function renderReviewCard(detail) {
+
+      if (!detail || !detail.ai_probabilities) {
+
+        return '<div class="rounded border border-dashed border-[#34497F] bg-[#F2F3FF] p-4 text-body-sm text-on-surface-variant">Run AI analysis first to populate radiologist review inputs.</div>';
+
+      }
+
+      const entries = CANONICAL_ORDER.filter((label) => detail.ai_probabilities[label] !== undefined);
+
+      const rows = entries.map((label, index) => `
+
+        <div class="grid gap-3 rounded border border-[#34497F]/40 bg-white p-3 md:grid-cols-[1.1fr_0.7fr_1.8fr]">
+
+          <div>
+
+            <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Finding</div>
+
+            <div class="mt-1 font-bold text-primary">${escapeHtml(label)}</div>
+
+          </div>
+
+          <div>
+
+            <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Outcome</div>
+
+            <select name="outcome-${index}" required class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-1.5 text-body-sm">
+
+              <option value="" selected disabled>Choose decision</option>
+
+              <option value="CONFIRMED">CONFIRMED</option>
+
+              <option value="REJECTED">REJECTED</option>
+
+              <option value="EDITED">EDITED</option>
+
+            </select>
+
+          </div>
+
+          <div>
+
+            <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Details</div>
+
+            <input name="details-${index}" placeholder="Add clinical evidence or leave blank." class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-1.5 text-body-sm" />
+
+          </div>
+
+        </div>
+
+      `).join('');
+
+
+
+      return `
+
+        <form id="review-form" class="space-y-4" onsubmit="return false;">
+
+          <div class="grid gap-3 md:grid-cols-[0.7fr_1.3fr]">
+
+            <div>
+
+              <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Review Decision</div>
+
+              <select name="decision" class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-2 text-body-sm">
+
+                <option value="MIXED">MIXED</option>
+
+                <option value="CONFIRMED">CONFIRMED</option>
+
+                <option value="EDITED">EDITED</option>
+
+                <option value="REJECTED">REJECTED</option>
+
+              </select>
+
+            </div>
+
+            <div>
+
+              <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Review Notes</div>
+
+              <input name="review-notes" placeholder="Optional review notes" class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-2 text-body-sm" />
+
+            </div>
+
+          </div>
+
+          <div class="space-y-3">${rows}</div>
+
+          <label class="block">Add a finding (optional)<input name="added-finding" class="w-full border rounded p-2" /></label>
+
+          <label class="block">Added finding details<input name="added-details" class="w-full border rounded p-2" /></label>
+
+          <button type="submit" class="btn-primary-archival rounded px-4 py-2 font-label-caps-lg text-label-caps-lg uppercase">Submit Radiologist Review</button>
+
+        </form>
+
+      `;
+
+    }
+
+
+
+    function renderOrthopedicReviewCard(detail) {
+
+      if (!detail) {
+
+        return '<div class="rounded border border-dashed border-[#34497F] bg-[#F2F3FF] p-4 text-body-sm text-on-surface-variant">No approved radiology report is available for orthopedic review yet.</div>';
+
+      }
+
+
+
+      return `
+
+        <form id="orthopedic-review-form" class="space-y-4" onsubmit="return false;">
+
+          <div class="grid gap-4 md:grid-cols-2">
+
+            <div>
+
+              <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Assessment</div>
+
+              <input name="assessment" placeholder="Enter orthopedic assessment" required class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-2 text-body-sm" />
+
+            </div>
+
+            <div>
+
+              <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Recommendation</div>
+
+              <input name="recommendation" placeholder="Enter recommendation" required class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-2 text-body-sm" />
+
+            </div>
+
+          </div>
+
+          <div>
+
+            <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Notes</div>
+
+            <textarea name="notes" rows="3" placeholder="Optional notes" class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-2 text-body-sm"></textarea>
+
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+
+            <div>
+
+              <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Patient Information Approved</div>
+
+              <select name="patient_information_approved" class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-2 text-body-sm">
+
+                <option value="false" selected>No</option>
+
+                <option value="true">Yes</option>
+
+              </select>
+
+            </div>
+
+            <div>
+
+              <div class="text-label-caps-sm font-label-caps-sm text-primary uppercase">Approved Follow-up Info</div>
+
+              <input name="approved_followup_info" placeholder="Approved follow-up information" class="mt-1 w-full rounded border border-[#34497F] bg-[#FFF9EE] px-2 py-2 text-body-sm" />
+
+            </div>
+
+          </div>
+
+          <button type="submit" class="btn-primary-archival rounded px-4 py-2 font-label-caps-lg text-label-caps-lg uppercase">Submit Orthopedic Review</button>
+
+        </form>
+
+      `;
+
+    }
+
+
+
+    function parseContent(content) {
+
+      if (typeof content === 'object') return content;
+
+      try { return JSON.parse(content); } catch { return null; }
+
+    }
+
+
+
+    function renderReport(content, status = 'DRAFT') {
+
+      const report = parseContent(content);
+
+      if (!report || typeof report !== 'object' || !Array.isArray(report.findings)) {
+
+        return `<pre class="whitespace-pre-wrap break-words">${escapeHtml(content || 'No report content available.')}</pre>`;
+
+      }
+
+      const approved = status === 'APPROVED';
+
+      return `<article class="space-y-4 rounded border border-[#34497F]/40 bg-white p-5" data-formatted-report>
+
+        <h3 class="text-title-lg font-bold text-primary">${escapeHtml(report.title)}</h3>
+
+        <section><h4 class="font-bold">Findings</h4><ul class="list-disc pl-5 space-y-1">${report.findings.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul></section>
+
+        <section><h4 class="font-bold">Impression</h4><p class="whitespace-pre-wrap">${escapeHtml(report.impression)}</p></section>
+
+        <section class="bg-[#F2F3FF] rounded p-3"><h4 class="font-bold">Provider / Safety Note</h4><p>${escapeHtml(report.note)}</p></section>
+
+        <div class="flex flex-wrap gap-4 text-sm"><span><b>Report status:</b> ${approved ? 'RADIOLOGIST APPROVED' : 'DRAFT'}</span><span><b>Final approval:</b> ${approved ? 'APPROVED' : 'PENDING APPROVAL'}</span></div>
+
+      </article>`;
+
+    }
+
+
+
+    function renderExplanation(content) {
+
+      const explanation = parseContent(content);
+
+      if (!explanation || typeof explanation !== 'object') return `<p>${escapeHtml(content || 'Not generated yet.')}</p>`;
+
+      return `<section class="space-y-3 rounded bg-white border p-4"><h3 class="font-bold text-primary">${escapeHtml(explanation.title || 'Patient explanation')}</h3>
+
+        <p><b>Approved findings:</b> ${escapeHtml(explanation.approved_findings)}</p>
+
+        <p>${escapeHtml(explanation.what_this_means)}</p>
+
+        <p class="text-sm bg-[#F2F3FF] p-3">${escapeHtml(explanation.important_note)}</p></section>`;
+
+    }
+
+
+
+    function renderEditor(report) {
+
+      const parsed = parseContent(report.draft_content);
+
+      return `<form id="report-editor" class="space-y-3 rounded border bg-white p-4"><h3 class="font-bold">Edit draft report</h3>
+
+        ${parsed && Array.isArray(parsed.findings) ? `<label class="block">Findings (one per line)<textarea name="findings" rows="5" required class="w-full border rounded p-2">${escapeHtml(parsed.findings.join('\n'))}</textarea></label><label class="block">Impression<textarea name="impression" rows="3" required class="w-full border rounded p-2">${escapeHtml(parsed.impression)}</textarea></label>` : `<textarea name="content" rows="8" required class="w-full border rounded p-2">${escapeHtml(report.draft_content)}</textarea>`}
+
+        <button class="btn-primary-archival rounded px-4 py-2" type="submit">Save Edited Version</button>
+
+        <button class="btn-secondary-archival rounded px-4 py-2" type="button" data-cancel-edit>Cancel</button></form>`;
+
+    }
+
+
+
+    async function loadMri(index = 0) {
+      const studyId = STATE.selectedStudyId;
+      const area = shell.querySelector('#mri-image');
+      if (!area) return;
+      if (!STATE.mri || STATE.mri.studyId !== studyId) {
+        area.innerHTML = '<p role="status" class="p-4 text-center text-sm font-semibold">Loading actual MRI sliceâ€¦</p>';
+      }
+      try {
+        const result = await api(`/studies/${studyId}/mri-preview?slice_index=${index}`);
+        if (STATE.selectedStudyId !== studyId) return;
+        STATE.mri = {studyId, ...result};
+        drawMri();
+      } catch (error) { if (STATE.selectedStudyId === studyId) area.textContent = error.message; }
+    }
+
+    async function loadGradCam(abnormality = null) {
+      const studyId = STATE.selectedStudyId;
+      const finding = abnormality || STATE.gradcamFinding || 'Effusion';
+      STATE.gradcamFinding = finding;
+      const statusEl = shell.querySelector('#gradcam-status');
+      if (statusEl) statusEl.textContent = `Computing Grad-CAM for ${finding}â€¦`;
+      try {
+        const result = await api('/api/v1/ai/gradcam', {
+          method: 'POST',
+          body: JSON.stringify({
+            study_id: studyId,
+            abnormality: finding,
+            series_instance_uid: '1.2.826.0.1.3680043.8.498.10851414972318193746245591053862925239',
+            window_index: 0
+          })
+        });
+        if (STATE.selectedStudyId !== studyId) return;
+        STATE.gradcamData = result;
+        drawMri();
+      } catch (error) {
+        if (statusEl) statusEl.textContent = `Grad-CAM: ${error.message}`;
+      }
+    }
+
+    function drawHeatmap(canvas, heatmap) {
+      if (!canvas || !heatmap || !heatmap.length) return;
+      const h = heatmap.length;
+      const w = heatmap[0].length;
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      const imgData = ctx.createImageData(w, h);
+      for (let r = 0; r < h; r++) {
+        for (let c = 0; c < w; c++) {
+          const v = Math.max(0, Math.min(1, heatmap[r][c]));
+          const idx = (r * w + c) * 4;
+          if (v < 0.25) {
+            imgData.data[idx] = 0;
+            imgData.data[idx+1] = 0;
+            imgData.data[idx+2] = 0;
+            imgData.data[idx+3] = 0;
+          } else {
+            imgData.data[idx] = Math.floor(Math.min(255, v * 300));
+            imgData.data[idx+1] = Math.floor(Math.max(0, (v - 0.35) * 350));
+            imgData.data[idx+2] = Math.floor(Math.max(0, (v - 0.7) * 400));
+            imgData.data[idx+3] = Math.floor(130 + v * 120);
+          }
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+
+    function drawMri() {
+      const area = shell.querySelector('#mri-image');
+      const mri = STATE.mri;
+      if (!area || mri?.studyId !== STATE.selectedStudyId) return;
+
+      const isRadiologist = STATE.session?.role === 'RADIOLOGIST';
+      const mode = STATE.mriViewMode || 'original';
+      const finding = STATE.gradcamFinding || 'Effusion';
+      const cam = STATE.gradcamData;
+
+      let html = '';
+      if (isRadiologist) {
+        html += `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2 border-b border-[#34497F]/30">
+            <div class="flex gap-2">
+              <button type="button" data-mri-mode="original" class="rounded px-3 py-1 text-xs font-bold ${mode === 'original' ? 'bg-[#263B73] text-white' : 'bg-[#EEF0FF] text-primary hover:bg-[#FFE0C5]'}">Original MRI</button>
+              <button type="button" data-mri-mode="gradcam" class="rounded px-3 py-1 text-xs font-bold ${mode === 'gradcam' ? 'bg-[#263B73] text-white' : 'bg-[#EEF0FF] text-primary hover:bg-[#FFE0C5]'}">Grad-CAM</button>
+            </div>
+            ${mode === 'gradcam' ? `
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-primary">Selected finding:</span>
+                <select id="gradcam-finding-select" class="rounded border border-[#34497F] bg-white px-2 py-1 text-xs font-bold text-primary">
+                  ${CANONICAL_ORDER.map(lbl => `<option value="${lbl}" ${lbl === finding ? 'selected' : ''}>${lbl}</option>`).join('')}
+                </select>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      if (mode === 'gradcam' && isRadiologist) {
+        html += `
+          <div class="text-center space-y-2">
+            <div class="relative inline-block mx-auto">
+              <img src="${mri.image}" alt="Actual knee MRI DICOM slice" class="max-h-80 object-contain bg-black mx-auto" />
+              <canvas id="gradcam-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="mix-blend-mode: screen;"></canvas>
+            </div>
+            <div class="bg-[#FFF9EE] p-2.5 rounded border border-[#34497F]/40 text-xs text-center space-y-1">
+              <p class="font-bold text-primary">AI Attention Map (Grad-CAM) • ${escapeHtml(cam?.abnormality || finding)} (${cam?.plane || 'Axial'} plane)</p>
+              <p class="text-[11px] text-[#705A45]">Research interpretability aid — not an independent diagnosis.</p>
+              <div id="gradcam-status" class="text-[10px] text-gray-600 font-semibold">${cam ? `Model: ${cam.model_version} • Class prob: ${(cam.probability * 100).toFixed(1)}%` : 'Loading attention mapâ€¦'}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        html += `
+          <img src="${mri.image}" alt="Actual knee MRI DICOM slice ${mri.slice_index + 1}" class="mx-auto max-h-80 object-contain bg-black" />
+          <div class="flex justify-center gap-4 items-center mt-2">
+            <button data-prev-slice ${mri.slice_index === 0 ? 'disabled' : ''} class="rounded border border-[#34497F] bg-white px-3 py-1 text-xs font-bold text-primary hover:bg-[#FFE0C5] disabled:opacity-40">Previous slice</button>
+            <span class="text-xs font-bold text-primary">Slice ${mri.slice_index + 1} / ${mri.slice_count}</span>
+            <button data-next-slice ${mri.slice_index + 1 === mri.slice_count ? 'disabled' : ''} class="rounded border border-[#34497F] bg-white px-3 py-1 text-xs font-bold text-primary hover:bg-[#FFE0C5] disabled:opacity-40">Next slice</button>
+          </div>
+        `;
+      }
+
+      area.innerHTML = html;
+
+      if (area.querySelector('[data-prev-slice]')) {
+        area.querySelector('[data-prev-slice]').onclick = () => loadMri(mri.slice_index - 1);
+        area.querySelector('[data-next-slice]').onclick = () => loadMri(mri.slice_index + 1);
+      }
+      if (area.querySelector('[data-mri-mode="original"]')) {
+        area.querySelector('[data-mri-mode="original"]').onclick = () => { STATE.mriViewMode = 'original'; drawMri(); };
+      }
+      if (area.querySelector('[data-mri-mode="gradcam"]')) {
+        area.querySelector('[data-mri-mode="gradcam"]').onclick = () => {
+          STATE.mriViewMode = 'gradcam';
+          if (!STATE.gradcamData) loadGradCam();
+          else drawMri();
+        };
+      }
+      const sel = area.querySelector('#gradcam-finding-select');
+      if (sel) {
+        sel.onchange = () => loadGradCam(sel.value);
+      }
+      const canvas = area.querySelector('#gradcam-canvas');
+      if (canvas && cam?.heatmap) {
+        drawHeatmap(canvas, cam.heatmap);
+      }
+    }
+
+    function renderDashboard() {
+      const detail = STATE.pendingDetail;
+      const role = STATE.session.role;
+      const isPatient = role === 'PATIENT';
+      const isRadiologist = role === 'RADIOLOGIST';
+      const isOrthopedic = isOrthopedicRole(role);
+      const state = detail?.workflow_state;
+      const report = detail?.report;
+      const reviewed = CANONICAL_ORDER.every(name => detail?.validated_findings?.some(f => f.finding === name && ['CONFIRMED','EDITED','REJECTED','APPROVED'].includes(f.outcome)));
+      const canEdit = state === 'REPORT_DRAFT' && report?.status === 'DRAFT';
+      const canRelease = isOrthopedic && state === 'ORTHOPEDIC_REVIEW' && detail.patient_id && detail.orthopedic_review?.patient_information_approved && detail.patient_explanation;
+      const button = (attribute, label, enabled) => `<button ${attribute} ${enabled ? '' : 'disabled'} class="btn-secondary-archival rounded px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed font-bold">${label}</button>`;
+
+      const WORKFLOW_STEPS = [
+        { id: 'AI_COMPLETE', label: 'AI Analysis' },
+        { id: 'RADIOLOGIST_REVIEW', label: 'Radiologist Review' },
+        { id: 'REPORT_DRAFT', label: 'Report Draft' },
+        { id: 'RADIOLOGIST_APPROVED', label: 'Radiologist Approved' },
+        { id: 'ORTHOPEDIC_REVIEW', label: 'Orthopedic Review' },
+        { id: 'PATIENT_RELEASED', label: 'Patient Released' },
+      ];
+      const currentIdx = WORKFLOW_STEPS.findIndex(s => s.id === state);
+      const stepperHtml = `
+        <div class="flex flex-wrap items-center gap-2 rounded bg-white p-3 border border-[#34497F]/30 mb-4 overflow-x-auto text-xs">
+          ${WORKFLOW_STEPS.map((step, idx) => {
+            const isCurrent = step.id === state;
+            const isDone = currentIdx !== -1 && idx < currentIdx;
+            const badgeClass = isCurrent
+              ? 'bg-[#263B73] text-white font-bold shadow-sm'
+              : isDone
+                ? 'bg-[#FFE0C5] text-[#281808] font-semibold'
+                : 'bg-gray-100 text-gray-500';
+            return `<div class="flex items-center gap-1.5 whitespace-nowrap">
+              <span class="rounded px-2.5 py-1 ${badgeClass}">${isDone ? '✓ ' : ''}${idx + 1}. ${escapeHtml(step.label)}</span>
+              ${idx < WORKFLOW_STEPS.length - 1 ? '<span class="text-gray-400 font-bold">→</span>' : ''}
+            </div>`;
+          }).join('')}
+        </div>
+      `;
+
+      shell.innerHTML = `<div class="rounded-2xl border border-[#34497F] bg-[#F2F3FF] p-4 shadow-[4px_4px_0_0_#263B73]">
+        <header class="flex flex-wrap justify-between gap-3 rounded border bg-[#FFF9EE] p-4 mb-4">
+          <div>
+            <div class="flex items-center gap-3 flex-wrap">
+              <h2 class="text-title-lg font-bold text-primary">KNEURA Clinical Workspace</h2>
+              <span class="rounded border border-[#263B73] bg-[#FFE0C5] px-2.5 py-0.5 text-xs font-bold text-primary">MOCK PROVIDER — DEMONSTRATION</span>
+            </div>
+            <p class="mt-1 text-sm">${escapeHtml(STATE.session.email)} • <span class="font-bold text-primary">${isPatient ? 'PATIENT' : isOrthopedic ? 'ORTHOPEDICIAN' : 'RADIOLOGIST'}</span></p>
+          </div>
+          <button id="logout-button" class="btn-secondary-archival rounded px-4 py-2 font-bold">Logout</button>
+        </header>
+
+        ${stepperHtml}
+
+        ${STATE.loading || STATE.submitting ? '<p role="status" class="mb-3 bg-white p-3 rounded font-bold">Loading / saving — please waitâ€¦</p>' : ''}
+        ${STATE.notification ? `<p role="alert" class="p-3 mb-3 rounded font-bold ${STATE.notification.variant === 'error' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${escapeHtml(STATE.notification.message)}</p>` : ''}
+        <p class="mb-4 text-xs font-semibold text-gray-700">DEMONSTRATION ONLY • ${isPatient ? 'Released information approved by your clinical team.' : 'Real MRI data and frozen Model 1 results. Clinician validation required.'}</p>
+
+        <div class="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <aside class="min-w-0 rounded border bg-[#FFF9EE] p-3">
+            <h3 class="font-bold mb-3">${isPatient ? 'Released studies' : isOrthopedic ? 'Approved cases' : 'Studies'}</h3>
+            ${isRadiologist ? '<form id="upload-form" class="mb-3 space-y-2"><label class="text-sm">Upload MRI<input name="files" type="file" accept=".zip,.dcm,.dicom" multiple required class="w-full text-xs" /></label><button class="btn-secondary-archival rounded p-2 text-sm font-bold">Upload DICOM</button></form>' : ''}
+            <div class="space-y-2">${renderStudyList()}</div>
+          </aside>
+
+          <main class="min-w-0 space-y-4">
+            ${!detail ? '<p class="p-4 bg-white rounded border">Select an available study.</p>' : `
+              <section class="rounded border bg-[#FFF9EE] p-4">
+                <h3 class="font-bold break-all">Study ${escapeHtml(detail.study_id)}</h3>
+                <div class="mt-2 flex flex-wrap gap-3 items-center text-sm font-semibold">
+                  <span class="rounded bg-[#263B73] text-white px-2.5 py-0.5 text-xs font-bold">Workflow: ${escapeHtml(state || detail.status || 'UNINITIALIZED')}</span>
+                  ${isRadiologist ? `
+                    <span class="rounded px-2.5 py-0.5 text-xs font-bold ${reviewed ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">Findings: ${reviewed ? 'FINDINGS REVIEWED' : 'PENDING'}</span>
+                    <span class="rounded px-2.5 py-0.5 text-xs font-bold ${report?.status === 'APPROVED' ? 'bg-blue-100 text-blue-800' : report ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700'}">Report: ${report?.status === 'APPROVED' ? 'RADIOLOGIST APPROVED' : report ? 'REPORT DRAFT • PENDING APPROVAL' : 'NOT GENERATED'}</span>
+                  ` : ''}
+                </div>
+                ${isRadiologist ? `
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    ${button('data-ai-analyze','Analyze AI',!state || state === 'AI_COMPLETE')}
+                    ${button('data-generate-draft','Generate Draft',state === 'RADIOLOGIST_REVIEW' && reviewed)}
+                    ${button('data-edit-report','Edit Report',canEdit)}
+                    ${button('data-approve-report','Approve Report',canEdit && reviewed && !STATE.editingReport)}
+                    ${button('data-patient-explanation','Generate Patient Explanation',state === 'RADIOLOGIST_APPROVED' && !report?.patient_explanation)}
+                  </div>
+                ` : ''}
+                ${isOrthopedic ? `
+                  <div class="mt-3">${button('data-release-patient','Release to Patient',canRelease)}</div>
+                  <p class="text-xs text-gray-600 mt-2 font-semibold">Release requires a signed report, reviewed patient explanation, explicit patient-information approval, and patient linkage.</p>
+                ` : ''}
+              </section>
+
+              ${!isPatient ? '<section class="rounded border bg-[#FFF9EE] p-4"><h3 class="font-bold mb-2">MRI • actual DICOM preview</h3><div id="mri-image"></div><p class="text-xs mt-2 text-gray-600">Display preview only. Model preprocessing and probabilities are unchanged.</p></section>' : ''}
+
+          ${isRadiologist ? renderAiResults(detail) : ''}
+
+          ${isRadiologist ? `<section class="rounded border bg-[#FFF9EE] p-4"><h3 class="font-bold mb-3">Radiologist finding validation</h3><fieldset ${state !== 'AI_COMPLETE' ? 'disabled' : ''}>${renderReviewCard(detail)}</fieldset>${state !== 'AI_COMPLETE' ? '<p class="text-sm mt-2">Saved decisions are read-only at this workflow stage.</p>' : ''}</section>` : ''}
+
+          ${report ? renderReport(report.draft_content, report.status) : ''}
+
+          ${isRadiologist && STATE.editingReport && canEdit ? renderEditor(report) : ''}
+
+          ${isRadiologist && detail.versions ? `<details class="rounded border bg-white p-3"><summary>Report version history</summary>${detail.versions.map(v => `<p class="mt-2">v${v.version_number} • ${v.version_number === 1 ? 'LLM generated' : 'Radiologist edited'} • ${escapeHtml(v.status)}${report.approved_version === v.version_number ? ' • Signed version' : ''}</p>`).join('')}</details>` : ''}
+
+          ${!isPatient && report?.patient_explanation ? `<h3 class="font-bold">Patient explanation • ${detail.orthopedic_review?.patient_information_approved ? 'APPROVED FOR RELEASE' : 'REQUIRES DOWNSTREAM REVIEW'}</h3>${renderExplanation(report.patient_explanation)}` : ''}
+
+          ${isOrthopedic && state === 'RADIOLOGIST_APPROVED' ? `<section class="rounded border bg-[#FFF9EE] p-4"><h3 class="font-bold mb-3">Orthopedic assessment • separate from signed report</h3>${renderOrthopedicReviewCard(detail)}</section>` : ''}
+
+          ${!isPatient && detail.orthopedic_review ? `<section class="rounded border bg-white p-4"><h3 class="font-bold">Saved orthopedic review</h3><p>Assessment: ${escapeHtml(detail.orthopedic_review.assessment)}</p><p>Recommendation: ${escapeHtml(detail.orthopedic_review.recommendation)}</p><p>Internal notes: ${escapeHtml(detail.orthopedic_review.notes || 'None')}</p><p>Patient information approved: ${detail.orthopedic_review.patient_information_approved ? 'YES' : 'NO'}</p><p>Approved follow-up: ${escapeHtml(detail.orthopedic_review.approved_followup_info || 'None')}</p></section>` : ''}
+
+          ${isPatient ? `${renderReport(detail.approved_report, 'APPROVED')}${renderExplanation(detail.patient_explanation)}<section class="rounded border bg-white p-4"><h3 class="font-bold">Approved follow-up information</h3><p>${escapeHtml(detail.approved_followup_info || 'No additional follow-up information released.')}</p></section>` : ''}
+
+        `}</main></div></div>`;
+
+      shell.querySelector('#logout-button').onclick = logout;
+
+      shell.querySelectorAll('[data-select-study]').forEach(b => b.onclick = async () => {STATE.selectedStudyId = b.dataset.selectStudy; STATE.editingReport = false; STATE.aiMetadata = null; await refreshStudyDetail();});
+
+      const actions = {'#upload-form':uploadMri, '[data-ai-analyze]':runAiAnalysis, '[data-generate-draft]':generateDraft, '[data-edit-report]':editReport, '[data-approve-report]':approveReport, '[data-patient-explanation]':generatePatientExplanation, '[data-release-patient]':releaseToPatient, '#review-form':submitReview, '#orthopedic-review-form':submitOrthopedicReview, '#report-editor':saveReport};
+
+      Object.entries(actions).forEach(([selector, handler]) => shell.querySelectorAll(selector).forEach(el => el.addEventListener(el.tagName === 'FORM' ? 'submit' : 'click', handler)));
+
+      shell.querySelector('[data-cancel-edit]')?.addEventListener('click', () => {STATE.editingReport = false; render();});
+
+      (detail?.validated_findings || []).forEach(f => {const i = CANONICAL_ORDER.indexOf(f.finding); const el = shell.querySelector(`[name="outcome-${i}"]`); if (el) el.value = f.outcome === 'APPROVED' ? 'CONFIRMED' : f.outcome; const input = shell.querySelector(`[name="details-${i}"]`); if(input) input.value = f.details || '';});
+
+      if (STATE.submitting) shell.querySelectorAll('button,input,select,textarea').forEach(el => el.disabled = true);
+
+      if (!isPatient && detail) { if (STATE.mri?.studyId === detail.study_id) drawMri(); else if (!STATE.loading) loadMri(); }
+
+    }
+
+
+
+    function render() {
+
+      if (!STATE.session) {
+
+        renderLogin();
+
+        return;
+
+      }
+
+      renderDashboard();
+
+    }
+
+
+
+    function boot() {
+
+      STATE.session = readSession();
+
+      if (STATE.session) {
+
+        initializeApp();
+
+      } else {
+
+        renderLogin();
+
+      }
+
+    }
+
+
+
+    boot();
+
+  })();
+
+</script>
+
+
+
+</body></html>
+
+

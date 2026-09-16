@@ -1,0 +1,67 @@
+{
+  "checks": [
+    {
+      "stage": "launch",
+      "time": 1789518955.6720638,
+      "http_status": 200,
+      "body": {
+        "message": "KNEE-AI 3.3 Backend is running"
+      }
+    },
+    {
+      "stage": "bearer login",
+      "time": 1789518956.1965609,
+      "http_status": 200,
+      "body": {
+        "message": "KNEE-AI 3.3 Backend is running"
+      }
+    },
+    {
+      "stage": "studies loaded",
+      "time": 1789518956.24495,
+      "http_status": 200,
+      "body": {
+        "message": "KNEE-AI 3.3 Backend is running"
+      }
+    },
+    {
+      "stage": "frontend opened",
+      "time": 1789519006.6516175,
+      "http_status": 200,
+      "body": {
+        "message": "KNEE-AI 3.3 Backend is running"
+      }
+    },
+    {
+      "stage": "persisted findings review and report retrieved",
+      "time": 1789519006.6846135,
+      "http_status": 200,
+      "body": {
+        "message": "KNEE-AI 3.3 Backend is running"
+      }
+    },
+    {
+      "stage": "assets and frontend wiring verified",
+      "time": 1789519039.8356233,
+      "http_status": 200,
+      "body": {
+        "message": "KNEE-AI 3.3 Backend is running"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
+      "http_status": 200
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap",
+      "http_status": 200
+    },
+    {
+      "url": "https://cdn.tailwindcss.com?plugins=forms,container-queries",
+      "http_status": 200
+    }
+  ],
+  "result": "PASS"
+}

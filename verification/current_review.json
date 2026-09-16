@@ -1,0 +1,70 @@
+{
+  "review_id": 1,
+  "study_id": "1.2.826.0.1.3680043.8.498.90283565381042081768587894596970552767",
+  "reviewer_id": "1",
+  "decision": "MIXED",
+  "notes": "Software smoke test decisions only.",
+  "created_at": "2026-09-15T16:51:42.172558",
+  "validated_findings": [
+    {
+      "finding": "ACL",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "MCL",
+      "outcome": "EDITED",
+      "details": "MCL changes reviewed for this software demonstration."
+    },
+    {
+      "finding": "Medial Meniscus",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "Lateral Meniscus",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "Medial OA",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "Lateral OA",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "PF OA",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "Effusion",
+      "outcome": "CONFIRMED",
+      "details": null
+    },
+    {
+      "finding": "Synovitis",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "Baker's",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "Contusion",
+      "outcome": "REJECTED",
+      "details": null
+    },
+    {
+      "finding": "Fracture",
+      "outcome": "REJECTED",
+      "details": null
+    }
+  ]
+}
