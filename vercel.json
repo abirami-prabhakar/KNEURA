@@ -3,7 +3,7 @@
   "framework": null,
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/", "dest": "/frontend/index.html" },
+    { "src": "/", "dest": "/index.html" },
     { "src": "/code.html", "dest": "/frontend/code.html" },
     { "src": "/(.*)", "dest": "/frontend/$1" }
   ]
