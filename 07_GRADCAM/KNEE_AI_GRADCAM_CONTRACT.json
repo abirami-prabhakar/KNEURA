@@ -1,0 +1,104 @@
+{
+  "contract_version": "1.0",
+  "feature": {
+    "name": "KNEE-AI Grad-CAM Explainability",
+    "status": "VALIDATED",
+    "role": "model_explainability",
+    "clinical_role": "visual explanation of model focus; not an independent diagnosis"
+  },
+  "model": {
+    "name": "KNEE-AI",
+    "version": "3.3",
+    "architecture": "StandaloneFiveSliceEfficientNet",
+    "backbone": "EfficientNet-B0",
+    "input_size": [
+      224,
+      224
+    ],
+    "slice_context": 5,
+    "num_abnormalities": 12
+  },
+  "target_layer": {
+    "module_path": "backbone.features.8.0",
+    "type": "Conv2d",
+    "output_channels": 1280
+  },
+  "method": {
+    "name": "Grad-CAM",
+    "class_specific": true,
+    "input": "same 5-slice tensor used by KNEE-AI",
+    "target": "selected abnormality output logit",
+    "heatmap_size": [
+      224,
+      224
+    ],
+    "normalization": "[0,1]"
+  },
+  "supported_abnormalities": [
+    "ACL",
+    "MCL",
+    "Medial Meniscus",
+    "Lateral Meniscus",
+    "Medial OA",
+    "Lateral OA",
+    "PF OA",
+    "Effusion",
+    "Synovitis",
+    "Baker's",
+    "Contusion",
+    "Fracture"
+  ],
+  "study_behavior": {
+    "prediction_aggregation": "mean_probability_across_study_windows",
+    "gradcam_unit": "individual_5_slice_window",
+    "study_gradcam_rule": "Grad-CAM is generated for a selected individual window/class; it is not computed directly from the study-level mean."
+  },
+  "backend_output": {
+    "abnormality": "string",
+    "class_index": "integer",
+    "probability": "float_0_to_1",
+    "plane": "string",
+    "series_instance_uid": "string",
+    "window_index": "integer",
+    "instance_numbers": "array_of_5_integers",
+    "heatmap": "224x224_normalized_array_or_image"
+  },
+  "validation": {
+    "target_study": "1.2.826.0.1.3680043.8.498.10004873229099053869093324292195817260",
+    "series_evaluated": 3,
+    "windows_evaluated": 44,
+    "classes_explained": 12,
+    "first_case_probability_difference": 0.0,
+    "heatmap_shape": [
+      224,
+      224
+    ],
+    "heatmap_range": [
+      0.0,
+      1.0
+    ],
+    "prediction_pipeline_modified": false,
+    "model_weights_modified": false
+  },
+  "safety": {
+    "diagnostic_claim": false,
+    "independent_diagnosis": false,
+    "clinical_threshold": false,
+    "radiologist_review_required": true,
+    "heatmap_must_not_be_presented_as_ground_truth": true,
+    "heatmap_must_not_override_radiologist_decision": true
+  },
+  "integration": {
+    "frontend_can_display": true,
+    "frontend_display_recommendation": "MRI slice with Grad-CAM overlay",
+    "backend_should_preserve": [
+      "model_version",
+      "abnormality",
+      "probability",
+      "series_instance_uid",
+      "window_index",
+      "instance_numbers"
+    ]
+  },
+  "generated_at": "2026-09-13T02:57:48.765662+00:00"
+}

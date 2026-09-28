@@ -1,0 +1,37 @@
+{
+  "project": "KNEE-AI",
+  "model_version": "KNEE-AI 3.3",
+  "architecture": "StandaloneFiveSliceEfficientNet",
+  "backbone": "EfficientNet-B0",
+  "validation": {
+    "checkpoint_sha256_verified": true,
+    "standalone_reproduction": {
+      "passed": true,
+      "series": 3,
+      "windows": 44,
+      "outputs": 12,
+      "maximum_probability_difference": 1.1920928955078125e-07
+    },
+    "clean_process_test": {
+      "passed": true,
+      "series": 3,
+      "windows": 44,
+      "outputs": 12
+    },
+    "patient_details_contract": {
+      "passed": true
+    },
+    "complete_demo_case": {
+      "passed": true
+    }
+  },
+  "clinical_safety": {
+    "clinical_threshold_validated": false,
+    "automatic_diagnosis": false,
+    "radiologist_review_required": true,
+    "final_report_approval_required": true,
+    "llm_receives_only_approved_findings": true
+  },
+  "handoff_status": "READY_FOR_TEAM_INTEGRATION",
+  "generated_at": "2026-09-12T14:33:41.508964"
+}

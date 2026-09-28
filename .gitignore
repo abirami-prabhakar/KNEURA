@@ -1,0 +1,61 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local reference captures
+.reference/
+
+# Local clinical data and Python cache
+.kneura/
+__pycache__/
+.pytest_cache/
+.venv/
+.env
+.env.*
+!.env.example
+playwright-report/
+test-results/
+
+# Authorized MRI and local presentation artifacts
+demo_data/knee_mri/*
+!demo_data/knee_mri/README.md
+!demo_data/knee_mri/.gitkeep
+backups/
+
+# Private model and runtime artifacts
+Model/
+*.pt
+*.pth
+*.pkl
+*.sqlite
+*.sqlite3
+*.db
+*.pyc
+*.pyo
+*.dcm
+*.dicom
+*.npy
+*.npz
+07_GRADCAM/VISUALIZATIONS/
+data/series_eligibility.csv

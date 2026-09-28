@@ -1,0 +1,47 @@
+{
+  "manifest_version": "1.0",
+  "project": "KNEE-AI",
+  "model_version": "KNEE-AI 3.3",
+  "purpose": "Canonical integration reference for AI, backend, frontend and LLM team members.",
+  "authoritative_artifacts": {
+    "ai_module": "AI/knee_ai_inference.py",
+    "ai_backend_contract": "CONTRACTS/KNEE_AI_FINAL_AI_BACKEND_HANDOFF.json",
+    "patient_details_schema": "CONTRACTS/KNEE_AI_PATIENT_DETAILS_SCHEMA.json",
+    "golden_case": "INTEGRATION/KNEE_AI_GOLDEN_CASE.json"
+  },
+  "golden_case": {
+    "sha256": "26c55fd96e9752b1a2cd5a885fe2dc3be554b6dfc668bb3c97eb486f75bb45df",
+    "status": "CANONICAL_DEMO_CASE",
+    "ai_outputs": 12,
+    "series": 3,
+    "windows": 44,
+    "approved_findings": 6,
+    "rejected_findings": 6,
+    "draft_report": true,
+    "final_approval_pending": true
+  },
+  "integration_rules": {
+    "ai_is_frozen": true,
+    "model_architecture_must_not_change": true,
+    "model_checkpoint_must_not_change": true,
+    "preprocessing_must_not_change": true,
+    "class_order_must_not_change": true,
+    "llm_uses_approved_findings_only": true,
+    "radiologist_review_required": true,
+    "final_report_approval_required": true
+  },
+  "team_roles": {
+    "AI": "Maintain and explain frozen KNEE-AI 3.3 inference.",
+    "Backend": "Implement APIs and connect AI, review and reporting stages.",
+    "LLM": "Generate draft reports using approved findings and clinical context.",
+    "Frontend": "Implement patient, MRI, review, report and approval interfaces."
+  },
+  "validation": {
+    "standalone_reproduction": "PASS",
+    "clean_process": "PASS",
+    "patient_details_contract": "PASS",
+    "end_to_end_pipeline": "PASS",
+    "golden_case": "PASS"
+  },
+  "generated_at": "2026-09-12T14:37:00.831698"
+}

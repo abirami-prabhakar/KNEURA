@@ -1,0 +1,14 @@
+# Set KNEURA_HOST to the actual deployed DNS name. Caddy must be installed and
+# the domain must resolve to this server for automatic HTTPS. This file alone
+# does not establish an HTTPS deployment.
+{$KNEURA_HOST} {
+    handle /api/* {
+        reverse_proxy 127.0.0.1:8000
+    }
+    handle {
+        root * {$KNEURA_DIST}
+        try_files {path} /index.html
+        file_server
+    }
+    header X-Content-Type-Options nosniff
+}

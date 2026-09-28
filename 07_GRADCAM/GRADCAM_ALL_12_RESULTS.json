@@ -1,0 +1,286 @@
+{
+  "model_version": "KNEE-AI 3.3",
+  "target_layer": "backbone.features.8.0",
+  "study_id": "1.2.826.0.1.3680043.8.498.10004873229099053869093324292195817260",
+  "num_abnormalities": 12,
+  "num_explanations": 12,
+  "explanation_type": "class_specific_gradcam",
+  "results": [
+    {
+      "class_index": 0,
+      "abnormality": "ACL",
+      "probability": 0.25464966893196106,
+      "plane": "Coronal",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.40734206102458723096154687147390476697",
+      "window_index": 0,
+      "instance_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.09540332853794098,
+      "cam_nonzero_fraction": 0.32142857142857145
+    },
+    {
+      "class_index": 1,
+      "abnormality": "MCL",
+      "probability": 0.7720101475715637,
+      "plane": "Sagittal",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.12343110195036213483454091715412333772",
+      "window_index": 7,
+      "instance_numbers": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.32938817143440247,
+      "cam_nonzero_fraction": 0.8010204081632653
+    },
+    {
+      "class_index": 2,
+      "abnormality": "Medial Meniscus",
+      "probability": 0.8420864343643188,
+      "plane": "Sagittal",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.12343110195036213483454091715412333772",
+      "window_index": 6,
+      "instance_numbers": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.33580654859542847,
+      "cam_nonzero_fraction": 0.9846938775510204
+    },
+    {
+      "class_index": 3,
+      "abnormality": "Lateral Meniscus",
+      "probability": 0.9979598522186279,
+      "plane": "Axial",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.13821229744997220641575291927426543265",
+      "window_index": 3,
+      "instance_numbers": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.2542891800403595,
+      "cam_nonzero_fraction": 0.9996811224489796
+    },
+    {
+      "class_index": 4,
+      "abnormality": "Medial OA",
+      "probability": 0.998195230960846,
+      "plane": "Axial",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.13821229744997220641575291927426543265",
+      "window_index": 4,
+      "instance_numbers": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.22228850424289703,
+      "cam_nonzero_fraction": 0.9285714285714286
+    },
+    {
+      "class_index": 5,
+      "abnormality": "Lateral OA",
+      "probability": 0.9984326958656311,
+      "plane": "Axial",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.13821229744997220641575291927426543265",
+      "window_index": 3,
+      "instance_numbers": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.2595127820968628,
+      "cam_nonzero_fraction": 0.9948979591836735
+    },
+    {
+      "class_index": 6,
+      "abnormality": "PF OA",
+      "probability": 0.998815655708313,
+      "plane": "Axial",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.13821229744997220641575291927426543265",
+      "window_index": 4,
+      "instance_numbers": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.25045347213745117,
+      "cam_nonzero_fraction": 0.9030612244897959
+    },
+    {
+      "class_index": 7,
+      "abnormality": "Effusion",
+      "probability": 0.7456693649291992,
+      "plane": "Sagittal",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.12343110195036213483454091715412333772",
+      "window_index": 11,
+      "instance_numbers": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.30459821224212646,
+      "cam_nonzero_fraction": 0.9387755102040817
+    },
+    {
+      "class_index": 8,
+      "abnormality": "Synovitis",
+      "probability": 0.963236391544342,
+      "plane": "Axial",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.13821229744997220641575291927426543265",
+      "window_index": 4,
+      "instance_numbers": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.2487567663192749,
+      "cam_nonzero_fraction": 0.8928571428571429
+    },
+    {
+      "class_index": 9,
+      "abnormality": "Baker's",
+      "probability": 0.9499605894088745,
+      "plane": "Sagittal",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.12343110195036213483454091715412333772",
+      "window_index": 16,
+      "instance_numbers": [
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.22549980878829956,
+      "cam_nonzero_fraction": 0.9081632653061225
+    },
+    {
+      "class_index": 10,
+      "abnormality": "Contusion",
+      "probability": 0.2505582869052887,
+      "plane": "Coronal",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.40734206102458723096154687147390476697",
+      "window_index": 11,
+      "instance_numbers": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.03365941345691681,
+      "cam_nonzero_fraction": 0.07653061224489796
+    },
+    {
+      "class_index": 11,
+      "abnormality": "Fracture",
+      "probability": 0.7609866261482239,
+      "plane": "Axial",
+      "series_instance_uid": "1.2.826.0.1.3680043.8.498.13821229744997220641575291927426543265",
+      "window_index": 11,
+      "instance_numbers": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "cam_shape": [
+        224,
+        224
+      ],
+      "cam_min": 0.0,
+      "cam_max": 1.0,
+      "cam_mean": 0.2562639117240906,
+      "cam_nonzero_fraction": 0.9897959183673469
+    }
+  ]
+}

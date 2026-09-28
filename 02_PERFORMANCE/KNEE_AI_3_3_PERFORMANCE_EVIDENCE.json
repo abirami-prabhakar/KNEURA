@@ -1,0 +1,57 @@
+{
+  "model_version": "KNEE-AI 3.3",
+  "architecture": "StandaloneFiveSliceEfficientNet",
+  "backbone": "EfficientNet-B0",
+  "input_size": [
+    224,
+    224
+  ],
+  "slice_context": 5,
+  "number_of_abnormalities": 12,
+  "validation_studies": 9,
+  "validation_windows": 844,
+  "study_aggregation": "Mean probability across study windows",
+  "evaluation_method": "Per-class AUROC across studies, then macro-average",
+  "macro_auroc": 0.7136243386243387,
+  "median_auroc": 0.75,
+  "minimum_auroc": 0.3571428571428571,
+  "maximum_auroc": 1.0,
+  "strongest_class": {
+    "abnormality": "Lateral Meniscus",
+    "study_level_auroc": 1.0
+  },
+  "weakest_class": {
+    "abnormality": "Lateral OA",
+    "study_level_auroc": 0.3571428571428571
+  },
+  "per_class_auroc": {
+    "ACL": 0.6,
+    "MCL": 0.7857142857142857,
+    "Medial Meniscus": 0.95,
+    "Lateral Meniscus": 1.0,
+    "Medial OA": 1.0,
+    "Lateral OA": 0.3571428571428571,
+    "PF OA": 0.7142857142857142,
+    "Effusion": 0.55,
+    "Synovitis": 0.4,
+    "Baker's": 0.4285714285714286,
+    "Contusion": 0.888888888888889,
+    "Fracture": 0.888888888888889
+  },
+  "reproduction_check": {
+    "authoritative_macro_auroc": 0.7136243386243387,
+    "recomputed_macro_auroc": 0.7136243386243387,
+    "absolute_difference": 0.0,
+    "passed": true
+  },
+  "clinical_interpretation": {
+    "role": "AI-assisted abnormality identification",
+    "clinical_threshold": {
+      "value": 0.5,
+      "validated": false,
+      "purpose": "Exploratory display only"
+    },
+    "radiologist_review_required": true,
+    "autonomous_diagnosis": false
+  }
+}

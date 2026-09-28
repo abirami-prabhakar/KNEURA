@@ -1,0 +1,81 @@
+{
+  "model_version": "KNEE-AI 3.3",
+  "study_id": "1.2.826.0.1.3680043.8.498.10004873229099053869093324292195817260",
+  "input_selection": {
+    "rule": "Fluid_Sensitive == 1 AND Fat_Suppression == 1",
+    "eligible_series": 3,
+    "eligible_planes": [
+      "Axial",
+      "Coronal",
+      "Sagittal"
+    ]
+  },
+  "series": [
+    {
+      "SeriesInstanceUID": "1.2.826.0.1.3680043.8.498.12343110195036213483454091715412333772",
+      "Anatomical_Plane": "Sagittal",
+      "windows": 18,
+      "first_center": 2,
+      "last_center": 19
+    },
+    {
+      "SeriesInstanceUID": "1.2.826.0.1.3680043.8.498.13821229744997220641575291927426543265",
+      "Anatomical_Plane": "Axial",
+      "windows": 14,
+      "first_center": 2,
+      "last_center": 15
+    },
+    {
+      "SeriesInstanceUID": "1.2.826.0.1.3680043.8.498.40734206102458723096154687147390476697",
+      "Anatomical_Plane": "Coronal",
+      "windows": 12,
+      "first_center": 2,
+      "last_center": 13
+    }
+  ],
+  "windowing": {
+    "total_windows": 44,
+    "slices_per_window": 5,
+    "stride": 1,
+    "ordering": "InstanceNumber ascending",
+    "center_slice": "third slice of each 5-slice window"
+  },
+  "preprocessing": {
+    "dicom_pixel_dtype": "float32",
+    "monochrome1_handling": "arr.max() - arr",
+    "normalization": "1st\u201399th percentile robust normalization",
+    "clipping": "values clipped to percentile range",
+    "resize": "224x224",
+    "interpolation": "bilinear",
+    "model_input": "[batch, 5, 224, 224]",
+    "slice_projection": "Conv2D 5->3, kernel 1x1, bias=True",
+    "projection_activation": "sigmoid",
+    "backbone": "EfficientNet-B0",
+    "outputs": 12
+  },
+  "model": {
+    "architecture": "StandaloneFiveSliceEfficientNet",
+    "backbone": "EfficientNet-B0",
+    "input_size": [
+      224,
+      224
+    ],
+    "slice_context": 5,
+    "outputs": 12
+  },
+  "aggregation": {
+    "window_predictions": 44,
+    "aggregation": "mean probability across study windows",
+    "study_outputs": 12,
+    "output_range": "[0,1]",
+    "clinical_threshold": "None validated",
+    "clinical_role": "AI-assisted abnormality identification",
+    "radiologist_review": "Required"
+  },
+  "validation": {
+    "window_provenance_checks": true,
+    "five_slice_windows_verified": true,
+    "series_structure_verified": true,
+    "preprocessing_contract_locked": true
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "model_version": "KNEE-AI 3.3",
+  "checkpoint_sha256": "ac59d8ce17a0b35c15189d691f7c6aa828f31a3dfe14601a02036a6c3b892a82",
+  "architecture": "StandaloneFiveSliceEfficientNet",
+  "backbone": "EfficientNet-B0",
+  "input_contract": {
+    "slice_context": 5,
+    "input_size": [
+      224,
+      224
+    ],
+    "outputs": 12
+  },
+  "backend_contract": {
+    "model_version_match": true,
+    "architecture_match": true,
+    "class_order_match": true,
+    "radiologist_review_required": true
+  },
+  "golden_case": {
+    "canonical": true,
+    "study_id": "1.2.826.0.1.3680043.8.498.10004873229099053869093324292195817260",
+    "eligible_series": 3,
+    "windows": 44,
+    "probabilities_match_within_1e-6": true,
+    "maximum_probability_difference": 1.1920927633912726e-07
+  },
+  "performance": {
+    "validation_studies": 9,
+    "validation_windows": 844,
+    "macro_auroc": 0.7136243386243387
+  },
+  "clinical_safety": {
+    "automatic_diagnosis": false,
+    "validated_clinical_threshold": false,
+    "radiologist_review_required": true,
+    "llm_receives_only_approved_findings": true,
+    "final_report_approval_required": true
+  },
+  "handoff_package": {
+    "directory_exists": true,
+    "zip_exists": true,
+    "file_count": 9
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "status": "CANONICAL_MODEL_LOCK",
+  "model": {
+    "model_version": "KNEE-AI 3.3",
+    "architecture": "StandaloneFiveSliceEfficientNet",
+    "backbone": "EfficientNet-B0",
+    "backbone_weights": "None during architecture construction",
+    "input_channels": 5,
+    "slice_projection": {
+      "type": "Conv2D",
+      "input_channels": 5,
+      "output_channels": 3,
+      "kernel_size": [
+        1,
+        1
+      ],
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        0,
+        0
+      ],
+      "bias": true,
+      "activation": "sigmoid"
+    },
+    "input_size": [
+      224,
+      224
+    ],
+    "output_classes": 12,
+    "class_order": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ]
+  },
+  "checkpoint": {
+    "path": "/kaggle/input/datasets/pranithaaprakash/model-3-3b/ORIGINAL_3_3_CHAMPION/best_5slice_model.pth",
+    "sha256": "ac59d8ce17a0b35c15189d691f7c6aa828f31a3dfe14601a02036a6c3b892a82",
+    "verified": true
+  },
+  "inference_contract": {
+    "series_selection": "Fluid_Sensitive == 1 AND Fat_Suppression == 1",
+    "slice_order": "InstanceNumber ascending",
+    "window_size": 5,
+    "window_stride": 1,
+    "preprocessing": [
+      "DICOM pixel_array -> float32",
+      "MONOCHROME1 inversion when applicable",
+      "1st-99th percentile robust normalization",
+      "clip to percentile range",
+      "resize to 224x224",
+      "bilinear interpolation"
+    ],
+    "study_aggregation": "mean probability across study windows",
+    "clinical_threshold": {
+      "value": 0.5,
+      "validated": false,
+      "purpose": "Exploratory display only"
+    },
+    "clinical_role": "AI-assisted abnormality identification",
+    "radiologist_review": "Required",
+    "autonomous_diagnosis": false
+  },
+  "performance": {
+    "validation_studies": 9,
+    "validation_windows": 844,
+    "validation_series": 27,
+    "evaluation": "Per-class AUROC across studies, then macro-average",
+    "study_aggregation": "Mean probability across study windows",
+    "macro_auroc": 0.7136243386243387,
+    "per_class_auroc": {
+      "ACL": 0.6,
+      "MCL": 0.7857142857142857,
+      "Medial Meniscus": 0.95,
+      "Lateral Meniscus": 1.0,
+      "Medial OA": 1.0,
+      "Lateral OA": 0.3571428571428571,
+      "PF OA": 0.7142857142857142,
+      "Effusion": 0.55,
+      "Synovitis": 0.4,
+      "Baker's": 0.4285714285714286,
+      "Contusion": 0.888888888888889,
+      "Fracture": 0.888888888888889
+    }
+  },
+  "reproducibility": {
+    "checkpoint_sha256": "ac59d8ce17a0b35c15189d691f7c6aa828f31a3dfe14601a02036a6c3b892a82",
+    "checkpoint_sha256_verified": true,
+    "original_validation_predictions_reused": true,
+    "original_validation_predictions_shape": [
+      844,
+      12
+    ],
+    "study_level_metric_reproduced": true,
+    "macro_auroc_exact_match": true,
+    "standalone_module_reproduction": true,
+    "clean_process_reproduction": true,
+    "backend_adapter_reproduction": true,
+    "golden_case_probability_match": true,
+    "model_weights_modified": false,
+    "retraining_performed": false,
+    "new_validation_inference_performed": false
+  }
+}

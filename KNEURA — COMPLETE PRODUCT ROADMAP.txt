@@ -1,0 +1,799 @@
+KNEURA — COMPLETE PRODUCT ROADMAP
+Core product vision
+
+KNEURA is an evidence-governed AI layer for knee MRI that integrates with existing hospital imaging and reporting workflows, assists radiologists in detecting abnormalities, links every AI finding to imaging evidence, generates a report draft only from radiologist-approved findings, and distributes the verified result to the appropriate clinical users.
+
+The architecture:
+
+                    EXISTING HOSPITAL
+          ┌──────────────────────────────┐
+          │                              │
+          │   PACS ─── RIS ─── EHR       │
+          │                              │
+          └──────────────┬───────────────┘
+                         │
+                    DICOM / API
+                         ↓
+              ┌──────────────────────┐
+              │       KNEURA         │
+              │                      │
+              │  1. INGESTION        │
+              │         ↓            │
+              │  2. AI ENGINE        │
+              │         ↓            │
+              │  3. EVIDENCE ENGINE   │
+              │         ↓            │
+              │  4. RADIOLOGIST GATE  │
+              │         ↓            │
+              │  5. REPORT ENGINE     │
+              │         ↓            │
+              │  6. FINAL APPROVAL    │
+              │         ↓            │
+              │  7. DISTRIBUTION      │
+              └──────────┬───────────┘
+                         │
+             ┌───────────┼───────────┐
+             ↓           ↓           ↓
+        Radiologist  Orthopedist   Patient
+PHASE 0 — FOUNDATION
+
+This is what KNEURA is built around.
+
+0.1 Identity & case management
+
+Every MRI examination becomes a KNEURA case.
+
+A case contains:
+
+Study ID
+Series information
+MRI images
+AI analysis
+detected findings
+evidence
+radiologist decisions
+generated report
+final approval
+audit history
+0.2 Role-based access
+
+Three primary roles:
+
+👩‍⚕️ Radiologist — VERIFY
+
+Full AI workflow.
+
+🦴 Orthopedist — ACT
+
+Sees verified clinical information.
+
+👤 Patient — UNDERSTAND
+
+Sees only the final approved information in understandable language.
+
+Later you can add:
+
+Hospital Administrator
+Department Head
+AI/ML Administrator
+Technician
+PHASE 1 — HOSPITAL INGESTION LAYER
+
+This is where we start making KNEURA hospital-compatible.
+
+1.1 DICOM ingestion
+
+Hospital sends knee MRI data to KNEURA.
+
+PACS
+ ↓
+DICOM
+ ↓
+KNEURA
+
+KNEURA identifies:
+
+Study
+Series
+Images
+Instance numbers
+MRI sequences
+
+Your existing implementation already has specific series-selection logic and DICOM preprocessing.
+
+1.2 Automatic series selection
+
+KNEURA identifies the appropriate MRI series.
+
+Current pipeline:
+
+Fluid-sensitive + fat-suppressed series → ordered by InstanceNumber → five consecutive slices → overlapping windows.
+
+That's already part of your frozen AI pipeline.
+
+1.3 Case queue
+
+Radiologist dashboard:
+
+NEW CASES
+────────────────────
+Patient/Study | Status | Time
+
+MRI-001       | AI Ready
+MRI-002       | Reviewing
+MRI-003       | Finalized
+PHASE 2 — KNEE-AI ENGINE
+
+This is your existing core and should remain frozen for finals.
+
+2.1 Five-slice AI
+
+Your model:
+
+5 consecutive MRI slices
+
+↓
+
+learned 5 → 3 slice projection
+
+↓
+
+EfficientNet-B0
+
+↓
+
+12 independent abnormality probabilities
+
+The checkpoint and inference implementation are frozen.
+
+PHASE 3 — 12-ABNORMALITY DETECTION
+
+KNEURA evaluates:
+
+ACL
+MCL
+Medial Meniscus
+Lateral Meniscus
+Medial OA
+Lateral OA
+Patellofemoral OA
+Effusion
+Synovitis
+Baker's cyst
+Contusion
+Fracture
+
+These are the canonical output classes and order in your implementation.
+
+Each produces:
+
+Abnormality
+Probability
+Evidence
+Status
+
+Important:
+
+Probability ≠ diagnosis.
+
+Your current system explicitly treats these as AI probabilities requiring radiologist review, with no clinically validated threshold.
+
+PHASE 4 — EVIDENCE ENGINE 🔥
+
+THIS is where KNEURA starts becoming much more than "another MRI classifier."
+
+For every AI finding:
+
+Finding
+   ↓
+Probability
+   ↓
+MRI window
+   ↓
+Specific slices
+   ↓
+Grad-CAM
+   ↓
+Evidence object
+4.1 Grad-CAM
+
+For every abnormality:
+
+class-specific heatmap
+MRI slice
+activation region
+window information
+series information
+
+Your current Grad-CAM uses the same five-slice tensor and produces class-specific heatmaps without modifying KNEE-AI.
+
+4.2 Evidence card
+
+Example:
+
+LATERAL MENISCUS
+
+AI Probability
+90.9%
+
+AI Explanation
+[ MRI + Grad-CAM ]
+
+Series:
+Fluid Sensitive / Fat Suppression
+
+Window:
+#17
+
+Slices:
+34–38
+
+Radiologist Decision:
+
+[ ✓ APPROVE ]   [ ✕ REJECT ]
+
+This should become one of KNEURA's signature UI components.
+
+PHASE 5 — RADIOLOGIST VERIFICATION GATE 🔥🔥
+
+This is the heart of your product.
+
+KNEURA does not automatically turn AI predictions into report findings.
+
+Every AI finding must receive:
+
+APPROVED
+     OR
+REJECTED
+
+Your current specification explicitly requires all 12 findings to receive a radiologist decision.
+
+5.1 Finding-level decision
+
+Example:
+
+Finding	AI probability	Radiologist
+ACL	7.7%	REJECT
+Lateral Meniscus	90.9%	APPROVE
+Medial OA	90.8%	APPROVE
+PF OA	94.2%	APPROVE
+
+This is much stronger than:
+
+"AI says abnormal."
+
+It becomes:
+
+AI proposes → radiologist verifies.
+
+PHASE 6 — EVIDENCE-GATED REPORT GENERATION 🔥🔥🔥
+
+This is KNEURA's major workflow innovation.
+
+The LLM does not receive everything.
+
+Instead:
+
+12 AI findings
+      ↓
+Radiologist review
+      ↓
+┌───────────────┐
+│ APPROVED      │
+│ FINDINGS ONLY │
+└───────┬───────┘
+        ↓
+       LLM
+        ↓
+   DRAFT REPORT
+
+Your specification explicitly prevents rejected findings from entering the report-generating input.
+
+PHASE 7 — AI REPORT GENERATION
+
+LLM receives:
+
+approved findings
+permitted clinical context
+
+Then generates:
+
+DRAFT REPORT
+
+Not final.
+
+Your current lifecycle is:
+
+LLM DRAFT → Radiologist Review → Authorized Radiologist Approval → FINAL.
+
+PHASE 8 — REPORT TRACEABILITY 🔥
+
+This is where I'd make the UI really special.
+
+Imagine the final report says:
+
+Lateral meniscal abnormality identified.
+
+Click it.
+
+↓
+
+TRACE EVIDENCE
+REPORT STATEMENT
+       ↓
+Approved Finding
+       ↓
+Lateral Meniscus
+       ↓
+AI Probability
+90.9%
+       ↓
+MRI Series
+       ↓
+Window #17
+       ↓
+Slices 34–38
+       ↓
+Grad-CAM
+       ↓
+Radiologist
+APPROVED
+
+That's your audit trail.
+
+Not just:
+
+"AI generated this."
+
+But:
+
+"Show me why this statement exists."
+
+PHASE 9 — FINAL RADIOLOGIST APPROVAL
+
+The report lifecycle:
+
+AI
+ ↓
+DRAFT
+ ↓
+Radiologist edits/reviews
+ ↓
+APPROVE
+ ↓
+FINAL
+
+Only the authorized radiologist can make the report FINAL.
+
+PHASE 10 — CLINICAL USER VIEWS
+
+Now the same verified case gets different interfaces.
+
+👩‍⚕️ RADIOLOGIST
+VERIFY
+
+Sees:
+
+MRI
+AI findings
+probabilities
+Grad-CAM
+evidence
+Approve/Reject
+draft report
+edit report
+final approval
+audit trail
+🦴 ORTHOPEDIST
+ACT
+
+Sees:
+
+final report
+verified findings
+relevant MRI
+evidence
+clinical information
+
+But not an uncontrolled AI prediction dump.
+
+👤 PATIENT
+UNDERSTAND
+
+Sees:
+
+Your Knee MRI
+
+Findings:
+• Meniscal abnormality
+• Osteoarthritis-related changes
+• Joint fluid accumulation
+
+What this means:
+[plain-language explanation]
+
+Your radiologist has reviewed
+and approved this report.
+
+No scary:
+
+"AI probability = 94.2%"
+
+😂
+
+The patient gets the verified result, not raw model internals.
+
+PHASE 11 — HOSPITAL INTEGRATION LAYER
+
+Now comes the startup part.
+
+KNEURA shouldn't replace:
+
+PACS
+RIS
+EHR
+
+Instead:
+
+PACS
+ ↓
+DICOM
+ ↓
+KNEURA
+ ↓
+AI result
+ ↓
+Structured report
+ ↓
+RIS / EHR
+Integration Adapter
+
+Your KNEURA backend becomes capable of accepting:
+
+INPUT
+DICOM MRI
+
+and returning:
+
+OUTPUT
+{
+  "case_id": "...",
+  "findings": [],
+  "radiologist_status": "...",
+  "report_status": "...",
+  "report": "..."
+}
+
+The exact production interoperability standards can come later.
+
+For the Technova MVP, you only need to demonstrate the architecture convincingly.
+
+PHASE 12 — AUDIT & GOVERNANCE
+
+This is extremely important if you want hospitals to take the product seriously.
+
+For every case:
+
+MRI received
+     ↓
+AI analysis
+     ↓
+AI findings generated
+     ↓
+Radiologist approved/rejected
+     ↓
+Draft generated
+     ↓
+Radiologist edited
+     ↓
+Final approved
+
+Store timestamps and relevant actions.
+
+Audit timeline
+10:02 MRI received
+
+10:03 AI analysis completed
+
+10:04 5 findings approved
+      7 findings rejected
+
+10:05 Draft report generated
+
+10:07 Radiologist modified report
+
+10:08 Final report approved
+PHASE 13 — MODEL TRANSPARENCY
+
+KNEURA should have a Model Information panel.
+
+Show:
+
+Model architecture
+Model version
+checkpoint version/hash
+number of abnormalities
+input configuration
+validation information
+limitations
+radiologist-review requirement
+
+Your current backend already exposes model metadata such as architecture, model version, evaluated series/windows, probabilities, and review requirement.
+
+PHASE 14 — VALIDATION DASHBOARD
+
+For internal/clinical evaluation:
+
+Current evidence
+
+Your documented validation has:
+
+9 validation studies
+844 validation windows
+27 selected series
+study-level Macro AUROC ≈ 0.714
+
+But this is not clinical diagnostic accuracy and shouldn't be presented as such.
+
+Future product validation can expand toward:
+
+Internal validation
+       ↓
+External validation
+       ↓
+Multi-center validation
+       ↓
+Reader study
+       ↓
+Prospective evaluation
+PHASE 15 — SECURITY LAYER
+
+For actual hospital deployment:
+
+Authentication
+Hospital SSO
+role-based access
+Authorization
+
+Radiologist ≠ Orthopedist ≠ Patient.
+
+Data protection
+encrypted data transfer
+encrypted storage
+access logging
+session management
+Audit
+
+Every clinically relevant action logged.
+
+PHASE 16 — DEPLOYMENT ARCHITECTURE
+
+Eventually KNEURA could support:
+
+Option A — Hospital server
+Hospital Network
+      ↓
+KNEURA Server
+      ↓
+AI inference
+Option B — Private cloud
+Hospital
+   ↓
+Secure connection
+   ↓
+KNEURA cloud
+   ↓
+AI
+Option C — Hybrid
+
+Sensitive imaging remains within hospital infrastructure while selected services run in a controlled environment.
+
+For now, don't build these. They're future deployment architecture.
+
+PHASE 17 — FUTURE AI EXPANSION
+
+Once the knee MVP is validated, KNEURA can expand.
+
+More abnormalities
+
+Additional knee conditions.
+
+Other joints
+
+Potentially:
+
+shoulder
+hip
+ankle
+wrist
+
+But only after validation.
+
+The product architecture shouldn't be locked to one model.
+
+Instead:
+
+KNEURA PLATFORM
+      │
+ ┌────┼─────┐
+ ↓    ↓     ↓
+Knee Shoulder Hip
+ AI     AI    AI
+PHASE 18 — FUTURE CLINICAL INTELLIGENCE
+
+Later, once the basic workflow is validated:
+
+Longitudinal comparison
+MRI 2025
+   ↓
+MRI 2026
+   ↓
+Change detection
+Previous reports
+
+Compare current and previous findings.
+
+Structured reporting
+
+Standardized templates.
+
+Clinical context
+
+Approved information from the patient's relevant record could eventually assist reporting.
+
+Knowledge retrieval / RAG
+
+You already decided to leave RAG for now.
+
+So:
+
+CURRENT KNEURA
+❌ RAG
+
+FUTURE KNEURA
+Possible RAG layer
+
+And importantly, RAG should remain downstream of verified findings rather than becoming a mechanism for inventing patient-specific findings.
+
+🧩 THE COMPLETE KNEURA STACK
+
+Now put everything together:
+
+                         KNEURA
+                           │
+        ┌──────────────────┴──────────────────┐
+        │                                     │
+  HOSPITAL INTEGRATION                  USER MANAGEMENT
+        │                                     │
+  PACS / RIS / EHR                      RBAC / Auth
+        │
+      DICOM
+        ↓
+┌──────────────────────────────────────────────┐
+│              KNEURA PLATFORM                │
+│                                              │
+│  1. DICOM INGESTION                          │
+│              ↓                               │
+│  2. SERIES SELECTION                        │
+│              ↓                               │
+│  3. KNEE-AI ENGINE                           │
+│       EfficientNet-B0                        │
+│       5-slice input                          │
+│       12 abnormalities                       │
+│              ↓                               │
+│  4. EVIDENCE ENGINE                          │
+│       Grad-CAM                               │
+│       slices                                 │
+│       windows                                │
+│       provenance                             │
+│              ↓                               │
+│  5. RADIOLOGIST GATE                         │
+│       APPROVE / REJECT                       │
+│              ↓                               │
+│  6. APPROVED FINDINGS                        │
+│              ↓                               │
+│  7. LLM REPORT GENERATOR                     │
+│       DRAFT ONLY                              │
+│              ↓                               │
+│  8. RADIOLOGIST FINAL APPROVAL               │
+│              ↓                               │
+│  9. FINAL REPORT                             │
+│              ↓                               │
+│ 10. TRACEABILITY                              │
+│              ↓                               │
+│ 11. AUDIT LOG                                │
+│                                              │
+└──────────────────────┬───────────────────────┘
+                       │
+             ┌─────────┼──────────┐
+             ↓         ↓          ↓
+       RADIOLOGIST  ORTHOPEDIST  PATIENT
+         VERIFY       ACT       UNDERSTAND
+🚦 BUT — THIS IS THE IMPORTANT PART
+
+We do not build all of this before Madurai.
+
+I would divide it into three levels.
+
+🔴 LEVEL 1 — TECHNOVA FINALS MVP
+
+Build NOW.
+
+Core AI
+✅ KNEE-AI 3.3
+✅ 12 abnormalities
+✅ DICOM preprocessing
+✅ study aggregation
+Evidence
+✅ MRI viewer
+✅ Grad-CAM
+✅ evidence cards
+✅ slice/window provenance
+Clinical workflow
+✅ Radiologist APPROVE/REJECT
+✅ approved-only LLM
+✅ draft report
+✅ final approval
+✅ final report
+Users
+✅ Radiologist
+✅ Orthopedist
+✅ Patient
+Product
+✅ case management
+✅ audit timeline
+✅ report traceability
+✅ model information
+✅ validation panel
+Hospital readiness
+✅ DICOM ingestion
+✅ API architecture
+✅ integration adapter demo
+🟡 LEVEL 2 — PILOT-READY PRODUCT
+
+After Technova:
+
+Real PACS integration
+RIS integration
+Hospital authentication
+stronger security
+database hardening
+structured interoperability
+multi-user deployment
+monitoring
+external validation
+larger reader study
+performance benchmarking
+failure/abstention handling
+deployment infrastructure
+🟢 LEVEL 3 — STARTUP PLATFORM
+
+After the knee product is validated:
+
+multi-hospital deployment
+cloud/on-premise options
+multiple joints
+longitudinal imaging
+previous-report comparison
+advanced reporting
+optional RAG
+analytics
+hospital dashboards
+model monitoring
+continuous validation
+additional AI models
+🔥 THE ONE-SENTENCE KNEURA
+
+If the judges ask:
+
+"So what exactly is KNEURA?"
+
+Say:
+
+"KNEURA is an integration-ready clinical AI layer for knee MRI that detects abnormalities, links every AI finding to imaging evidence, requires radiologist verification before report generation, generates an auditable draft report only from verified findings, and delivers the finalized information to radiologists, orthopedists, and patients through role-specific interfaces."
+
+And your killer workflow sentence:
+
+"KNEURA doesn't let AI findings directly become clinical conclusions — AI proposes, evidence supports, the radiologist verifies, and only then does the report get generated."
+
+THAT is the product architecture I'd build around. 🧠🔥

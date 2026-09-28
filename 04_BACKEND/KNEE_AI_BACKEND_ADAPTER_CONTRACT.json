@@ -1,0 +1,84 @@
+{
+  "contract_version": "1.0",
+  "model": {
+    "name": "KNEE-AI",
+    "version": "3.3",
+    "module": "knee_ai_inference.py",
+    "role": "AI-assisted abnormality identification"
+  },
+  "backend_to_ai": {
+    "study_id": {
+      "type": "string",
+      "required": true
+    },
+    "study_root": {
+      "type": "filesystem_path",
+      "required": true
+    },
+    "train_series_metadata": {
+      "type": "dataframe",
+      "required": true
+    },
+    "checkpoint_path": {
+      "type": "filesystem_path",
+      "required": true
+    }
+  },
+  "ai_to_backend": {
+    "study_id": "string",
+    "model_version": "KNEE-AI 3.3",
+    "architecture": "StandaloneFiveSliceEfficientNet",
+    "series_evaluated": "integer",
+    "windows_evaluated": "integer",
+    "probabilities": {
+      "ACL": "float 0-1",
+      "MCL": "float 0-1",
+      "Medial Meniscus": "float 0-1",
+      "Lateral Meniscus": "float 0-1",
+      "Medial OA": "float 0-1",
+      "Lateral OA": "float 0-1",
+      "PF OA": "float 0-1",
+      "Effusion": "float 0-1",
+      "Synovitis": "float 0-1",
+      "Baker's": "float 0-1",
+      "Contusion": "float 0-1",
+      "Fracture": "float 0-1"
+    },
+    "requires_radiologist_review": true
+  },
+  "api": {
+    "method": "POST",
+    "endpoint": "/api/v1/ai/analyze",
+    "request": {
+      "study_id": "string",
+      "action": "ANALYZE_KNEE_MRI"
+    },
+    "response": {
+      "success": "boolean",
+      "study_id": "string",
+      "model_version": "string",
+      "architecture": "string",
+      "series_evaluated": "integer",
+      "windows_evaluated": "integer",
+      "probabilities": "object",
+      "requires_radiologist_review": "boolean"
+    }
+  },
+  "safety": {
+    "automatic_diagnosis": false,
+    "validated_clinical_threshold": false,
+    "radiologist_review_required": true,
+    "backend_must_not_create_diagnosis": true,
+    "backend_must_preserve_probability_values": true,
+    "class_order_must_not_change": true
+  },
+  "golden_case": {
+    "source": "INTEGRATION/KNEE_AI_GOLDEN_CASE.json",
+    "expected_series": 3,
+    "expected_windows": 44,
+    "expected_outputs": 12,
+    "expected_model_version": "KNEE-AI 3.3"
+  },
+  "status": "FROZEN_FOR_BACKEND_IMPLEMENTATION",
+  "generated_at": "2026-09-12T14:38:05.396333"
+}

@@ -1,0 +1,126 @@
+{
+  "golden_case_version": "1.0",
+  "status": "CANONICAL_DEMO_CASE",
+  "purpose": "Single source of truth for KNEE-AI frontend, backend, AI and LLM integration testing.",
+  "patient": {
+    "patient_id": "DEMO-PATIENT-001",
+    "display_id": "KNEE-DEMO-001",
+    "age": 42,
+    "sex": "Female",
+    "clinical_context": {
+      "symptoms": "Persistent knee pain with activity and intermittent stiffness.",
+      "medical_history": "No additional relevant history provided for this demonstration.",
+      "clinical_notes": "MRI requested for evaluation of persistent knee symptoms."
+    }
+  },
+  "mri": {
+    "study_instance_uid": "1.2.826.0.1.3680043.8.498.10004873229099053869093324292195817260",
+    "series_evaluated": 3,
+    "windows_evaluated": 44
+  },
+  "ai": {
+    "model_version": "KNEE-AI 3.3",
+    "architecture": "StandaloneFiveSliceEfficientNet",
+    "probabilities": {
+      "ACL": 0.0768398568034172,
+      "MCL": 0.21053840219974518,
+      "Medial Meniscus": 0.5337309241294861,
+      "Lateral Meniscus": 0.9094741344451904,
+      "Medial OA": 0.9076368808746338,
+      "Lateral OA": 0.8252654671669006,
+      "PF OA": 0.9420368075370789,
+      "Effusion": 0.35206925868988037,
+      "Synovitis": 0.6673381328582764,
+      "Baker's": 0.471786767244339,
+      "Contusion": 0.05063483491539955,
+      "Fracture": 0.438851922750473
+    }
+  },
+  "radiologist_review": {
+    "status": "COMPLETED",
+    "reviewer_role": "Radiologist",
+    "decision_source": "DEMO/SIMULATED REVIEW DECISION",
+    "approved_findings": [
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Synovitis"
+    ],
+    "rejected_findings": [
+      "ACL",
+      "MCL",
+      "Effusion",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ]
+  },
+  "llm_input": {
+    "approved_ai_findings": {
+      "Medial Meniscus": 0.5337309241294861,
+      "Lateral Meniscus": 0.9094741344451904,
+      "Medial OA": 0.9076368808746338,
+      "Lateral OA": 0.8252654671669006,
+      "PF OA": 0.9420368075370789,
+      "Synovitis": 0.6673381328582764
+    },
+    "clinical_context": {
+      "symptoms": "Persistent knee pain with activity and intermittent stiffness.",
+      "medical_history": "No additional relevant history provided for this demonstration.",
+      "clinical_notes": "MRI requested for evaluation of persistent knee symptoms."
+    },
+    "rules": [
+      "Use only radiologist-approved AI findings.",
+      "Do not include rejected findings.",
+      "Do not infer unapproved abnormalities.",
+      "Do not create unsupported diagnoses.",
+      "Generate a draft report only.",
+      "Final radiologist approval is required."
+    ]
+  },
+  "draft_report": {
+    "status": "DRAFT",
+    "findings": [
+      "Medial meniscal abnormality identified.",
+      "Lateral meniscal abnormality identified.",
+      "Medial compartment osteoarthritic changes identified.",
+      "Lateral compartment osteoarthritic changes identified.",
+      "Patellofemoral osteoarthritic changes identified.",
+      "Synovitis identified."
+    ],
+    "clinical_context": "Persistent knee pain with activity and intermittent stiffness.",
+    "impression": "The approved findings demonstrate meniscal abnormalities, medial and lateral osteoarthritic changes, patellofemoral osteoarthritic changes, and synovitis.",
+    "limitations": "This is an AI-assisted draft based on radiologist-approved findings. Final clinical interpretation and approval remain the responsibility of the radiologist.",
+    "final_approval": {
+      "required": true,
+      "approved": false,
+      "status": "PENDING"
+    }
+  },
+  "final_approval": {
+    "required": true,
+    "approved": false,
+    "approved_by": null,
+    "approved_at": null
+  },
+  "safety_invariants": {
+    "automatic_diagnosis": false,
+    "validated_clinical_threshold": false,
+    "radiologist_review_required": true,
+    "llm_receives_only_approved_findings": true,
+    "final_report_approval_required": true
+  },
+  "integration_invariants": {
+    "ai_output_count": 12,
+    "series_evaluated": 3,
+    "windows_evaluated": 44,
+    "approved_findings": 6,
+    "rejected_findings": 6,
+    "llm_identifier_exposure": false,
+    "draft_status": "DRAFT",
+    "final_approval_status": "PENDING"
+  },
+  "generated_at": "2026-09-12T14:36:16.992163"
+}

@@ -1,0 +1,37 @@
+{
+  "name": "kneura",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test": "node --test --test-isolation=none tests/workflow.test.mjs",
+    "test:e2e": "playwright test",
+    "test:patient": "node tests/patient.e2e.mjs",
+    "api": "powershell -NoProfile -File ./run_kneura.ps1",
+    "test:backend": "python -m pytest tests/test_backend.py -q",
+    "model:check": "python -m backend.manage check-model",
+    "test:live": "playwright test --config playwright.live.config.ts",
+    "demo:dicom": "python -m backend.demo",
+    "preflight": "python scripts/preflight.py --model",
+    "demo:verify": "python scripts/verify_dicom_study.py",
+    "demo:start": "powershell -NoProfile -File scripts/start-finals.ps1"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  }
+}

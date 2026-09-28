@@ -1,0 +1,180 @@
+{
+  "contract_version": "1.0",
+  "project": {
+    "name": "KNEE-AI",
+    "model_version": "KNEE-AI 3.3",
+    "purpose": "AI-assisted identification of 12 knee MRI abnormalities"
+  },
+  "model": {
+    "architecture": "StandaloneFiveSliceEfficientNet",
+    "backbone": "EfficientNet-B0",
+    "weights": "KNEE-AI 3.3 champion checkpoint",
+    "checkpoint_sha256": "ac59d8ce17a0b35c15189d691f7c6aa828f31a3dfe14601a02036a6c3b892a82",
+    "input_size": [
+      224,
+      224
+    ],
+    "slice_context": 5,
+    "projection": {
+      "input_channels": 5,
+      "output_channels": 3,
+      "kernel_size": [
+        1,
+        1
+      ],
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        0,
+        0
+      ],
+      "bias": true,
+      "activation": "sigmoid"
+    },
+    "num_outputs": 12,
+    "classes": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ]
+  },
+  "preprocessing": {
+    "dicom_input": true,
+    "photometric_interpretation": {
+      "MONOCHROME1": "invert",
+      "MONOCHROME2": "unchanged"
+    },
+    "intensity_normalization": {
+      "method": "1st-99th percentile",
+      "clip": true,
+      "range": [
+        0.0,
+        1.0
+      ]
+    },
+    "resize": {
+      "height": 224,
+      "width": 224,
+      "interpolation": "bilinear"
+    },
+    "tensor_dtype": "float32",
+    "imagenet_normalization": true
+  },
+  "series_selection": {
+    "rule": "Fluid_Sensitive == 1 AND Fat_Suppression == 1",
+    "slice_order": "InstanceNumber ascending"
+  },
+  "windowing": {
+    "window_size": 5,
+    "stride": 1,
+    "contiguous": true
+  },
+  "aggregation": {
+    "level": "study",
+    "method": "mean probability across study windows"
+  },
+  "output": {
+    "type": "probability",
+    "range": [
+      0.0,
+      1.0
+    ],
+    "class_order": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "clinical_threshold": null,
+    "validated_threshold": false
+  },
+  "clinical_safety": {
+    "role": "AI-assisted abnormality identification",
+    "not_final_diagnosis": true,
+    "automatic_diagnosis": false,
+    "clinician_review_required": true,
+    "radiologist_approval_required": true,
+    "llm_receives_only_approved_findings": true
+  },
+  "validation": {
+    "validation_studies": 9,
+    "validation_windows": 844,
+    "macro_auroc": 0.7136243386243387,
+    "study_level_aggregation": "mean probability across study windows",
+    "target_study_reproduction": {
+      "series": 3,
+      "windows": 44,
+      "outputs": 12,
+      "maximum_probability_difference": 1.1920928955078125e-07,
+      "standalone_module_passed": true,
+      "clean_process_passed": true
+    }
+  },
+  "api_contract": {
+    "endpoint": "/api/v1/ai/analyze",
+    "request": {
+      "study_id": "string",
+      "action": "ANALYZE_KNEE_MRI"
+    },
+    "response": {
+      "success": true,
+      "study_id": "string",
+      "model_version": "KNEE-AI 3.3",
+      "architecture": "StandaloneFiveSliceEfficientNet",
+      "num_series_evaluated": "<integer>",
+      "num_windows_evaluated": "<integer>",
+      "probabilities": {
+        "ACL": "<float 0-1>",
+        "MCL": "<float 0-1>",
+        "Medial Meniscus": "<float 0-1>",
+        "Lateral Meniscus": "<float 0-1>",
+        "Medial OA": "<float 0-1>",
+        "Lateral OA": "<float 0-1>",
+        "PF OA": "<float 0-1>",
+        "Effusion": "<float 0-1>",
+        "Synovitis": "<float 0-1>",
+        "Baker's": "<float 0-1>",
+        "Contusion": "<float 0-1>",
+        "Fracture": "<float 0-1>"
+      },
+      "requires_radiologist_review": true
+    }
+  },
+  "workflow": [
+    "MRI study received",
+    "AI inference",
+    "AI probabilities generated",
+    "Radiologist reviews findings",
+    "Radiologist approves/rejects findings",
+    "Only approved findings sent to LLM",
+    "LLM generates draft report",
+    "Radiologist performs final report approval",
+    "Approved report returned to downstream workflow"
+  ],
+  "deployment": {
+    "module": "knee_ai_inference.py",
+    "module_directory": "/kaggle/working/KNEE_AI_INFERENCE_MODULE",
+    "standalone_validation": true,
+    "clean_process_validation": true
+  },
+  "generated_at": "2026-09-12T14:24:30.376251"
+}

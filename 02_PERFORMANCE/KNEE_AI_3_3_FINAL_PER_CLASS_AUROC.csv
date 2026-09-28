@@ -1,0 +1,13 @@
+Class Index,Abnormality,Study_Level_AUROC
+0,ACL,0.6
+1,MCL,0.7857142857142857
+2,Medial Meniscus,0.95
+3,Lateral Meniscus,1.0
+4,Medial OA,1.0
+5,Lateral OA,0.35714285714285715
+6,PF OA,0.7142857142857142
+7,Effusion,0.55
+8,Synovitis,0.4
+9,Baker's,0.4285714285714286
+10,Contusion,0.888888888888889
+11,Fracture,0.888888888888889

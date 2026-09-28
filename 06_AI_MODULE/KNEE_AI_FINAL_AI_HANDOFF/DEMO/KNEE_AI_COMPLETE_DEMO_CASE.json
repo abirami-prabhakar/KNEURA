@@ -1,0 +1,128 @@
+{
+  "case_version": "1.0",
+  "demo_status": "SIMULATED CLINICAL CASE",
+  "patient": {
+    "patient_id": "DEMO-PATIENT-001",
+    "display_id": "KNEE-DEMO-001",
+    "age": 42,
+    "sex": "Female",
+    "clinical_context": {
+      "symptoms": "Persistent knee pain with activity and intermittent stiffness.",
+      "medical_history": "No additional relevant history provided for this demonstration.",
+      "clinical_notes": "MRI requested for evaluation of persistent knee symptoms."
+    }
+  },
+  "mri": {
+    "study_instance_uid": "1.2.826.0.1.3680043.8.498.10004873229099053869093324292195817260",
+    "dataset_source": "RSNA Knee MRI Abnormality Detection dataset",
+    "series_evaluated": 3,
+    "windows_evaluated": 44,
+    "model_version": "KNEE-AI 3.3"
+  },
+  "ai": {
+    "model_version": "KNEE-AI 3.3",
+    "architecture": "StandaloneFiveSliceEfficientNet",
+    "backbone": "EfficientNet-B0",
+    "probabilities": {
+      "ACL": 0.0768398642539978,
+      "MCL": 0.2105383425951004,
+      "Medial Meniscus": 0.5337308645248413,
+      "Lateral Meniscus": 0.9094741940498352,
+      "Medial OA": 0.9076368808746338,
+      "Lateral OA": 0.8252653479576111,
+      "PF OA": 0.9420366883277893,
+      "Effusion": 0.3520691990852356,
+      "Synovitis": 0.6673380136489868,
+      "Baker's": 0.471786767244339,
+      "Contusion": 0.05063481628894806,
+      "Fracture": 0.438851922750473
+    },
+    "decision_policy": {
+      "clinical_threshold": null,
+      "validated_threshold": false,
+      "interpretation": "Probabilities are AI-assisted outputs for clinician review and are not final diagnoses."
+    }
+  },
+  "radiologist_review": {
+    "status": "COMPLETED",
+    "reviewer_role": "Radiologist",
+    "decision_source": "DEMO/SIMULATED REVIEW DECISION",
+    "approved_findings": [
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Synovitis"
+    ],
+    "rejected_findings": [
+      "ACL",
+      "MCL",
+      "Effusion",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "final_clinician_review_required": true
+  },
+  "llm_input": {
+    "approved_ai_findings": {
+      "Medial Meniscus": 0.5337308645248413,
+      "Lateral Meniscus": 0.9094741940498352,
+      "Medial OA": 0.9076368808746338,
+      "Lateral OA": 0.8252653479576111,
+      "PF OA": 0.9420366883277893,
+      "Synovitis": 0.6673380136489868
+    },
+    "clinical_context": {
+      "symptoms": "Persistent knee pain with activity and intermittent stiffness.",
+      "medical_history": "No additional relevant history provided for this demonstration.",
+      "clinical_notes": "MRI requested for evaluation of persistent knee symptoms."
+    },
+    "rules": [
+      "Use only radiologist-approved AI findings.",
+      "Do not include rejected findings.",
+      "Do not infer unapproved abnormalities.",
+      "Do not create unsupported diagnoses.",
+      "Generate a draft report only.",
+      "Final radiologist approval is required."
+    ]
+  },
+  "draft_report": {
+    "status": "DRAFT",
+    "findings": [
+      "Medial meniscal abnormality identified and approved for reporting.",
+      "Lateral meniscal abnormality identified and approved for reporting.",
+      "Medial compartment osteoarthritic changes identified and approved for reporting.",
+      "Lateral compartment osteoarthritic changes identified and approved for reporting.",
+      "Patellofemoral osteoarthritic changes identified and approved for reporting.",
+      "Synovitis identified and approved for reporting."
+    ],
+    "clinical_context": "Persistent knee pain with activity and intermittent stiffness.",
+    "impression": "Approved findings demonstrate abnormalities involving the menisci, medial and lateral osteoarthritis, patellofemoral osteoarthritis, and synovitis.",
+    "limitations": "This is an AI-assisted draft based on radiologist-approved findings. Final clinical interpretation and approval remain the responsibility of the radiologist.",
+    "final_approval": {
+      "required": true,
+      "approved": false,
+      "status": "PENDING"
+    }
+  },
+  "workflow": [
+    "Patient details recorded",
+    "MRI study received",
+    "KNEE-AI 3.3 analyzes MRI",
+    "AI generates 12 probability outputs",
+    "Radiologist reviews AI findings",
+    "Radiologist approves/rejects findings",
+    "Only approved findings enter LLM pipeline",
+    "LLM generates draft report",
+    "Radiologist performs final approval"
+  ],
+  "safety": {
+    "automatic_diagnosis": false,
+    "validated_clinical_threshold": false,
+    "radiologist_review_required": true,
+    "final_report_approval_required": true
+  },
+  "generated_at": "2026-09-12T14:32:24.454974"
+}

@@ -1,0 +1,82 @@
+{
+  "patient": {
+    "patient_id": {
+      "type": "string",
+      "source": "DICOM / hospital system",
+      "required": true,
+      "description": "De-identified patient identifier. Should not be exposed unnecessarily."
+    },
+    "display_id": {
+      "type": "string",
+      "source": "Hospital / application",
+      "required": false
+    },
+    "age": {
+      "type": "integer",
+      "source": "Hospital / clinician",
+      "required": false,
+      "minimum": 0,
+      "maximum": 120
+    },
+    "sex": {
+      "type": "string",
+      "source": "Hospital / clinician",
+      "required": false,
+      "allowed_values": [
+        "Female",
+        "Male",
+        "Other",
+        "Unknown"
+      ]
+    }
+  },
+  "study": {
+    "study_instance_uid": {
+      "type": "string",
+      "source": "DICOM",
+      "required": true
+    },
+    "series": {
+      "type": "array",
+      "source": "DICOM",
+      "required": true
+    }
+  },
+  "clinical_context": {
+    "symptoms": {
+      "type": "string",
+      "source": "Patient / clinician",
+      "required": false
+    },
+    "medical_history": {
+      "type": "string",
+      "source": "Patient / clinician",
+      "required": false
+    },
+    "clinical_notes": {
+      "type": "string",
+      "source": "Clinician",
+      "required": false
+    }
+  },
+  "privacy": {
+    "patient_identifiers_deidentified": true,
+    "llm_identifier_policy": "Do not send PatientID, StudyInstanceUID, SeriesInstanceUID, or other unnecessary identifiers to the LLM.",
+    "llm_allowed_context": [
+      "approved_ai_findings",
+      "symptoms",
+      "medical_history",
+      "clinical_notes"
+    ]
+  },
+  "workflow": {
+    "patient_details": true,
+    "mri_study": true,
+    "ai_analysis": true,
+    "radiologist_review_required": true,
+    "llm_receives_only_approved_findings": true,
+    "final_report_approval_required": true
+  },
+  "contract_version": "1.0",
+  "generated_at": "2026-09-12T14:31:45.732848"
+}
