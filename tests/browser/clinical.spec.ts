@@ -240,10 +240,10 @@ test('processing and finalized empty views do not fabricate findings', async ({ 
   await expect(page.getByLabel('Report findings')).toHaveValue('No AI-proposed abnormalities were approved.')
 })
 
-test('handoff preserves all supplied probabilities, class order, overlays and simulated status', async ({ page }) => {
+test('reference case preserves probabilities and simulated status without distributing scans', async ({ page }) => {
   const { requests } = await workspace(page)
-  await page.goto('/radiologist/handoff')
-  await expect(page.getByRole('heading', { name: 'Golden case & evidence' })).toBeVisible()
+  await page.goto('/radiologist/cases/sample-case')
+  await expect(page.getByRole('heading', { name: 'Radhika', exact: true }).first()).toBeVisible()
   await expect(page.locator('.handoff-findings strong')).toHaveText(Object.keys(golden.ai.probabilities))
   for (const result of cam.results) {
     await page.locator('.handoff-findings .finding-row').nth(result.class_index).click()
@@ -251,8 +251,8 @@ test('handoff preserves all supplied probabilities, class order, overlays and si
     await expect(evidence).toContainText(String(golden.ai.probabilities[result.abnormality as keyof typeof golden.ai.probabilities]))
     await expect(evidence).toContainText(String(result.probability))
     await expect(evidence).toContainText(result.instance_numbers.join(', '))
-    await expect(evidence.getByRole('img')).toBeVisible()
-    expect(await evidence.getByRole('img').evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(1)
+    await expect(evidence.getByRole('img')).toHaveCount(0)
+    await expect(evidence).toContainText(`Supplied Grad-CAM overlay for ${result.abnormality} unavailable.`)
   }
   await expect(page.getByRole('region', { name: 'Supplied draft report' })).toContainText('Final approval: PENDING')
   await expect(page.getByRole('button', { name: 'Approve', exact: true })).toHaveCount(0)

@@ -1,5 +1,8 @@
 # KNEURA EC2 deployment readiness
 
+> Release update: `release-clean` now excludes historical runtime artifacts and model weights, adds `deploy/kneura.service`, and uses maintained source tests for the current multipart API. This document is the earlier audit, not a statement of the latest test results. Follow `UBUNTU_DEPLOYMENT.md` for the current setup and validation record. Linux/EC2 execution and the other operational findings still require verification.
+
+
 Audited 2026-09-26. Verdict: **not ready to deploy as-is**. A restricted single-instance demo is feasible after the release and configuration blockers below are resolved. Public production use with real patient data requires additional operational and access-control work.
 
 This audit examined the current Windows working tree, Git HEAD, runtime configuration, persistence, model and LLM integration, dependencies, and automated tests. No AWS resources were created or inspected. No production cases were approved or changed. Application code and dependencies were not upgraded during this audit. An isolated audit-tool environment and test artifacts were created under `.kneura/` and `test-results/`.

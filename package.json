@@ -12,13 +12,14 @@
     "test:e2e": "playwright test",
     "test:patient": "node tests/patient.e2e.mjs",
     "api": "powershell -NoProfile -File ./run_kneura.ps1",
-    "test:backend": "python -m pytest tests/test_backend.py -q",
+    "test:backend": "python -m pytest tests -q",
     "model:check": "python -m backend.manage check-model",
     "test:live": "playwright test --config playwright.live.config.ts",
     "demo:dicom": "python -m backend.demo",
     "preflight": "python scripts/preflight.py --model",
     "demo:verify": "python scripts/verify_dicom_study.py",
-    "demo:start": "powershell -NoProfile -File scripts/start-finals.ps1"
+    "demo:start": "powershell -NoProfile -File scripts/start-finals.ps1",
+    "api:linux": "python -m uvicorn backend.app:app --host 127.0.0.1 --port 8000 --workers 1"
   },
   "dependencies": {
     "react": "^19.2.8",

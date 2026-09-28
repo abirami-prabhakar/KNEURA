@@ -1,110 +1,97 @@
-﻿import json
+"""Current one-step multipart upload contract, using synthetic DICOM only."""
+import json
 import pytest
 from fastapi.testclient import TestClient
 from patient_test_server import backend, seed_users
 from backend.demo import create_demo_package
 
-VALID = {'patientName': "  Demo O'Neil-Patient  ", 'patientAge': 42, 'patientGender': 'Female'}
+VALID = {'patient_name': "  Demo O'Neil-Patient  ", 'patient_age': '42', 'patient_gender': 'Female'}
 
 @pytest.fixture
 def client(tmp_path, monkeypatch):
     monkeypatch.setattr(backend, 'DATA', tmp_path)
     seed_users()
     with TestClient(backend.app) as client:
-        response = client.post('/api/auth/login', json={'email': 'radiologist@example.test', 'password': 'test-password', 'role': 'radiologist'})
-        assert response.status_code == 200
+        assert client.post('/api/auth/login', json={'email': 'radiologist@example.test', 'password': 'test-password', 'role': 'radiologist'}).status_code == 200
         yield client
 
+@pytest.fixture
+def package(tmp_path):
+    path = tmp_path / 'synthetic.zip'
+    create_demo_package(path)
+    return path.read_bytes()
 
-def create(client, **changes):
-    return client.post('/api/cases', json=VALID | changes)
+def upload(client, package, data=None):
+    return client.post('/api/cases', data=VALID if data is None else data,
+                       files={'files': ('synthetic.zip', package, 'application/zip')})
 
-
-def test_persistence_and_audit(client):
-    response = create(client)
-    assert response.status_code == 201, response.text
+def test_persistence_demographics_and_audit(client, package):
+    response = upload(client, package)
+    assert response.status_code == 200, response.text
     case = response.json()
-    assert case['id'].startswith('KN-')
     assert case['patient']['name'] == "Demo O'Neil-Patient"
     assert case['patient']['age'] == 42
     assert case['patient']['gender'] == 'Female'
+    assert case['study']['patientName'] == case['patient']['name']
+    assert case['patient']['patient_id'] == case['study']['patientId']
+    assert case['series']
     with backend.db() as conn:
         stored = json.loads(conn.execute('SELECT document FROM cases WHERE id=?', (case['id'],)).fetchone()[0])
     assert stored == case
     assert client.get('/api/cases/' + case['id']).json()['patient'] == case['patient']
     assert client.get('/api/cases').json()[0]['patient'] == case['patient']
     assert "O'Neil" not in json.dumps(case['audit'])
-    assert backend.verify_audit(case)
+    assert backend.verify_audit(case)['valid']
+    assert client.get(case['series'][0]['images'][0]['url']).status_code == 200
 
-@pytest.mark.parametrize('field', ['patientName', 'patientAge', 'patientGender'])
-def test_required(client, field):
+@pytest.mark.parametrize('field', list(VALID))
+def test_partial_demographics_rejected(client, package, field):
     data = VALID.copy(); del data[field]
-    assert client.post('/api/cases', json=data).status_code == 422
+    assert upload(client, package, data).status_code == 422
     assert client.get('/api/cases').json() == []
 
-@pytest.mark.parametrize('age', [-1, 12.5, 121, '42', True, None])
-def test_invalid_age(client, age):
-    assert create(client, patientAge=age).status_code == 422
+@pytest.mark.parametrize('age', ['-1', '12.5', '131', 'true', 'invalid'])
+def test_invalid_age(client, package, age):
+    assert upload(client, package, VALID | {'patient_age': age}).status_code == 422
 
-@pytest.mark.parametrize('name', ['', '   ', 'x' * 101, None])
-def test_invalid_name(client, name):
-    assert create(client, patientName=name).status_code == 422
+@pytest.mark.parametrize('name', ['', '   ', 'x' * 121])
+def test_invalid_name(client, package, name):
+    assert upload(client, package, VALID | {'patient_name': name}).status_code == 422
 
-@pytest.mark.parametrize('gender', ['', 'Unknown', None])
-def test_invalid_gender(client, gender):
-    assert create(client, patientGender=gender).status_code == 422
+@pytest.mark.parametrize('gender', ['', 'Unknown'])
+def test_invalid_gender(client, package, gender):
+    assert upload(client, package, VALID | {'patient_gender': gender}).status_code == 422
 
-@pytest.mark.parametrize('age', [0, 120])
-def test_age_boundaries(client, age):
-    assert create(client, patientAge=age).status_code == 201
+@pytest.mark.parametrize('age', ['0', '130'])
+def test_age_boundaries(client, package, age):
+    response = upload(client, package, VALID | {'patient_age': age})
+    assert response.status_code == 200, response.text
+    assert response.json()['patient']['age'] == int(age)
 
+def test_dicom_only_integration_upload(client, package):
+    response = client.post('/api/integration/cases', files={'files': ('synthetic.zip', package)})
+    assert response.status_code == 200, response.text
+    assert response.json()['patient']['patient_id'] == response.json()['study']['patientId']
 
-def test_idempotent_retry(client):
-    headers = {'Idempotency-Key': 'same-submission'}
-    first = client.post('/api/cases', json=VALID, headers=headers)
-    second = client.post('/api/cases', json=VALID, headers=headers)
-    assert first.json()['id'] == second.json()['id']
-    assert len(client.get('/api/cases').json()) == 1
-    assert client.post('/api/cases', json=VALID | {'patientAge': 43}, headers=headers).status_code == 409
+def test_json_only_creation_is_not_supported(client):
+    assert client.post('/api/cases', json={'patientName': 'Test', 'patientAge': 42, 'patientGender': 'Female'}).status_code == 422
+    assert client.get('/api/cases').json() == []
 
-
-def test_access_and_legacy(client):
-    case = create(client).json()
+def test_access_and_legacy(client, package):
+    case = upload(client, package).json()
     legacy = dict(case); legacy['id'] = 'KN-LEGACY'; legacy.pop('patient')
     legacy['audit'] = []; legacy.pop('auditChain', None)
     backend.save_case(legacy)
     assert client.get('/api/cases/KN-LEGACY').status_code == 200
     client.post('/api/auth/logout')
-    assert create(client).status_code == 401
+    assert upload(client, package).status_code == 401
     for role in ['orthopedist', 'patient']:
         assert client.post('/api/auth/login', json={'email': role+'@example.test', 'password': 'test-password', 'role': role}).status_code == 200
-        assert create(client).status_code == 403
+        assert upload(client, package).status_code == 403
         assert client.get('/api/cases/' + case['id']).status_code == 404
-        assert client.post('/api/cases/' + case['id'] + '/study', files={'files': ('bad.dcm', b'bad')}).status_code == 403
 
-
-def test_dicom_attachment_preserves_demographics(client, tmp_path):
-    case = create(client).json()
-    package = tmp_path / 'synthetic.zip'
-    create_demo_package(package)
-    with package.open('rb') as file:
-        response = client.post('/api/cases/' + case['id'] + '/study', files={'files': ('synthetic.zip', file, 'application/zip')})
-    assert response.status_code == 200, response.text
-    updated = response.json()
-    assert updated['id'] == case['id']
-    for field in ['name', 'age', 'gender', 'patient_id']:
-        assert updated['patient'][field] == case['patient'][field]
-    assert updated['study']['patientName'] == case['patient']['name']
-    assert updated['series']
-    assert client.get('/api/cases/' + case['id']).json()['patient'] == updated['patient']
-    assert client.post('/api/cases/' + case['id'] + '/study', files={'files': ('bad.dcm', b'bad')}).status_code == 409
-    image_url = updated['series'][0]['images'][0]['url']
-    assert client.get(image_url).status_code == 200
-
-
-def test_failed_upload_can_retry(client):
-    case = create(client).json()
-    response = client.post('/api/cases/' + case['id'] + '/study', files={'files': ('bad.dcm', b'invalid')})
-    assert response.status_code == 422
-    assert client.get('/api/cases/' + case['id']).json()['patient'] == case['patient']
-    assert not (backend.DATA / 'studies' / case['id']).exists()
+def test_failed_upload_can_retry(client, package):
+    assert upload(client, b'invalid').status_code == 422
+    assert client.get('/api/cases').json() == []
+    assert not list((backend.DATA / 'studies').glob('KN-*'))
+    assert upload(client, package).status_code == 200
