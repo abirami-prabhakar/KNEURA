@@ -1,10 +1,7 @@
-﻿"""Run the existing recovered backend tests without overwriting their bytecode.
+"""Compatibility test entry point backed by maintained, portable Python source.
 
-The original test source is absent from this workspace. Its pytest-rewritten
-Python 3.14 artifact is preserved and executed unchanged.
+Every historical test function exists in test_backend.py. Re-export that source
+instead of executing interpreter-specific cached bytecode, which cannot run in
+our Python 3.12 container and can silently exercise obsolete contracts.
 """
-import marshal
-from pathlib import Path
-
-_cache = Path(__file__).parent / '__pycache__' / 'test_backend.cpython-314-pytest-9.0.3.pyc'
-exec(marshal.loads(_cache.read_bytes()[16:]), globals())
+from test_backend import *  # noqa: F403

@@ -1,4 +1,4 @@
-"""Demo metadata checks, not a substitute for authorized human de-identification review."""
+"""Study metadata checks, not a substitute for authorized human de-identification review."""
 import hashlib
 import json
 from pathlib import Path
@@ -18,7 +18,7 @@ def deidentification_issues(ds):
     for tag in ('PatientBirthDate', 'PatientAddress', 'PatientTelephoneNumbers', 'OtherPatientIDs', 'OtherPatientNames',
                 'AccessionNumber', 'InstitutionName', 'InstitutionAddress', 'ReferringPhysicianName', 'PerformingPhysicianName', 'OperatorsName'):
         if str(getattr(ds, tag, '')).strip():
-            issues.append(tag + ' must be removed for the controlled demo')
+            issues.append(tag + ' must be removed for the controlled evaluation')
     if any(element.tag.is_private for element in ds.iterall()):
         issues.append('Private metadata remains')
     return issues
@@ -63,7 +63,7 @@ def verify_study(directory, csv_path, authorization_path=None):
         group['instance_numbers'].sort()
         group['image_count'] = len(group['instance_numbers'])
     if result['synthetic']:
-        result['problems'].append('Synthetic input is not a clinical MRI demonstration.')
+        result['problems'].append('Synthetic input is not a clinical MRI study.')
     if not csv_path.is_file():
         result['problems'].append('Series eligibility CSV missing.')
     else:

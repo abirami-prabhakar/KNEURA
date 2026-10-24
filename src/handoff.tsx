@@ -45,6 +45,8 @@ export function HandoffMetadata({ kind }: { kind: 'model' | 'validation' }) {
   </section>
 }
 
+export const referenceCaseLabel = `Patient name not supplied · ${golden.patient.age} years`
+
 export function HandoffStudy() {
   const [selected, setSelected] = useState(0)
   const name = classes[selected]
@@ -54,9 +56,9 @@ export function HandoffStudy() {
   const studyProbability = golden.ai.probabilities[name as keyof typeof golden.ai.probabilities]
   const decision = golden.radiologist_review.approved_findings.includes(name) ? 'APPROVED' : golden.radiologist_review.rejected_findings.includes(name) ? 'REJECTED' : 'PENDING'
   return <>
-    <div className="page-intro"><div><div className="eyebrow">CASE DETAILS</div><h1>Radhika</h1><p>{golden.ai.model_version} / {golden.mri.series_evaluated} series / {golden.mri.windows_evaluated} windows / {classes.length} outputs</p></div></div>
+    <div className="page-intro"><div><div className="eyebrow">CASE DETAILS</div><h1>Golden case &amp; evidence</h1><p>{golden.ai.model_version} / {golden.mri.series_evaluated} series / {golden.mri.windows_evaluated} windows / {classes.length} outputs</p></div></div>
     <p className="small-copy">Read-only reference case. Review decisions are simulated; final approval is pending.</p>
-    <section className="evidence-card"><h2>Radhika</h2><p className="small-copy">{golden.patient.display_id}</p><p>{golden.patient.age} years / {golden.patient.sex}</p><dl className="evidence-metadata"><div><dt>Symptoms</dt><dd>{golden.patient.clinical_context.symptoms}</dd></div><div><dt>Medical history</dt><dd>{golden.patient.clinical_context.medical_history}</dd></div><div><dt>Clinical notes</dt><dd>{golden.patient.clinical_context.clinical_notes}</dd></div></dl><p className="small-copy">Study UID: {golden.mri.study_instance_uid}</p></section>
+    <section className="evidence-card"><h2>{referenceCaseLabel}</h2><p className="small-copy">{golden.patient.display_id}</p><p>{golden.patient.age} years / {golden.patient.sex}</p><dl className="evidence-metadata"><div><dt>Symptoms</dt><dd>{golden.patient.clinical_context.symptoms}</dd></div><div><dt>Medical history</dt><dd>{golden.patient.clinical_context.medical_history}</dd></div><div><dt>Clinical notes</dt><dd>{golden.patient.clinical_context.clinical_notes}</dd></div></dl><p className="small-copy">Study UID: {golden.mri.study_instance_uid}</p></section>
     <div className="clinical-workspace handoff-workspace"><section className="evidence-card" aria-label="Golden case evidence"><div className="eyebrow">SUPPLIED MRI + GRAD-CAM OVERLAY</div><h2>{name}</h2><ClinicalImage src={overlay} label={`Supplied Grad-CAM overlay for ${name}`}/><p className="clinical-note">Class-specific model explanation, not ground truth or a diagnosis. Original DICOM slices and a separate raw MRI image are not included in this package.</p>
       <dl className="evidence-metadata"><div><dt>Study probability (mean)</dt><dd>{studyProbability}</dd></div><div><dt>Selected-window probability</dt><dd>{evidence?.probability ?? 'Unavailable'}</dd></div><div><dt>Plane</dt><dd>{evidence?.plane || 'Unavailable'}</dd></div><div><dt>Series UID</dt><dd>{evidence?.series_instance_uid || 'Unavailable'}</dd></div><div><dt>Window index (as supplied)</dt><dd>{evidence?.window_index ?? 'Unavailable'}</dd></div><div><dt>Five InstanceNumbers</dt><dd>{evidence?.instance_numbers.join(', ') || 'Unavailable'}</dd></div><div><dt>Simulated decision</dt><dd>{decision}</dd></div><div><dt>Model version</dt><dd>{gradcam.model_version}</dd></div></dl>
       <p className="small-copy">Study values: 05_GOLDEN_CASE. Window values and overlays: 07_GRADCAM. Values and zero-based window indexes are displayed unchanged.</p><SourceDetails title="Selected Grad-CAM output, shape and heatmap statistics" value={evidence}/>

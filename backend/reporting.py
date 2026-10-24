@@ -16,11 +16,45 @@ def approved_findings(case):
     return [f for f in findings if f['status'] == 'APPROVED']
 
 
+# Class-level labels support these statements, not tear grades, measurements,
+# severity, normal structures or treatment recommendations.
+TEMPLATE = {
+    'ACL': ('Anterior cruciate ligament abnormality.', 'Anterior cruciate ligament abnormality'),
+    'MCL': ('Medial collateral ligament abnormality.', 'Medial collateral ligament abnormality'),
+    'Medial Meniscus': ('Abnormality involving the medial meniscus.', 'Medial meniscal abnormality'),
+    'Lateral Meniscus': ('Abnormality involving the lateral meniscus.', 'Lateral meniscal abnormality'),
+    'Medial OA': ('Osteoarthritic changes in the medial tibiofemoral compartment.', 'Medial tibiofemoral osteoarthritis'),
+    'Lateral OA': ('Osteoarthritic changes in the lateral tibiofemoral compartment.', 'Lateral tibiofemoral osteoarthritis'),
+    'Patellofemoral OA': ('Osteoarthritic changes in the patellofemoral compartment.', 'Patellofemoral osteoarthritis'),
+    'Effusion': ('Knee joint effusion.', 'Knee joint effusion'),
+    'Synovitis': ('Synovitis involving the knee joint.', 'Knee joint synovitis'),
+    "Baker's cyst": ("Popliteal (Baker's) cyst.", "Popliteal (Baker's) cyst"),
+    'Contusion': ('Bone contusion.', 'Bone contusion'),
+    'Fracture': ('Fracture.', 'Fracture'),
+}
+
+
 def compose(approved):
-    statements = [dict(id='statement-' + f['id'], text=f"{f['name']}: abnormality approved by the reviewing radiologist.", findingIds=[f['id']], source='approved-finding') for f in approved]
-    provider = 'Evidence-bound template'
-    text = '\n'.join(s['text'] for s in statements) or 'No AI-proposed abnormalities were approved. This does not establish a normal examination.'
-    return text, statements, provider
+    by_name = {f['name']: f for f in approved}
+    if len(by_name) != len(approved) or not set(by_name).issubset(TEMPLATE):
+        raise ValueError('Template requires unique canonical approved findings.')
+    statements = []
+    for section in ('findings', 'impression'):
+        for name in NAMES:
+            if name not in by_name:
+                continue
+            finding = by_name[name]
+            text = TEMPLATE[name][0] if section == 'findings' else TEMPLATE[name][1] + '.'
+            statements.append(dict(id=f"{section}-{finding['id']}", text=text,
+                                   findingIds=[finding['id']], source='approved-finding', section=section))
+    if not approved:
+        for section in ('findings', 'impression'):
+            statements.append(dict(id=section + '-limitation',
+                text='No reportable abnormalities are established by the supplied findings. This does not establish a normal examination.',
+                findingIds=[], source='template-limitation', section=section))
+    findings = '\n'.join(s['text'] for s in statements if s['section'] == 'findings')
+    impression = '\n'.join(s['text'] for s in statements if s['section'] == 'impression')
+    return findings, impression, statements, 'Evidence-bound template'
 
 
 def edited_statements(findings, impression, approved, previous):

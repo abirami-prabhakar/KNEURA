@@ -1,7 +1,9 @@
+import { presentationLabels } from './presentation'
 import { approvedFindingIds } from './workflow'
 import type {
   Case,
   ModelMetadata,
+  PatientSummary,
   Report,
   Role,
   User,
@@ -89,7 +91,7 @@ async function request<T>(
     )
   }
 
-  return response.json() as Promise<T>
+  return presentationLabels(await response.json()) as T
 }
 
 export const api = {
@@ -182,6 +184,14 @@ export const api = {
         method: 'POST',
       },
     ),
+
+  preparePatientSummary: (id: string) =>
+    request<Case>(`/cases/${encodeURIComponent(id)}/patient-summary`, { method: 'POST' }),
+
+  reviewPatientSummary: (id: string, summary: Pick<PatientSummary, 'findings' | 'meaning' | 'nextSteps' | 'sourceFingerprint' | 'version'> & { confirmed: boolean }) =>
+    request<Case>(`/cases/${encodeURIComponent(id)}/patient-summary`, { method: 'PATCH', body: JSON.stringify(summary) }),
+
+  patientSummaryExportUrl: (id: string) => `${base}/cases/${encodeURIComponent(id)}/patient-summary/export`,
 
   releaseToPatient: (id: string) =>
     request<Case>(

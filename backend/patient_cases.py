@@ -5,7 +5,7 @@ import uuid
 from typing import Literal
 from starlette.concurrency import run_in_threadpool
 
-from fastapi import Depends, File, Header, HTTPException, Request, UploadFile
+from fastapi import Depends, File, Header, HTTPException, Request, Response, UploadFile
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 
@@ -13,7 +13,7 @@ class PatientInformation(BaseModel):
     model_config = ConfigDict(extra='forbid')
     patientName: str = Field(min_length=1, max_length=100)
     patientAge: int = Field(strict=True, ge=0, le=120)
-    patientGender: Literal['Female', 'Male', 'Other', 'Prefer not to say']
+    patientGender: Literal['Female', 'Male', 'Non-binary', 'Other', 'Prefer not to say']
 
     @field_validator('patientName', mode='before')
     @classmethod
@@ -57,11 +57,12 @@ def install(api):
     @api.app.post('/api/cases', status_code=201, openapi_extra={
         'requestBody': {'required': True, 'content': {'application/json': {'schema': PatientInformation.model_json_schema()}}}
     })
-    async def create_case(request: Request,
+    async def create_case(request: Request, response: Response,
                           idempotency_key: str | None = Header(default=None, max_length=100),
                           account=Depends(api.radiologist)):
         if request.headers.get('content-type', '').startswith('multipart/form-data'):
             # Preserve the established one-step upload contract for existing clients.
+            response.status_code = 200
             async with request.form(max_files=5000) as form:
                 files = form.getlist('files')
                 if not files or any(not hasattr(file, 'file') for file in files):

@@ -1,3 +1,4 @@
+import { caseLabel, patientName, patientAge } from './patient'
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { Case, Finding, Role } from './types'
@@ -51,7 +52,7 @@ export function EvidenceCard({ item, finding, role, onOpen }: { item: Case; find
 
 export function PatientIdentity({ item }: { item: Case }) {
   const patient = item.patient
-  return <span className="patient-identity"><strong>{patient?.name || item.study.patientName || 'Patient name unavailable'}</strong><small>{patient?.age != null ? `${patient.age} years` : 'Age not supplied'} / {patient?.gender || patient?.sex || 'Gender not supplied'}</small></span>
+  return <span className="patient-identity"><strong>{caseLabel(item)}</strong><small>{patient?.gender || patient?.sex || 'Gender not supplied'}</small></span>
 }
 
 export function PatientStudyDetails({ item, role }: { item: Case; role: Role }) {
@@ -59,9 +60,9 @@ export function PatientStudyDetails({ item, role }: { item: Case; role: Role }) 
   const context = item.clinical_context || patient?.clinical_context
   return <details className="study-details"><summary>Patient & study information</summary>
     <dl className="evidence-metadata">
-      <div><dt>Patient</dt><dd>{patient?.name || item.study.patientName || 'Unavailable'}</dd></div>
+      <div><dt>Patient</dt><dd>{patientName(item)}</dd></div>
       <div><dt>Display ID</dt><dd>{patient?.display_id || 'Unavailable'}</dd></div>
-      <div><dt>Age</dt><dd>{patient?.age != null ? `${patient.age} years` : 'Not supplied'}</dd></div>
+      <div><dt>Age</dt><dd>{patientAge(item)}</dd></div>
       <div><dt>{patient?.gender ? 'Gender' : 'Sex'}</dt><dd>{patient?.gender || patient?.sex || 'Not supplied'}</dd></div>
       <div><dt>Study</dt><dd>{item.study.description || 'Unavailable'}</dd></div>
       <div><dt>Laterality</dt><dd>{item.study.laterality || 'Not supplied'}</dd></div>
@@ -91,6 +92,6 @@ export function FinalizedSummary({ item, role, onReport }: { item: Case; role: R
     <span><strong>{item.findings.filter(f => f.status === 'APPROVED').length}</strong> Radiologist-approved</span>
     {role === 'radiologist' && <span><strong>{item.findings.filter(f => f.status === 'REJECTED').length}</strong> Rejected / excluded from report</span>}
   </div><button className="button" onClick={onReport}>View final report</button>
-  {item.releasedToPatient && <span className="small-tag" style={{marginLeft: 'auto'}}>RELEASED TO PATIENT</span>}
+  {item.releasedToPatient && <span className="small-tag" style={{marginLeft: 'auto'}}>RELEASED TO COORDINATOR</span>}
   </section>
 }

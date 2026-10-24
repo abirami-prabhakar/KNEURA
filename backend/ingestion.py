@@ -71,7 +71,7 @@ def ingest(payloads, case_id, directory):
             raise ValueError('DICOM image dimensions exceed the supported limit.')
         records.append((ds, data))
     if os.getenv('KNEURA_REQUIRE_SERIES_CSV') == '1' and not has_csv:
-        raise ValueError('This demo requires an explicit series eligibility CSV. No heuristic fallback is allowed.')
+        raise ValueError('This workflow requires an explicit series eligibility CSV. No heuristic fallback is allowed.')
     if not records:
         raise ValueError('No MRI DICOM images were found.')
     studies = {str(ds.StudyInstanceUID) for ds, _ in records}

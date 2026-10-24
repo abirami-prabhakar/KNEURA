@@ -35,7 +35,7 @@ def check(service, full_model=False):
         result['demo_mri'] = verify_study(os.getenv('KNEURA_DEMO_MRI_DIR', root / 'demo_data/knee_mri'),
             os.getenv('KNEURA_SERIES_CSV', root / 'data/series_eligibility.csv'), os.getenv('KNEURA_DEMO_AUTHORIZATION'))
     except Exception:
-        result['demo_mri'] = dict(ready=False, problems=['Demo verification could not complete. Check configured files.'])
+        result['demo_mri'] = dict(ready=False, problems=['Study verification could not complete. Check configured files.'])
     result['configuration'] = dict(csv_required=os.getenv('KNEURA_REQUIRE_SERIES_CSV') == '1', secure_cookie=os.getenv('KNEURA_SECURE_COOKIE') == '1')
     result['finals_ready'] = all((result['database'], result['model'], result['worker'], result['llm']['reachable'], result['demo_mri']['ready'], result['configuration']['csv_required']))
     return result

@@ -28,7 +28,7 @@ def create_demo_package(output):
             ds.InstanceNumber, ds.Modality = number, 'MR'
             ds.PatientID, ds.PatientName = 'DEMO-SYNTHETIC', 'DEMO^SYNTHETIC'
             ds.ClinicalTrialProtocolName = 'KNEURA-SYNTHETIC-DEMO'
-            ds.StudyDescription, ds.SeriesDescription = 'DEMO synthetic software verification', 'PD FS DEMO'
+            ds.StudyDescription, ds.SeriesDescription = 'Synthetic software verification', 'PD FS SYNTHETIC'
             ds.StudyDate = '20260924'
             ds.Rows = ds.Columns = 64
             ds.SamplesPerPixel, ds.PhotometricInterpretation = 1, 'MONOCHROME2'
@@ -47,4 +47,4 @@ if __name__ == '__main__':
     parser.add_argument('--output', default='.kneura/demo-study.zip')
     args = parser.parse_args()
     print(create_demo_package(args.output))
-    print('DEMO ONLY: artificial noise, not patient MRI. Upload and run the real model; outputs have no clinical meaning.')
+    print('SYNTHETIC STUDY: artificial noise, not patient MRI. Upload and run the real model; outputs have no clinical meaning.')

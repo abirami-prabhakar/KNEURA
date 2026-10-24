@@ -54,7 +54,7 @@ try {
         & python -B scripts/check_kneura_config.py
         if ($LASTEXITCODE -ne 0) { throw 'Backend LLM configuration is incomplete or invalid.' }
         if (!$LoadOnly) {
-            & python -B -m uvicorn backend.app:app --host 127.0.0.1 --port 8000
+            & python -B -m uvicorn backend.app:app --host 127.0.0.1 --port 8001
             if ($LASTEXITCODE -ne 0) { throw 'Backend stopped with an error.' }
         }
     }

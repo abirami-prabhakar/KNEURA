@@ -13,7 +13,7 @@ def main():
     create.add_argument('--email', required=True)
     create.add_argument('--name', required=True)
     create.add_argument('--role', required=True, choices=['radiologist', 'orthopedist', 'patient'])
-    create.add_argument('--patient-id', default='')
+    create.add_argument('--patient-id', default='', help='Legacy metadata; not required for Patient Coordinators (role patient).')
     grant = sub.add_parser('assign')
     grant.add_argument('--email', required=True)
     grant.add_argument('--case', required=True)
@@ -21,8 +21,6 @@ def main():
     args = parser.parse_args()
     init_db()
     if args.command == 'create-user':
-        if args.role == 'patient' and not args.patient_id:
-            parser.error('Patient accounts require --patient-id matching DICOM PatientID.')
         password = getpass.getpass('New password (at least 12 characters): ')
         if len(password) < 12:
             parser.error('Password must contain at least 12 characters.')

@@ -1,6 +1,6 @@
 ﻿import test from 'node:test'
 import assert from 'node:assert/strict'
-import { validatePatient, patientName, patientDemographics } from '../src/patient.ts'
+import { validatePatient, patientName, patientDemographics, caseLabel } from '../src/patient.ts'
 
 test('patient input validation rejects missing or invalid data', () => {
   assert.deepEqual(Object.keys(validatePatient('', '', '')), ['name', 'age', 'gender'])
@@ -18,4 +18,11 @@ test('saved demographics take precedence, with safe legacy fallbacks', () => {
   assert.equal(patientDemographics(item), '0 years · Female')
   assert.equal(patientName({study:{patientName:'Legacy'}}), 'Legacy')
   assert.equal(patientDemographics({study:{patientName:'Legacy'}}), '')
+})
+
+test('case labels use saved name and age with identical legacy fallbacks', () => {
+  assert.equal(caseLabel({study:{patientName:'DICOM Name'},patient:{name:'Entered Name',age:42}}), 'Entered Name · 42 years')
+  assert.equal(caseLabel({study:{patientName:'Infant'},patient:{age:0}}), 'Infant · 0 years')
+  assert.equal(caseLabel({study:{patientName:'Legacy'}}), 'Legacy · Age not supplied')
+  assert.equal(caseLabel({study:{patientName:''}}), 'Patient information unavailable · Age not supplied')
 })

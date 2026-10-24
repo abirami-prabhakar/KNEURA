@@ -102,4 +102,22 @@
 .patient-release-bar > div { flex: 1; min-width: 0; }
 .patient-release-bar p { font-size: 13px; line-height: 1.5; margin: 6px 0 0; }
 .patient-release-bar > button { flex-shrink: 0; min-height: 44px; }
-@media(max-width:700px) { .patient-release-bar { flex-direction: column; align-items: stretch; gap: 12px; bottom: 6px; padding: 14px; } }
+.audience-reports { display: grid; grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr); gap: 24px; align-items: start; }
+.audience-reports .summary-editor { grid-column: 1 / -1; }
+.clinical-report section, .patient-summary section { margin-top: 24px; }
+.clinical-report h3, .patient-summary h3 { margin-bottom: 10px; }
+.summary-fields { border: 0; padding: 0; margin-top: 20px; display: grid; gap: 18px; min-width: 0; }
+.summary-fields label { display: grid; gap: 8px; font-weight: 600; }
+.summary-fields textarea { width: 100%; box-sizing: border-box; padding: 12px; color: var(--ink); background: var(--paper); border: 1px solid var(--navy); border-radius: 4px; font: inherit; line-height: 1.6; resize: vertical; }
+.summary-fields .summary-confirm { display: flex; align-items: flex-start; font-weight: 400; }
+.summary-confirm input { width: auto; margin-top: 4px; }
+.summary-limitation { border-top: 1px dashed var(--navy); padding-top: 18px; }
+.coordinator-report .patient-summary { line-height: 1.8; }
+.coordinator-report .report-actions { flex-wrap: wrap; }
+@media(max-width:700px) { .audience-reports { grid-template-columns: minmax(0, 1fr); } .summary-editor { padding: 18px; } }
+@media print { .coordinator-report > :not(.printable-report) { display: none !important; } .clinical-evidence, .summary-editor { display: none !important; } .audience-reports { display: block; } .printable-report section { break-inside: avoid; } }
+@media(max-width:700px) { .patient-release-bar { position: static; flex-direction: column; align-items: stretch; gap: 12px; bottom: 6px; padding: 14px; } }
+
+.patient-identity strong,.case-heading h1,.page-intro h1{overflow-wrap:anywhere}.patient-identity{display:inline-flex;flex-direction:column;gap:4px}
+
+.patient-identity strong,.case-heading h1,.page-intro h1{overflow-wrap:anywhere}.patient-identity{display:inline-flex;flex-direction:column;gap:4px}

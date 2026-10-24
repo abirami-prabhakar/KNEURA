@@ -25,6 +25,7 @@ from .inference import metadata, analyze
 from .ingestion import ingest, MAX_BYTES
 from .reporting import approved_findings, compose, edited_statements
 from . import narrative, report_jobs
+from .patient_summary import reviewed_current
 
 DATA = Path(os.getenv('KNEURA_DATA_DIR', Path(__file__).resolve().parents[1] / '.kneura'))
 LOCK = threading.RLock()
@@ -99,7 +100,7 @@ app = FastAPI(title='KNEURA', version='1.0.0', lifespan=lifespan)
 async def request_guard(request, call_next):
     # Same-origin API via Vite/reverse proxy. Reject cross-origin mutations.
     origin = request.headers.get('origin')
-    allowed = os.getenv('KNEURA_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:8000,http://127.0.0.1:8000').split(',')
+    allowed = os.getenv('KNEURA_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174,http://localhost:8000,http://127.0.0.1:8000').split(',')
     if request.method not in ('GET', 'HEAD', 'OPTIONS') and origin and origin not in allowed:
         with db() as conn:
             conn.execute('INSERT INTO access_log VALUES (?,?,?,?,?)', (now(), None, request.method, request.url.path, 403))
@@ -140,7 +141,10 @@ def authorized(case, account):
     if account['role'] == 'orthopedist':
         return True
     if account['role'] == 'patient':
-        return bool(case.get('releasedToPatient')) and bool(account['patient_id']) and account['patient_id'] == case['study']['patientId']
+        # The legacy patient role now represents Patient Coordinator.
+        # Coordinators see all orthopedist-released cases without patient-ID matching.
+        # Final radiologist approval alone must never publish a case here.
+        return bool(case.get('releasedToPatient'))
     return False
 
 
@@ -164,6 +168,11 @@ def visible(case, account):
         result.pop('analysis', None)
         if account['role'] == 'patient':
             result['series'] = []
+            # Never expose an unreviewed or outdated summary to the coordinator.
+            if not reviewed_current(case) or result.get('patientSummary', {}).get('status') != 'RELEASED':
+                result.pop('patientSummary', None)
+            elif result.get('patientSummary'):
+                result['patientSummary'].pop('revisions', None)
     return result
 
 
@@ -226,7 +235,7 @@ def case_detail(case_id: str, account=Depends(user)):
     return visible(get_case(case_id), account)
 
 
-@app.post('/api/integration/cases', tags=['Hospital Integration Adapter Demo'])
+@app.post('/api/integration/cases', tags=['Hospital Integration Adapter'])
 @app.post('/api/cases')
 def upload(files: list[UploadFile] = File(...), patient_name: str | None = Form(None, max_length=120), patient_age: int | None = Form(None, ge=0, le=130), patient_gender: str | None = Form(None), account=Depends(radiologist)):
     supplied = any(value is not None for value in (patient_name, patient_age, patient_gender))
@@ -347,14 +356,14 @@ def generate(case_id: str, body: Generate, account=Depends(radiologist)):
         if len(body.approvedFindingIds) != len(ids) or set(body.approvedFindingIds) != set(ids):
             raise HTTPException(422, 'Report input must contain exactly the server-approved finding IDs.')
         try:
-            text, statements, provider = compose(approved)
+            text, impression, statements, provider = compose(approved)
         except Exception as exc:
             LOG.exception('Report provider failed')
             event(case, 'Draft generation failed; no draft saved', account['name'], actor_id=account['id'])
             save_case(case)
             raise HTTPException(502, 'Report provider failed validation. No draft was saved.') from exc
         case['report'] = dict(id=uuid.uuid4().hex, status='DRAFT', findings=text,
-            impression='Radiologist interpretation required before final approval.', updatedAt=now(), statements=statements,
+            impression=impression, updatedAt=now(), statements=statements,
             provider=provider, version=1, approvedFindingIds=ids, revisions=[],
             createdBy=account['name'], createdById=account['id'], createdAt=now())
         case['status'] = 'DRAFT'
@@ -443,7 +452,7 @@ def validation(account=Depends(radiologist)):
                 limitations='Small internal evaluation, not clinical diagnostic accuracy or external validation.')
 
 
-@app.get('/api/integration/cases/{case_id}/result', tags=['Hospital Integration Adapter Demo'])
+@app.get('/api/integration/cases/{case_id}/result', tags=['Hospital Integration Adapter'])
 @app.get('/api/cases/{case_id}/export')
 def export(case_id: str, account=Depends(user)):
     case = visible(get_case(case_id), account)
@@ -451,7 +460,7 @@ def export(case_id: str, account=Depends(user)):
         raise HTTPException(409, 'Only finalized reports can be exported.')
     case['findings'] = [f for f in case['findings'] if f['status'] == 'APPROVED']
     case['report'].pop('revisions', None)
-    return dict(integration_mode='MVP demonstration adapter; no PACS/RIS/EHR transport', schema_version='kneura.integration.v1', case_id=case['id'], study=case['study'], findings=case['findings'],
+    return dict(integration_mode='Integration adapter; no PACS/RIS/EHR transport', schema_version='kneura.integration.v1', case_id=case['id'], study=case['study'], findings=case['findings'],
                 radiologist_status='APPROVED', report_status='FINAL', report=case['report'])
 
 
@@ -586,18 +595,21 @@ def source_image(case_id: str, image_id: str, width: float | None = Query(defaul
 @app.post('/api/cases/{case_id}/release-to-patient')
 def release_to_patient(case_id: str, account=Depends(user)):
     if account['role'] != 'orthopedist':
-        raise HTTPException(403, 'Only an orthopedist can release a case to a patient.')
+        raise HTTPException(403, 'Only an orthopedist can release a case to a Patient Coordinator.')
     with LOCK:
         case = get_case(case_id)
         if case['status'] != 'FINAL' or case.get('report', {}).get('status') != 'FINAL':
             raise HTTPException(409, 'Case must be finalized by a radiologist first.')
         if case.get('releasedToPatient'):
-            raise HTTPException(409, 'Case is already released to the patient.')
+            raise HTTPException(409, 'Case is already released to the Patient Coordinator.')
+        if not reviewed_current(case):
+            raise HTTPException(409, 'Review and save the patient summary against the final clinical report before release.')
+        case['patientSummary']['status'] = 'RELEASED'
         case['releasedToPatient'] = True
         case['releasedToPatientAt'] = now()
         case['releasedToPatientBy'] = account['name']
         case['releasedToPatientById'] = account['id']
-        event(case, 'Case approved and released to patient', account['name'], actor_id=account['id'], current='RELEASED_TO_PATIENT')
+        event(case, 'Case approved and released to Patient Coordinator', account['name'], actor_id=account['id'], current='RELEASED_TO_PATIENT')
         save_case(case)
         return visible(case, account)
 
@@ -606,3 +618,10 @@ def release_to_patient(case_id: str, account=Depends(user)):
 def system_readiness(execute_model: bool = False, account=Depends(radiologist)):
     from .readiness import check
     return check(sys.modules[__name__], execute_model)
+
+
+# Register patient-first creation and study attachment while preserving multipart upload.
+from .patient_summary import install as install_patient_summary
+install_patient_summary(sys.modules[__name__])
+from .patient_cases import install as install_patient_cases
+install_patient_cases(sys.modules[__name__])

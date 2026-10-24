@@ -44,8 +44,20 @@ retraction, marrow edema, associated injury or chronicity. Do not add those deta
 If no findings are approved, explicitly state this does not establish a normal examination.
 In that case, describe the lack of reportable supplied findings without naming any
 abnormality or discussing the approval workflow.
-Write coherent professional Findings and Impression prose. Authorized radiologist
-review and final approval are required. Return JSON only with these exact keys:
+Write coherent professional Findings and Impression prose.
+Expand abbreviated finding labels into meaningful anatomical language in Findings;
+for example, describe ACL as an abnormality involving the anterior cruciate ligament,
+not merely "ACL abnormality". Describe effusion as knee joint effusion. Describe
+osteoarthritis with its supplied compartment only. These are language examples,
+not fixed sentences: combine related findings naturally without adding specificity.
+Order supported content by ligaments, menisci, osteoarthritis, fluid/synovium,
+cysts and bone findings. Omit unsupported sections and technique details. Do not
+restate the same abnormality repeatedly. Impression must concisely summarize all
+and only the findings described in Findings; do not use "as described" alone.
+Keep names, ages, identifiers and probabilities out of both clinical sections;
+the application displays patient/study metadata separately. Do not discuss models,
+confidence, algorithms, machine learning or KNEURA in clinical prose.
+Authorized radiologist review and final approval are required. Return JSON only with these exact keys:
 report_type ("DRAFT"), findings (string), impression (string), source_finding_ids
 (all supplied approved IDs exactly once), statements (array of {text, section,
 finding_ids}). section is "findings" or "impression". Each clinical statement must
@@ -102,7 +114,8 @@ def health():
 ALIASES = {
     'ACL': r'\b(ACL|anterior cruciate)\b', 'MCL': r'\b(MCL|medial collateral)\b',
     'Medial Meniscus': r'\bmedial menisc\w*', 'Lateral Meniscus': r'\blateral menisc\w*',
-    'Medial OA': r'\bmedial (OA|osteoarthritis)\b', 'Lateral OA': r'\blateral (OA|osteoarthritis)\b',
+    'Medial OA': r'\bmedial (OA|osteoarthrit\w*)\b|\bmedial compartment\b[^.!?;\n]{0,60}\b(osteoarthrit\w*|degenerat\w*)\b|\b(osteoarthrit\w*|degenerat\w*)\b[^.!?;\n]{0,60}\bmedial compartment\b',
+    'Lateral OA': r'\blateral (OA|osteoarthrit\w*)\b|\blateral compartment\b[^.!?;\n]{0,60}\b(osteoarthrit\w*|degenerat\w*)\b|\b(osteoarthrit\w*|degenerat\w*)\b[^.!?;\n]{0,60}\blateral compartment\b',
     'Patellofemoral OA': r'\b(patellofemoral|PF OA)\b', 'Effusion': r'\beffusion\b',
     'Synovitis': r'\bsynovitis\b', "Baker's cyst": r'\b(Baker.?s|popliteal cyst)\b',
     'Contusion': r'\b(contusion|bone bruise)\b', 'Fracture': r'\bfracture\b',
@@ -131,9 +144,16 @@ def validate_output(raw, payload):
     used = set()
     names_by_id = {f['id']: f['name'] for f in payload['approved_findings']}
     for statement in result.statements:
+        if len(statement.finding_ids) != len(set(statement.finding_ids)):
+            raise ValueError('Statement sources must be unique.')
         if not set(statement.finding_ids).issubset(ids):
             raise ValueError('Provider cited an unapproved finding.')
         linked_names = {names_by_id[i] for i in statement.finding_ids}
+        mentioned_names = {name for name in NAMES if re.search(ALIASES[name], statement.text, re.I)}
+        if mentioned_names - names:
+            raise ValueError('Provider introduced an unapproved abnormality.')
+        if linked_names != mentioned_names:
+            raise ValueError('Statement text and cited finding disagree.')
         for name in names:
             if re.search(ALIASES[name], statement.text, re.I) and name not in linked_names:
                 raise ValueError('Statement text and cited finding disagree.')
@@ -148,18 +168,27 @@ def validate_output(raw, payload):
             raise ValueError('Narrative and traceable statements disagree.')
         # Keep the existing line-based editor's source links intact on save.
         setattr(result, section, '\n'.join(s.text for s in result.statements if s.section == section))
+        section_ids = {i for s in result.statements if s.section == section for i in s.finding_ids}
+        if section_ids != ids:
+            raise ValueError('Findings and impression must cover the same approved findings.')
     text = result.findings + '\n' + result.impression
     for name in NAMES:
         if name not in names and re.search(ALIASES[name], text, re.I):
             raise ValueError('Provider introduced an unapproved abnormality.')
-    if re.search(r'\b(tear|rupture|grade|severe|moderate|mild|complete|partial|mm|cm|retraction|discontinuity|edema|oedema|acute|chronic)\b', text, re.I):
+    if re.search(r'\b(tear\w*|rupture\w*|grade\w*|severe|moderate|mild|complete|partial|mm|cm|retraction|discontinuity|edema|oedema|acute|chronic|proximal|distal|posterior horn|anterior horn|tibial plateau|displaced|nondisplaced|thickening|thinning|extrusion|tumou?r|infection|osteomyelitis|osteonecrosis|chondromalacia)\b', text, re.I):
         raise ValueError('Provider introduced unsupported severity, measurements or subtype.')
-    if re.search(r'\b(AI|Grad[ -]?CAM|probabilit\w*|radiologist\w*|approv\w*|reject\w*|workflow|backend|DRAFT|FINAL)\b', text, re.I):
+    if re.search(r'\b(AI|Grad[ -]?CAM|probabilit\w*|radiologist\w*|approv\w*|reject\w*|workflow|backend|DRAFT|FINAL|model\w*|confidence|algorithm\w*|machine learning|KNEURA|sourceFindingId\w*)\b', text, re.I):
         raise ValueError('Provider included internal workflow language in clinical prose.')
-    # Numeric claims are not present in approved class labels. Context age is the only allowed number.
-    allowed_numbers = set(re.findall(r'\d+(?:\.\d+)?', str(payload['clinical_context'].get('age', ''))))
-    if not set(re.findall(r'\d+(?:\.\d+)?', text)).issubset(allowed_numbers):
+    # Patient metadata is rendered from the case, never written into clinical prose.
+    if re.search(r'\d|%', text):
         raise ValueError('Provider introduced unsupported numeric claims.')
+    if re.search(r'\b(intact|unremarkable|normal (MRI|study|structures|ligaments|menisci)|no (abnormalit\w*|effusion|fracture)|without (effusion|fracture))\b', text, re.I):
+        raise ValueError('Provider introduced an unsupported negative or normal finding.')
+    if not ids and not re.search(r'(does not establish|cannot establish|cannot determine|cannot be (established|determined|assessed)|not established)', text, re.I):
+        raise ValueError('An empty input must explicitly state the limits of the examination.')
+    for statement in result.statements:
+        if statement.section == 'findings' and re.fullmatch(r'\s*(ACL|MCL|Medial Meniscus|Lateral Meniscus|Medial OA|Lateral OA|Patellofemoral OA|Effusion|Synovitis|Baker.s cyst|Contusion|Fracture)(\s+(abnormal|abnormality))?\s*[.!]?\s*', statement.text, re.I):
+            raise ValueError('Expand finding labels into natural anatomical descriptions.')
     return result
 
 

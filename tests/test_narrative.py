@@ -179,3 +179,106 @@ def test_provider_paragraph_whitespace_preserves_statement_content():
     raw['findings'] += ' Additional unsupported statement.'
     with pytest.raises(ValueError, match='Narrative and traceable statements disagree'):
         narrative.validate_output(raw, payload)
+
+
+def mixed_payload():
+    case = reviewed_case(0)
+    for finding in case['findings']:
+        if finding['name'] in ('ACL', 'Effusion', 'Medial Meniscus'):
+            finding['status'] = finding['decision']['status'] = 'APPROVED'
+    return narrative.build_input(case)
+
+
+def natural_response(payload):
+    sources = {f['name']: f['id'] for f in payload['approved_findings']}
+    statements = [
+        dict(text='Abnormalities involve the anterior cruciate ligament and medial meniscus.', section='findings', finding_ids=[sources['ACL'], sources['Medial Meniscus']]),
+        dict(text='Knee joint effusion is present.', section='findings', finding_ids=[sources['Effusion']]),
+        dict(text='ACL and medial meniscal abnormalities with associated joint effusion.', section='impression', finding_ids=list(sources.values())),
+    ]
+    return dict(report_type='DRAFT', source_finding_ids=list(sources.values()), statements=statements,
+                **{section:' '.join(s['text'] for s in statements if s['section']==section) for section in ('findings','impression')})
+
+
+def test_mixed_findings_natural_prose_and_traceability():
+    payload = mixed_payload()
+    assert {f['name'] for f in payload['approved_findings']} == {'ACL', 'Medial Meniscus', 'Effusion'}
+    result = narrative.validate_output(natural_response(payload), payload)
+    assert result.report_type == 'DRAFT'
+    assert 'anterior cruciate ligament' in result.findings
+    assert set(result.source_finding_ids) == {f['id'] for f in payload['approved_findings']}
+    assert result.statements[0].finding_ids == ['0', '2']
+
+
+@pytest.mark.parametrize('claim', [
+    'Complete anterior cruciate ligament tear with proximal fiber discontinuity.',
+    'Moderate knee joint effusion with synovial thickening.',
+    'Complex posterior horn medial meniscal tear.',
+    'Acute nondisplaced fracture of the medial tibial plateau.',
+    'Degenerative osteoarthritic changes involving the lateral compartment.',
+    'The model predicts an ACL abnormality.',
+    'ACL abnormality with high confidence.',
+    'KNEURA suggests ACL abnormality.',
+    'Joint effusion has 82% probability.',
+    'The medial collateral ligament is intact.',
+    'An osseous tumor is present.',
+])
+def test_mixed_report_rejects_unapproved_specificity_and_technical_prose(claim):
+    payload = mixed_payload()
+    raw = natural_response(payload)
+    raw['statements'][1]['text'] = claim
+    raw['findings'] = ' '.join(s['text'] for s in raw['statements'] if s['section']=='findings')
+    with pytest.raises(ValueError):
+        narrative.validate_output(raw, payload)
+
+
+def test_impression_cannot_drop_findings_or_claim_unrelated_sources():
+    payload = mixed_payload()
+    raw = natural_response(payload)
+    raw['impression'] = raw['statements'][-1]['text'] = 'Joint effusion is present.'
+    with pytest.raises(ValueError):
+        narrative.validate_output(raw, payload)
+    raw['statements'][-1]['finding_ids'] = ['7']
+    with pytest.raises(ValueError, match='same approved findings'):
+        narrative.validate_output(raw, payload)
+
+
+def test_rejected_compartment_osteoarthritis_is_excluded_from_context():
+    with pytest.raises(ValueError, match='unapproved finding'):
+        narrative.build_input(reviewed_case(1), {'indication':'Degenerative changes involving the lateral compartment.'})
+
+
+def test_approved_compartment_natural_wording_is_accepted():
+    case=reviewed_case(0)
+    case['findings'][4]['status']=case['findings'][4]['decision']['status']='APPROVED'
+    payload=narrative.build_input(case)
+    raw=dict(report_type='DRAFT', findings='Degenerative osteoarthritic changes involve the medial compartment.',
+             impression='Medial compartment osteoarthritis.',source_finding_ids=['4'])
+    raw['statements']=[dict(text=raw[section],section=section,finding_ids=['4']) for section in ('findings','impression')]
+    assert narrative.validate_output(raw,payload).source_finding_ids==['4']
+
+
+def test_all_rejected_cannot_become_normal_exam():
+    payload=narrative.build_input(reviewed_case(0))
+    raw=dict(report_type='DRAFT',findings='Normal MRI.',impression='Normal MRI.',source_finding_ids=[],
+             statements=[dict(text='Normal MRI.',section=section,finding_ids=[]) for section in ('findings','impression')])
+    with pytest.raises(ValueError):narrative.validate_output(raw,payload)
+
+
+def test_natural_draft_persists_as_draft_without_final_approval(client, monkeypatch):
+    login(client)
+    case=reviewed_case(0)
+    for finding in case['findings']:
+        if finding['name'] in ('ACL','Effusion','Medial Meniscus'):
+            finding['status']=finding['decision']['status']='APPROVED'
+    service.save_case(case)
+    def provider(request, timeout):
+        payload=json.loads(json.loads(request.data)['messages'][1]['content'])
+        assert {f['name'] for f in payload['approved_findings']}=={'ACL','Effusion','Medial Meniscus'}
+        return io.BytesIO(envelope(json.dumps(natural_response(payload))))
+    monkeypatch.setattr(narrative.urllib.request,'urlopen',provider)
+    assert client.post('/api/cases/KN-TEST/report-jobs',json={'approvedFindingIds':['0','2','7']}).status_code==202
+    saved=service.get_case('KN-TEST')
+    assert saved['report']['status']=='DRAFT'
+    assert 'approvedAt' not in saved['report']
+    assert client.post('/api/cases/KN-TEST/report/finalize').status_code==422

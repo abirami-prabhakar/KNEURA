@@ -15,6 +15,7 @@ function study() {
     findings: names.map((name, index) => ({ id: `F${index}`, name, probability: 0.90947, status: 'PENDING', patientExplanation: `Explanation supplied for ${name}.`, evidence: { seriesId: '1.2.3', seriesName: 'PD FS', windowNumber: 1, sliceStart: 34, sliceEnd: 40, instanceNumbers: [34, 35, 37, 39, 40], mriImageUrl: '/api/images/34.png', gradCamImageUrl: `/api/images/gradcam-${index}.png`, attribution: 'Window-level attribution, not a diagnosis.' }, decision: undefined as any })),
     audit: [{ id: 'a1', timestamp, action: 'MRI received', actor: 'Uploader' }, { id: 'a2', timestamp: '2026-09-23T08:01:00Z', action: 'AI findings generated', actor: 'AI service' }],
     report: undefined as any,
+    patientSummary: undefined as any,
   }
 }
 
@@ -41,7 +42,7 @@ async function workspace(page: Page, role = 'radiologist', setup: (item: ReturnT
         item.status = 'DRAFT'
         item.report = { id: 'R1', status: 'DRAFT', findings: item.findings.filter(f => f.status === 'APPROVED').map(f => `${f.name} approved.`).join('\n') || 'No AI-proposed abnormalities were approved. This does not establish a normal examination.', impression: '', updatedAt: timestamp, provider: 'Evidence-bound template', statements: item.findings.filter(f => f.status === 'APPROVED').map(f => ({ id: `S${f.id}`, text: `${f.name} approved.`, findingIds: [f.id], source: 'approved-finding' })) }
       } else if (path.endsWith('/report') && req.method() === 'PATCH') {
-        Object.assign(item.report, body, { updatedAt: '2026-09-23T09:00:00Z' })
+        Object.assign(item.report, body, { updatedAt: '2026-09-23T09:00:00Z', status: 'UNDER_REVIEW', reviewedAt: '2026-09-23T09:00:00Z' })
       } else if (path.endsWith('/finalize')) {
         item.status = 'FINAL'
         Object.assign(item.report, { status: 'FINAL', approvedBy: 'Reviewer Test', approvedAt: timestamp, updatedAt: '2026-09-23T10:00:00Z' })
@@ -59,6 +60,7 @@ async function workspace(page: Page, role = 'radiologist', setup: (item: ReturnT
 }
 
 function finalize(item: ReturnType<typeof study>) {
+  item.patientSummary = { status: 'RELEASED', version: 1, sourceFingerprint: 'a'.repeat(64), findings: 'Explanation supplied for ACL.', meaning: 'Final radiologist assessment.', nextSteps: '', limitation: 'This summary does not decide treatment.', reviewedBy: 'Reviewer Test', reviewedAt: timestamp }
   item.status = 'FINAL'
   item.findings.forEach((f, i) => { f.status = i === 0 ? 'APPROVED' : 'REJECTED'; f.decision = { status: f.status, userName: 'Reviewer Test', timestamp } })
   item.report = { id: 'R1', status: 'FINAL', findings: 'ACL approved.', impression: 'Final radiologist assessment.', updatedAt: timestamp, approvedBy: 'Reviewer Test', approvedAt: timestamp, statements: [{ id: 'S1', text: 'ACL approved.', findingIds: ['F0'], source: 'approved-finding' }, { id: 'S2', text: 'Radiologist authored assessment.', findingIds: [], source: 'radiologist-authored' }] }
@@ -67,7 +69,7 @@ function finalize(item: ReturnType<typeof study>) {
 test('case navigation, canonical findings, MRI windows and unchanged backend evidence', async ({ page }) => {
   await workspace(page, 'radiologist', item => item.findings.reverse())
   await page.goto('/radiologist/cases')
-  await page.getByRole('button', { name: 'KN-TEST', exact: true }).click()
+  await page.getByRole('button', { name: 'Case ID: KN-TEST', exact: true }).click()
   await expect(page.locator('.finding-row strong')).toHaveText(names)
   await expect(page.getByRole('region', { name: 'Evidence card for ACL' })).toContainText('34, 35, 37, 39, 40')
   await expect(page.getByRole('region', { name: 'Evidence card for ACL' })).toContainText('KNEE-AI 3.3')
@@ -112,7 +114,7 @@ test('12 explicit decisions gate approved-only draft, edits and backend final ap
   await page.getByLabel('Report impression').fill('Reviewed final impression.')
   await expect(page.getByRole('button', { name: 'Approve final', exact: true })).toBeDisabled()
   await expect(page.getByText('Save your edits to update statement traceability.', { exact: false })).toBeVisible()
-  await page.getByRole('button', { name: 'Save draft', exact: true }).click()
+  await page.getByRole('button', { name: 'Save reviewed report', exact: true }).click()
   await page.getByRole('button', { name: 'Approve final', exact: true }).click()
   await page.getByRole('button', { name: 'Approve final report', exact: true }).click()
   await expect(page.getByRole('region', { name: 'Finalized case summary' })).toContainText('11')
@@ -158,7 +160,7 @@ test('orthopedist and patient routes expose only finalized approved information'
   await page.getByRole('button', { name: 'Trace Evidence', exact: true }).click()
   await expect(page.getByRole('dialog')).toContainText('1.2.3')
   await page.unroute('**/api/**')
-  await workspace(page, 'patient', finalize)
+  await workspace(page, 'patient', item => { finalize(item); Object.assign(item, { releasedToPatient: true }) })
   await page.goto('/patient/mri/KN-TEST')
   await expect(page.locator('main')).toContainText('Explanation supplied for ACL.')
   await expect(page.locator('main')).toContainText('Final radiologist assessment.')
@@ -377,7 +379,7 @@ test('expired case request clears clinical workspace and requires sign-in', asyn
   await workspace(page)
   await page.goto('/radiologist/cases')
   await page.route('**/api/cases/KN-TEST', route => route.fulfill({ status: 401, json: { detail: 'Session expired' } }))
-  await page.getByRole('button', { name: 'KN-TEST', exact: true }).click()
+  await page.getByRole('button', { name: 'Case ID: KN-TEST', exact: true }).click()
   await expect(page).toHaveURL('/login')
   await expect(page.getByLabel('Password', { exact: true })).toBeVisible()
   await expect(page.locator('.finding-row')).toHaveCount(0)
@@ -417,15 +419,123 @@ test('orthopedist release stays available while reading and displays server fail
   await page.goto('/orthopedist/cases/KN-TEST/report')
   await expect(page.getByText('Awaiting your approval', {exact:true})).toBeVisible()
   const approval = page.getByRole('region', {name:'Orthopedist approval'})
+  await approval.scrollIntoViewIfNeeded()
   await expect(approval).toBeInViewport()
   await page.evaluate(() => window.scrollTo(0,document.body.scrollHeight))
   await expect(approval).toBeInViewport()
-  await approval.getByRole('button',{name:'Approve for Patient',exact:true}).click()
+  await approval.getByRole('button',{name:'Approve for Patient Coordinator',exact:true}).click()
   await expect(approval).toContainText('Release temporarily unavailable. Please retry.')
-  await approval.getByRole('button',{name:'Approve for Patient',exact:true}).click()
-  await expect(approval).toHaveCount(0)
+  await approval.getByRole('button',{name:'Approve for Patient Coordinator',exact:true}).click()
+  await expect(approval).toContainText('The reviewed patient summary is available to the Patient Coordinator.')
   await page.reload()
-  await expect(page.getByText('RELEASED TO PATIENT',{exact:true})).toBeVisible()
-  await expect(page.getByRole('button',{name:'Approve for Patient',exact:true})).toHaveCount(0)
+  await expect(page.getByText('RELEASED TO COORDINATOR',{exact:true})).toBeVisible()
+  await expect(page.getByRole('button',{name:'Approve for Patient Coordinator',exact:true})).toHaveCount(0)
   expect(calls).toBe(2)
+})
+
+
+for (const role of ['radiologist','orthopedist','patient']) {
+  test(`${role} shows the same patient name and age in lists and report headings`, async ({page}) => {
+    await workspace(page,role,item=>{
+      finalize(item)
+      Object.assign(item,{patient:{name:'Identity Test',age:42,gender:'Female'},releasedToPatient:true})
+    })
+    const label='Identity Test · 42 years'
+    await page.goto(`/${role}/cases`)
+    await expect(page.locator('.table-scroll .patient-identity strong')).toHaveText(label)
+    await page.getByRole('button',{name:'Case ID: KN-TEST',exact:true}).click()
+    await expect(page.locator('main h1')).toHaveText(role==='patient'?label:new RegExp('Identity Test.*42 years'))
+    await expect(page.locator('main')).toContainText('Case ID: KN-TEST')
+    await page.goto(`/${role}/reports`)
+    await expect(page.locator('.document-list .patient-identity strong')).toHaveText(label)
+  })
+}
+
+test('orthopedist needs attention shows reports awaiting patient release', async ({page}) => {
+  await workspace(page, 'orthopedist', finalize)
+  await page.goto('/orthopedist/cases')
+  await page.getByRole('button', {name:'Needs attention'}).click()
+  await expect(page.getByRole('button', {name:'Case ID: KN-TEST', exact:true})).toBeVisible()
+})
+
+test('switching accounts clears the previous worklist search and filters', async ({page}) => {
+  await workspace(page, 'radiologist', finalize)
+  await page.goto('/radiologist/cases')
+  await page.getByRole('button', {name:'Needs attention'}).click()
+  await page.getByRole('textbox', {name:'Search cases'}).fill('unrelated patient')
+  await page.getByRole('button', {name:'Account settings'}).click()
+  await page.getByRole('button', {name:'Switch account'}).click()
+  await page.unroute('**/api/**')
+  await workspace(page, 'orthopedist', finalize)
+  await page.route('**/api/auth/login', route => route.fulfill({json:{id:'orthopedist',name:'Reviewer Test',role:'orthopedist'}}))
+  await page.getByLabel('Workspace role').selectOption('orthopedist')
+  await page.getByLabel('Email address').fill('orthopedist@test.local')
+  await page.getByLabel('Password', {exact:true}).fill('test-password-123')
+  await page.getByRole('button', {name:'Enter your workspace'}).click()
+  await expect(page).toHaveURL('/orthopedist/overview')
+  await expect(page.getByRole('textbox', {name:'Search cases'})).toHaveValue('')
+  await expect(page.getByRole('button', {name:'Case ID: KN-TEST', exact:true})).toBeVisible()
+})
+
+
+test('Patient Coordinator sees released cases and can export the final report', async ({ page }) => {
+  const state = await workspace(page, 'patient', item => {
+    finalize(item)
+    Object.assign(item, { releasedToPatient: true })
+  })
+  await page.goto('/patient/overview')
+  await expect(page.getByLabel('Workspace role')).toHaveValue('patient')
+  await expect(page.getByLabel('Workspace role').locator('option:checked')).toHaveText('Patient Coordinator')
+  await page.getByRole('button', { name: 'Case ID: KN-TEST', exact: true }).click()
+  await expect(page.locator('main')).toContainText('Final radiologist assessment.')
+  await expect(page.getByRole('link', { name: 'Download patient summary' })).toHaveAttribute('href', '/api/cases/KN-TEST/patient-summary/export')
+  await page.evaluate(() => { window.print = () => { document.body.dataset.printed = 'yes' } })
+  await page.getByRole('button', { name: 'Print / Save patient summary PDF' }).click()
+  await expect(page.locator('body')).toHaveAttribute('data-printed', 'yes')
+  Object.assign(state.item, { releasedToPatient: false })
+  await page.goto('/patient/overview')
+  await expect(page.getByRole('button', { name: 'Case ID: KN-TEST', exact: true })).toHaveCount(0)
+  await page.goto('/patient/mri/KN-TEST')
+  await expect(page.getByRole('link', { name: 'Download patient summary' })).toHaveCount(0)
+})
+
+
+test('patient summary requires orthopedist review and unsaved edits block release', async ({ page }) => {
+  const state = await workspace(page, 'orthopedist', item => { finalize(item); item.patientSummary = undefined })
+  await page.route('**/api/cases/KN-TEST/patient-summary', async route => {
+    if (route.request().method() === 'POST') {
+      state.item.patientSummary = {status:'DRAFT',version:0,sourceFingerprint:'a'.repeat(64),findings:'A change was noted in a stabilizing band of tissue.',meaning:'',nextSteps:'',limitation:'This summary does not decide treatment.'}
+    } else {
+      Object.assign(state.item.patientSummary, route.request().postDataJSON(), {status:'REVIEWED',version:state.item.patientSummary.version+1,reviewedBy:'Reviewer Test',reviewedAt:timestamp})
+    }
+    return route.fulfill({json:state.item})
+  })
+  await page.goto('/orthopedist/cases/KN-TEST/report')
+  await expect(page.getByRole('article', {name:'Clinical report',exact:true})).toContainText('Final radiologist assessment.')
+  await page.getByRole('button', {name:'Prepare patient summary',exact:true}).click()
+  const release = page.getByRole('button', {name:'Approve for Patient Coordinator',exact:true})
+  const save = page.getByRole('button', {name:'Save reviewed patient summary',exact:true})
+  await expect(release).toBeDisabled()
+  await expect(save).toBeDisabled()
+  await page.getByLabel('Patient summary meaning').fill('The scan does not establish how severe this change is.')
+  await page.getByRole('checkbox', {name:'I checked this summary'}).check()
+  await save.click()
+  await expect(release).toBeEnabled()
+  await page.getByLabel('Patient summary next steps').fill('Discuss this at the next appointment.')
+  await expect(release).toBeDisabled()
+  await expect(page.getByRole('checkbox', {name:'I checked this summary'})).not.toBeChecked()
+  await page.getByRole('checkbox', {name:'I checked this summary'}).check()
+  await save.click()
+  await expect(release).toBeEnabled()
+  await expect(page.getByRole('article', {name:'Clinical report',exact:true})).toContainText('Final radiologist assessment.')
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+})
+
+test('legacy released cases show no unreviewed patient summary download', async ({page}) => {
+  await workspace(page, 'patient', item => { finalize(item); Object.assign(item, {releasedToPatient:true}); item.patientSummary = undefined })
+  await page.goto('/patient/mri/KN-TEST')
+  await expect(page.getByRole('heading', {name:'Patient summary awaiting orthopedist review'})).toBeVisible()
+  await expect(page.getByRole('link', {name:'Download patient summary'})).toHaveCount(0)
+  await page.getByRole('button', {name:'Original clinical report',exact:true}).click()
+  await expect(page.getByRole('article', {name:'Clinical report',exact:true})).toContainText('Final radiologist assessment.')
 })

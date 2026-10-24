@@ -1,3 +1,4 @@
+import { caseLabel } from './patient'
 import { useEffect, useState } from 'react'
 import { api } from './api'
 import type { Case, Finding } from './types'
@@ -8,7 +9,7 @@ export function StudySummary({ cases, onOpen }: { cases: Case[]; onOpen: (id: st
   const ordered = [...cases].sort((a,b) => Date.parse(b.updatedAt)-Date.parse(a.updatedAt))
   const active = ordered.find(item => item.status !== 'FINAL') || ordered[0]
   return <section className="evidence-card" aria-label="Active study"><div className="eyebrow">ACTIVE STUDY</div>{active ? <>
-    <h2>{active.patient?.display_id || active.id}</h2><p>{active.study.description}</p><dl className="evidence-metadata">
+    <h2>{caseLabel(active)}</h2><p className="document-meta">Case ID: {active.id}</p><p>{active.study.description}</p><dl className="evidence-metadata">
       <div><dt>MRI</dt><dd>{active.series.length ? `${active.series.length} series received` : 'Images unavailable'}</dd></div>
       <div><dt>Analysis status</dt><dd><StatusBadge status={active.status}/></dd></div>
       <div><dt>AI model</dt><dd>{active.analysis?.modelVersion || 'Not supplied'}</dd></div>

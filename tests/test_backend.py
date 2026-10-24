@@ -59,6 +59,17 @@ def login(client, role='radiologist'):
     assert result.status_code == 200, result.text
 
 
+def review_patient_summary(client, route):
+    response = client.post(route + '/patient-summary')
+    assert response.status_code == 200, response.text
+    summary = response.json()['patientSummary']
+    response = client.patch(route + '/patient-summary', json={
+        'findings': summary['findings'], 'meaning': 'Reviewed explanation for this synthetic software test.',
+        'nextSteps': '', 'confirmed': True, 'version': summary['version'], 'sourceFingerprint': summary['sourceFingerprint'],
+    })
+    assert response.status_code == 200, response.text
+
+
 def seeded_case(status='AI_READY'):
     return dict(id='KN-TEST', status=status, study=dict(id='study', patientId='SYNTHETIC-TEST', patientName='Synthetic test', description='Test', date=''),
                 series=[], audit=[], updatedAt=service.now(), findings=[dict(id=str(i), name=name, status='PENDING', probability=.1) for i, name in enumerate(NAMES)])
@@ -89,7 +100,8 @@ def test_review_report_and_release_gates(client):
     draft = client.post(route + '/report', json={'approvedFindingIds': ['2']})
     assert draft.status_code == 200, draft.text
     report = draft.json()['report']
-    assert 'Medial Meniscus' in report['findings'] and 'Lateral Meniscus' not in report['findings']
+    assert 'medial meniscus' in report['findings'] and 'lateral meniscus' not in report['findings']
+    assert report['impression'] == 'Medial meniscal abnormality.'
     assert report['statements'][0]['findingIds'] == ['2']
     assert client.post(route + '/findings/3/decision', json={'status': 'APPROVED'}).status_code == 409
     assert client.post(route + '/report/finalize').status_code == 422
@@ -103,9 +115,10 @@ def test_review_report_and_release_gates(client):
     exported = client.get(route + '/export').json()
     assert len(exported['findings']) == 1 and exported['findings'][0]['status'] == 'APPROVED'
     assert 'revisions' not in exported['report']
-    assert 'MVP demonstration' in exported['integration_mode']
+    assert exported['integration_mode'] == 'Integration adapter; no PACS/RIS/EHR transport'
     assert client.patch(route + '/report', json={'findings': 'change', 'impression': 'change'}).status_code == 409
     login(client, 'orthopedist')
+    review_patient_summary(client, route)
     release = client.post(route + '/release-to-patient')
     assert release.status_code == 200
     login(client, 'patient')
@@ -115,7 +128,7 @@ def test_review_report_and_release_gates(client):
     assert 'revisions' not in patient['report']
     assert client.get(route + '/export').json()['report_status'] == 'FINAL'
     login(client, 'otherpatient')
-    assert client.get(route).status_code == 404 and client.get('/api/cases').json() == []
+    assert client.get(route).status_code == 200 and len(client.get('/api/cases').json()) == 1
     login(client, 'orthopedist')
     assert client.get(route).status_code == 200
     assert client.post(route + '/report/finalize').status_code == 403
@@ -149,6 +162,7 @@ def test_handoff_release_persistence_and_identity(client):
     login(client, 'orthopedist')
     assert [c['id'] for c in client.get('/api/cases').json()] == ['KN-TEST']
     assert client.get(route).status_code == 200
+    review_patient_summary(client, route)
     released = client.post(route + '/release-to-patient')
     assert released.status_code == 200
     stored = service.get_case('KN-TEST')
@@ -158,13 +172,13 @@ def test_handoff_release_persistence_and_identity(client):
     assert stored['report'] == case['report']
     assert stored['findings'] == case['findings']
     assert stored['study'] == case['study']
-    assert len(stored['audit']) == 1
+    assert len(stored['audit']) == 3
     assert client.post(route + '/release-to-patient').status_code == 409
-    assert len(service.get_case('KN-TEST')['audit']) == 1
+    assert len(service.get_case('KN-TEST')['audit']) == 3
     for role in ('patient', 'otherpatient', 'orthopedist', 'radiologist', 'patient'):
         assert client.post('/api/auth/logout').status_code == 204
         login(client, role)
-        allowed = role != 'otherpatient'
+        allowed = True
         assert client.get(route).status_code == (200 if allowed else 404)
         assert client.get(route + '/export').status_code == (200 if allowed else 404)
         assert len(client.get('/api/cases').json()) == int(allowed)
@@ -325,7 +339,7 @@ def test_failed_access_logged_and_login_rotates_session(client):
 def narrative_result(payload):
     ids = [f['id'] for f in payload['approved_findings']]
     findings = 'Abnormalities involve ' + ', '.join(f['name'] for f in payload['approved_findings']) + '.'
-    impression = 'Knee abnormalities as described.'
+    impression = 'Abnormalities involving ' + ', '.join(f['name'] for f in payload['approved_findings']) + '.'
     return dict(report_type='DRAFT', findings=findings, impression=impression, source_finding_ids=ids,
         statements=[dict(text=findings, section='findings', finding_ids=ids), dict(text=impression, section='impression', finding_ids=ids)])
 
@@ -630,3 +644,25 @@ def test_uploaded_demographics_persist_with_dicom_identity(client, age):
     login(client)
     assert client.get(route).json()['patient'] == created['patient']
     assert client.get('/api/cases').json()[0]['patient'] == created['patient']
+
+
+@pytest.mark.parametrize('canonical', ['SYNTHETIC-TEST', 'OTHER'])
+def test_patient_first_handoff_publishes_to_shared_patient_workspace(client, canonical):
+    case = seeded_case('FINAL')
+    case['patient'] = {'patient_id': canonical}
+    case['report'] = dict(status='FINAL', approvedFindingIds=[], statements=[])
+    service.save_case(case)
+    route = '/api/cases/KN-TEST'
+    for role in ('patient', 'otherpatient'):
+        login(client, role)
+        assert client.get(route).status_code == 404
+    login(client, 'orthopedist')
+    assert len(client.get('/api/cases').json()) == 1
+    review_patient_summary(client, route)
+    assert client.post(route + '/release-to-patient').status_code == 200
+    for role, identity in [('patient', 'SYNTHETIC-TEST'), ('otherpatient', 'OTHER')]:
+        login(client, role)
+        allowed = True
+        assert client.get(route).status_code == (200 if allowed else 404)
+        assert client.get(route + '/export').status_code == (200 if allowed else 404)
+        assert len(client.get('/api/cases').json()) == int(allowed)

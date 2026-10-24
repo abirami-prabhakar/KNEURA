@@ -1,0 +1,51 @@
+name: kneura
+services:
+  api:
+    build:
+      context: .
+      target: api
+    init: true
+    restart: unless-stopped
+    env_file:
+      - path: .env.kneura.local
+        required: false
+    environment:
+      KNEURA_DATA_DIR: /data
+      KNEURA_ORIGINS: ${KNEURA_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+      KNEURA_SECURE_COOKIE: ${KNEURA_SECURE_COOKIE:-0}
+      KNEURA_REQUIRE_SERIES_CSV: ${KNEURA_REQUIRE_SERIES_CSV:-0}
+    volumes:
+      - kneura-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: '3'
+  web:
+    build:
+      context: .
+      target: web
+    restart: unless-stopped
+    ports:
+      - '${KNEURA_BIND_ADDRESS:-127.0.0.1}:${KNEURA_PORT:-8080}:80'
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: '3'
+volumes:
+  kneura-data:
